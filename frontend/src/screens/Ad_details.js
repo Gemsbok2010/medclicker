@@ -370,6 +370,7 @@ const Ad_details = () => {
                       <p>{list.startDate}</p>
                     </div>
                   </div>
+                  <div>Hello</div>
                   <div className="row">
                     <div className="col-xs-7">
                       <p className="chart">Finish Date</p>
