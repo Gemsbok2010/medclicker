@@ -5,38 +5,8 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
+import { RotatingLines } from "react-loader-spinner";
 import ReactGA from "react-ga4";
-
-//Admin
-import Aprofessions from "./admin/Aprofessions";
-import Apayconsole from "./admin/ApaymentConsole";
-import Ausers from "./admin/Ausers";
-import Aedituser from "./admin/Aedituser";
-import Alocums from "./admin/Alocums";
-import AeditLocum from "./admin/AeditLocum";
-import AeditLocumcv from "./admin/AeditLocumcv";
-import Aresume from "./admin/Aresume";
-import Alistings from "./admin/Alistings";
-import AlistingsEdit from "./admin/AlistingsEdit";
-import AlistingsEditReg from "./admin/AlistingsEditReg";
-import Alocumlistings from "./admin/Alocumlistings";
-import Aapplications from "./admin/Aapplications";
-import AlocumAgreements from "./admin/AlocumAgreements";
-import Asecurity from "./admin/Asecurity";
-import Apayments from "./admin/Apayments";
-import Aforgotpwd from "./admin/Aforgotpassword";
-import AemailMessage from "./admin/AemailMessage";
-import Asms from "./admin/Asms";
-import Alogout from "./admin/Alogout";
-
-//Screens
-import Logout from "./screens/Logout";
-import CreditCardSuccess from "./screens/CreditCardSuccess";
-import CreditCardFailed from "./screens/CreditCardFailed";
-import CreditCard from "./screens/CreditCard";
-import CreditCardLoading from "./screens/CreditCardLoading";
-import CreditCardRegLoading from "./screens/CreditCardRegLoading";
-import CreditCardRegular from "./screens/CreditCardRegular";
 
 //Route Protection
 import ProtectedAdmin from "./ProtectedAdmin";
@@ -60,6 +30,26 @@ import IdleTimerContainer from "./components/IdleTimerContainer";
 const Admin = lazy(() => import("./admin/Administrator"));
 const Ahomepage = lazy(() => import("./admin/Ahomepage"));
 const Adashboard = lazy(() => import("./admin/Adashboard"));
+const Alogout = lazy(() => import("./admin/Alogout"));
+const Aforgotpwd = lazy(() => import("./admin/Aforgotpassword"));
+const AemailMessage = lazy(() => import("./admin/AemailMessage"));
+const Asecurity = lazy(() => import("./admin/Asecurity"));
+const Apayments = lazy(() => import("./admin/Apayments"));
+const Asms = lazy(() => import("./admin/Asms"));
+const Alocums = lazy(() => import("./admin/Alocums"));
+const Aapplications = lazy(() => import("./admin/Aapplications"));
+const AlocumAgreements = lazy(() => import("./admin/AlocumAgreements"));
+const Aprofessions = lazy(() => import("./admin/Aprofessions"));
+const Apayconsole = lazy(() => import("./admin/ApaymentConsole"));
+const Ausers = lazy(() => import("./admin/Ausers"));
+const Aedituser = lazy(() => import("./admin/Aedituser"));
+const AeditLocum = lazy(() => import("./admin/AeditLocum"));
+const AeditLocumcv = lazy(() => import("./admin/AeditLocumcv"));
+const Aresume = lazy(() => import("./admin/Aresume"));
+const Alistings = lazy(() => import("./admin/Alistings"));
+const AlistingsEdit = lazy(() => import("./admin/AlistingsEdit"));
+const AlistingsEditReg = lazy(() => import("./admin/AlistingsEditReg"));
+const Alocumlistings = lazy(() => import("./admin/Alocumlistings"));
 
 //Screens
 const Question1 = lazy(() => import("./screens/Question1"));
@@ -115,6 +105,15 @@ const ResetPwd = lazy(() => import("./screens/Resetpassword"));
 const ForgotPwd = lazy(() => import("./screens/ForgotPassword"));
 const EmailMessage = lazy(() => import("./screens/EmailMessage"));
 const ListingManager = lazy(() => import("./screens/ListingManager"));
+const CreditCardSuccess = lazy(() => import("./screens/CreditCardSuccess"));
+const CreditCardFailed = lazy(() => import("./screens/CreditCardFailed"));
+const CreditCard = lazy(() => import("./screens/CreditCard"));
+const CreditCardLoading = lazy(() => import("./screens/CreditCardLoading"));
+const CreditCardRegLoading = lazy(() =>
+  import("./screens/CreditCardRegLoading")
+);
+const CreditCardRegular = lazy(() => import("./screens/CreditCardRegular"));
+const Logout = lazy(() => import("./screens/Logout"));
 
 ReactGA.initialize("G-9P8NEB3TMM");
 
@@ -142,7 +141,43 @@ function App() {
     <Router>
       <ScrollToTop />
       <IdleTimerContainer />
-      <Suspense fallback={<h3>Loading....</h3>}>
+      <Suspense
+        fallback={
+          <div
+            style={{
+              backgroundColor: "rgba(33, 40, 46, 0.8)",
+              top: "0",
+              left: "0",
+              height: "100%",
+              width: "100%",
+              zIndex: "2500",
+              justifyContent: "center",
+              alignItems: "center",
+              display: "block",
+              position: "fixed",
+              color: "white",
+            }}
+          >
+            <div
+              style={{
+                textAlign: "center",
+                position: "absolute",
+                transform: "translate(50%,50%)",
+              }}
+            >
+              <RotatingLines
+                strokeColor="white"
+                strokeWidth="5"
+                animationDuration="0.75"
+                width="76"
+                visible={true}
+              />
+              {"  "}
+              Loading...
+            </div>
+          </div>
+        }
+      >
         <Routes>
           {/* 1. ADMIN NOT LOGGED IN */}
           <Route path="/signout" element={<Alogout />} />

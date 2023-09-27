@@ -261,7 +261,7 @@ const Adashboard = () => {
                   <span className="material-symbols-outlined">sms</span>
                   <h4>SMS</h4>
                 </Link>
-                <Link to="/admin/logout">
+                <Link to="/signout">
                   <span className="material-icons-sharp">logout</span>
                   <h4>Log Out</h4>
                 </Link>
