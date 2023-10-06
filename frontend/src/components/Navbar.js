@@ -283,7 +283,7 @@ const Navbar = () => {
                                 "mailframe 100ms ease-in-out 500ms forwards",
                             }}
                           >
-                            {displayName === ""
+                            {displayName === "" || displayName === undefined
                               ? "Login"
                               : `Hello, ${displayName}`}
                           </i>
