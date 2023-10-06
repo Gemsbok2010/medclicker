@@ -435,7 +435,7 @@ const Question3 = () => {
   };
 
   // ============ CALENDAR ================
-  const [finishDate, setFinishDate] = useState("");
+  const [, setFinishDate] = useState("");
   const [startDate, setStartDate] = useState("");
 
   const [showCalendarStart, setShowCalendarStart] = useState(false);

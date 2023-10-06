@@ -9,9 +9,9 @@ const QuestionContinue = () => {
   const [contractType, setContractType] = useState("");
   const [professions, setProfessions] = useState("");
   const [normal_rate, setNormalRate] = useState("");
-  const [sat_rate, setSatRate] = useState("");
-  const [sun_rate, setSunRate] = useState("");
-  const [ph_rate, setPhRate] = useState("");
+  const [, setSatRate] = useState("");
+  const [, setSunRate] = useState("");
+  const [, setPhRate] = useState("");
   const [about, setAbout] = useState("");
   const [finishDate, setFinishDate] = useState("");
   const [street, setStreet] = useState("");

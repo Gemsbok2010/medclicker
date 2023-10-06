@@ -71,7 +71,6 @@ router.put("/allusers", async (req, res, next) => {
 //============ DELETE PHOTO ==============
 router.delete("/allusers/:id", async (req, res, next) => {
   let user = await User.findById({ _id: req.params.id });
-  console.log(user);
 
   let unset = {};
   unset["filename"] = null;

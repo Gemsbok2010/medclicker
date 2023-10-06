@@ -132,7 +132,6 @@ const PersonalDetails = () => {
   let token = params.get("token");
   let access = params.get("access");
   access = access === "true";
-  console.log(user);
 
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");

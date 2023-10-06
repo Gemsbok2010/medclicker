@@ -22,7 +22,7 @@ const HomeNav = () => {
   const [openDropDown, setOpenDropDown] = useState(false);
   const [openHamburger, setOpenHamburger] = useState(false);
   const user = useSelector((state) => state.userInfo.value);
-  console.log(user);
+
   ReactSession.setStoreType("localStorage");
   const [listOfProfessions, setListOfProfessions] = useState([]);
   const [showemp, setShowEmp] = useState(false);
@@ -32,7 +32,6 @@ const HomeNav = () => {
 
   const onNext = (e) => {
     e.preventDefault();
-
     localStorage.setItem("professions", profession);
     localStorage.setItem("contractType", contractType);
     if (localStorage.getItem("contractType") === "Locum") {

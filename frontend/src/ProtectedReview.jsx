@@ -14,7 +14,7 @@ const questionReview = () => {
 const ProtectedReview = () => {
   const isAuth = questionReview();
 
-  return isAuth.contractType != "Locum" && isAuth.access ? (
+  return isAuth.contractType !== "Locum" && isAuth.access ? (
     <Outlet />
   ) : (
     <Navigate to={-1} />

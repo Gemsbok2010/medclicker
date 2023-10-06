@@ -890,6 +890,293 @@ const Footer = ({ asx }) => {
             text-align: center;
           }
         }
+
+        /* ========== LOGIN QUESTION CARD ============= */
+
+        .backdrop {
+          position: fixed;
+          background-color: rgba(33, 40, 46, 0.8);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 4500;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+        }
+
+        .wrap .loginQuestionCard {
+          width: 340px;
+          min-height: 80vh;
+          padding: 20px 10px;
+          align-items: center;
+          border-radius: 0px;
+          background: #fff;
+          -webkit-box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
+          box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
+          z-index: 3000;
+          transform: translate(-50%, -50%);
+          top: 52%;
+          left: 50%;
+          position: fixed;
+          display: block;
+          animation: mailframe 500ms ease-in 0ms;
+        }
+        @keyframes mailframe {
+          from {
+            transform: translate(-50%, -30%);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(-50%, -50%);
+            opacity: 1;
+          }
+        }
+
+        .wrap .loginQuestionCard > figure {
+          width: 200px;
+          margin: 0px auto 16px;
+        }
+        .wrap .loginQuestionCard > figure > a {
+          display: block;
+        }
+
+        .wrap .loginQuestionCard .regCon {
+          margin: 0px auto;
+          width: 90%;
+        }
+        @media screen and (max-width: 768px) {
+          .wrap .loginQuestionCard .regCon {
+            width: 100%;
+          }
+        }
+        .wrap .loginQuestionCard #email {
+          background-image: url(./../../images/mail.png);
+          background-repeat: no-repeat;
+          background-size: 16px;
+          background-position: 360px;
+        }
+        .wrap .loginQuestionCard #password {
+          background-image: url(./../../images/lock.png);
+          background-repeat: no-repeat;
+          background-size: 15px;
+          background-position: 360px;
+        }
+
+        .wrap .loginQuestionCard .input-group input:focus + label {
+          transform: translate(-8px, -32px) scale(0.9);
+          font-size: 14px;
+          opacity: 1;
+        }
+        .wrap .loginQuestionCard .input-group input.springbok + label {
+          transform: translate(-8px, -32px) scale(0.9);
+          font-size: 14px;
+          opacity: 0;
+        }
+
+        .wrap .loginQuestionCard .input-group {
+          display: block;
+          margin-right: 20px;
+          position: relative;
+        }
+
+        .wrap .loginQuestionCard .input-group label {
+          position: absolute;
+          transform: translateY(-50%);
+          top: 50%;
+          left: 0%;
+          font-family: sans-serif;
+          font-size: 14px;
+          color: #777;
+          font-weight: 500;
+          padding: 0px 0px;
+          pointer-events: none;
+          transition: all 300ms ease-in-out 0ms;
+        }
+        .wrap .loginQuestionCard h2 {
+          font-family: sans-serif;
+          text-align: center;
+          font-weight: 400;
+          font-size: 28px;
+          width: 100%;
+          margin: 10px auto;
+          padding-top: 8px;
+          padding-bottom: 8px;
+          color: #2b2b2b;
+        }
+        .wrap .loginQuestionCard p {
+          margin: 10px auto;
+          text-align: center;
+          color: #777;
+          width: 100%;
+          font-size: 15px;
+          font-weight: 500;
+          font-family: sans-serif;
+        }
+        .wrap .loginQuestionCard a {
+          margin-bottom: 0;
+          width: 100%;
+          font-size: 15px;
+          font-weight: 700;
+          font-family: sans-serif;
+          color: #14a248;
+        }
+        .loginQuestionCard .btn-login,
+        #facebook-login,
+        #google-login {
+          height: 48px;
+          border-radius: 4px;
+          width: 100%;
+          font-weight: 800;
+          font-size: 20px;
+          text-align: center;
+          box-sizing: border-box;
+          margin-top: 0px;
+          cursor: pointer;
+          padding: 1px auto;
+        }
+        .wrap .loginQuestionCard .btn-login {
+          line-height: 32px;
+          color: #fff;
+          border: none;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color: #14a248;
+          border-color: #14a248;
+        }
+
+        .wrap .loginQuestionCard #facebook-login {
+          background-color: #3a5ba0;
+          border: 2px solid #3a5ba0;
+          position: relative;
+          cursor: pointer;
+          color: white;
+        }
+        .wrap .loginQuestionCard #facebook-login a {
+          font-weight: 800;
+          font-size: 20px;
+          color: #fff;
+          position: relative;
+          display: block;
+          width: 100%;
+        }
+        .wrap .loginQuestionCard #google-login {
+          background-color: #fff;
+          border: 1px solid #333;
+          position: relative;
+          cursor: pointer;
+        }
+        .wrap .loginQuestionCard #google-login a {
+          font-weight: 800;
+          font-size: 20px;
+          color: #333;
+          position: relative;
+          display: block;
+          width: 100%;
+        }
+        .wrap .loginQuestionCard .form-group {
+          height: 52px;
+        }
+        .wrap .loginQuestionCard input[type="text"],
+        .wrap .loginQuestionCard input[type="password"],
+        .wrap .loginQuestionCard input[type="email"] {
+          height: 42px;
+          text-decoration: none;
+          outline: none;
+          background: none;
+          border: none;
+          border-bottom: 2px solid #dadada;
+          font-weight: 500;
+          width: 100%;
+          font-size: 14px;
+          color: #2b2b2b;
+          font-family: sans-serif;
+        }
+
+        .wrap .loginQuestionCard .form-check-input {
+          position: absolute;
+          margin-top: 0.3rem;
+          margin-left: 0.5rem;
+        }
+        .wrap .loginQuestionCard .form-check-label {
+          margin-bottom: 10px;
+          color: #777;
+          width: 100%;
+          font-size: 15px;
+          font-weight: 500;
+          font-family: sans-serif;
+        }
+
+        input[type="password"]:active,
+        input[type="password"]:focus,
+        input[type="email"]:focus,
+        input[type="email"]:active {
+          outline: 3px solid #14a248;
+          border: none;
+        }
+        .input-group label {
+          display: block;
+        }
+        form .row {
+          margin: 0px;
+        }
+
+        input[type="checkbox"] {
+          display: none;
+        }
+
+        .container {
+          text-align: center;
+        }
+
+        @media only screen and (min-width: 768px) {
+          .container {
+            text-align: left;
+          }
+
+          .backdrop {
+            display: block;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: #3f3f3f;
+            z-index: 100;
+            opacity: 0.8;
+            cursor: auto;
+          }
+
+          .wrap .loginQuestionCard {
+            width: 468px;
+            padding: 30px 0px;
+            z-index: 2500;
+          }
+
+          .wrap .content4 > .comment {
+            padding: 20px 40px;
+          }
+          .content5 .btn-med {
+            top: 75%;
+            left: 12%;
+          }
+
+          .form-check-input {
+            margin-left: -1.25rem;
+          }
+          .form-check-label {
+            margin-left: 0px;
+            font-size: 16px;
+          }
+          .loginQuestionCard .input-group input:focus + label {
+            transform: translate(-8px, -32px) scale(0.9);
+          }
+          .loginQuestionCard .input-group input.springbok + label {
+            transform: translate(-8px, -32px) scale(0.9);
+          }
+        }
       `}</style>
     </>
   );
