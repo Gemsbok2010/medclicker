@@ -105,7 +105,10 @@ const Calendar = () => {
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
-        "http://localhost:4000/api/applications/calendar?" + "email=" + email
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/calendar?" +
+          "email=" +
+          email
       );
       const data = await res.json();
 
@@ -114,8 +117,7 @@ const Calendar = () => {
           top: 0,
           behavior: "smooth",
         });
-        console.log(data.applications, "apply");
-        console.log(data.adPosts, "list");
+     
         setListingInfo(data.adPosts);
         setApplications(data.applications);
       }
@@ -154,7 +156,6 @@ const Calendar = () => {
   const [sun_rate, setSun_rate] = useState("");
 
   const panelDisplay = (e, app, list) => {
-    console.log(e, app, list);
     setShowInfo(false);
     setThisId(app._id);
     setAvailable_start(app.available_start);

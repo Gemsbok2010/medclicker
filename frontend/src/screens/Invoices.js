@@ -22,9 +22,8 @@ const Invoices = () => {
 
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/payment/invoices?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/payment/invoices?page=${page <= 0 ? 0 : page - 1}` +
         "sortBy=" +
         sort +
         "&email=" +
@@ -51,9 +50,10 @@ const Invoices = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/payment/invoices?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/payment/invoices?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "sortBy=" +
         sort +
         "&email=" +
@@ -86,7 +86,8 @@ const Invoices = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/payment/invoices?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/payment/invoices?page=${id + 1}` +
         "&sortBy=" +
         sort +
         "&email=" +
@@ -120,7 +121,8 @@ const Invoices = () => {
     const name = e.target.innerHTML;
     if (ascDesc === false) {
       const res = await fetch(
-        "http://localhost:4000/api/payment/sortinvoices?sortBy=asc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/payment/sortinvoices?sortBy=asc" +
           "&contract=" +
           contract +
           "&page=" +
@@ -145,7 +147,8 @@ const Invoices = () => {
 
     if (ascDesc === true) {
       const res = await fetch(
-        "http://localhost:4000/api/payment/sortinvoices?sortBy=desc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/payment/sortinvoices?sortBy=desc" +
           "&contract=" +
           contract +
           "&page=" +
@@ -212,7 +215,8 @@ const Invoices = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/payment/invoices?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/payment/invoices?" +
           "contract=" +
           contract +
           "&sortBy=" +
@@ -302,7 +306,8 @@ const Invoices = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/payment/invoices?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/payment/invoices?" +
           "sortBy=" +
           sort +
           "&page=" +
@@ -690,7 +695,10 @@ const Invoices = () => {
                           <td className="cell edit">
                             <div>
                               <ExternalLink
-                                href={`http://localhost:4000/api/payment/invoice/${invoice.invoiceNumber}`}
+                                href={
+                                  process.env.REACT_APP_BACKEND_URL +
+                                  `api/payment/invoice/${invoice.invoiceNumber}`
+                                }
                                 target="_self"
                               >
                                 <input type="button" value="View Invoice" />

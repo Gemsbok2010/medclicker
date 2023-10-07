@@ -130,8 +130,6 @@ const PersonalDetails = () => {
   let params = new URLSearchParams(search);
   let id = params.get("id");
   let token = params.get("token");
-  let access = params.get("access");
-  access = access === "true";
 
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");
@@ -155,7 +153,8 @@ const PersonalDetails = () => {
     // ============ PROFILE DATA ===========
     axios
       .get(
-        "http://localhost:4000/api/users/allusers/" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/users/allusers/" +
           localStorage.getItem("userId")
       )
       .then((response) => {
@@ -201,7 +200,7 @@ const PersonalDetails = () => {
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
-        "http://localhost:4000/api/listings/listOfProfessions?"
+        process.env.REACT_APP_BACKEND_URL + "api/listings/listOfProfessions?"
       );
       const data = await res.json();
 
@@ -304,9 +303,12 @@ const PersonalDetails = () => {
 
   // =========== DELETE PHOTO ==================
   const deletePhoto = async (id) => {
-    await fetch("http://localhost:4000/api/users/allusers/" + id, {
-      method: "DELETE",
-    }).then((res) => {
+    await fetch(
+      process.env.REACT_APP_BACKEND_URL + "api/users/allusers/" + id,
+      {
+        method: "DELETE",
+      }
+    ).then((res) => {
       if (res.ok === true) {
         setIdPhoto("");
         setImageHere("");
@@ -332,7 +334,7 @@ const PersonalDetails = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     setIsloading(true);
-    fetch("http://localhost:4000/api/users/allusers", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/users/allusers", {
       method: "PUT",
       credentials: "include",
       headers: { "Content-type": "application/json" },
@@ -658,7 +660,10 @@ const PersonalDetails = () => {
 
           <form
             id="formZero"
-            action={`http://localhost:4000/api/users/upload?email=${userInfo.email}`}
+            action={
+              process.env.REACT_APP_BACKEND_URL +
+              `api/users/upload?email=${userInfo.email}`
+            }
             method="POST"
             encType="multipart/form-data"
           >

@@ -33,7 +33,11 @@ const CreditCard = () => {
   // ============ PROFILE DATA ===========
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/applications/candidate/" + nanoslug)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/candidate/" +
+          nanoslug
+      )
       .then((response) => {
         if (response.status === 200) {
           setCandidate(response.data.candidate);
@@ -54,7 +58,9 @@ const CreditCard = () => {
   const inputRef = useRef(null);
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/payment/anyCard/" + user.email)
+      .get(
+        process.env.REACT_APP_BACKEND_URL + "api/payment/anyCard/" + user.email
+      )
       .then((response) => {
         if (response.status === 200) {
           if (response.data.existingCard === null) {
@@ -87,7 +93,7 @@ const CreditCard = () => {
 
     if (show === true) {
       const res = await fetch(
-        `http://localhost:4000/api/payment/removeCard/${email}`,
+        process.env.REACT_APP_BACKEND_URL + `api/payment/removeCard/${email}`,
         {
           method: "PUT",
           credentials: "include",
@@ -114,7 +120,7 @@ const CreditCard = () => {
       expiry.length === 5
     ) {
       const res = await fetch(
-        `http://localhost:4000/api/payment/storeCard/${email}`,
+        process.env.REACT_APP_BACKEND_URL + `api/payment/storeCard/${email}`,
         {
           method: "PUT",
           credentials: "include",
@@ -248,7 +254,7 @@ const CreditCard = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/payments_plans/storedPlans")
+      .get(process.env.REACT_APP_BACKEND_URL + "api/payments_plans/storedPlans")
       .then((response) => {
         if (response.status === 200) {
           setLocumMin1(response.data.locumMin1);
@@ -480,7 +486,7 @@ const CreditCard = () => {
     e.preventDefault();
     setIsloaded(true);
     try {
-      fetch("http://localhost:4000/api/payment/nopayment", {
+      fetch(process.env.REACT_APP_BACKEND_URL + "api/payment/nopayment", {
         method: "POST",
         credentials: "include",
         headers: { "Content-type": "application/json" },

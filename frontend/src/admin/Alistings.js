@@ -22,9 +22,8 @@ const Alistings = () => {
 
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/listings?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/listings?page=${page <= 0 ? 0 : page - 1}` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -53,9 +52,10 @@ const Alistings = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/listings?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/listings?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -90,7 +90,8 @@ const Alistings = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/listings?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/listings?page=${id + 1}` +
         "&location=" +
         location +
         "&sortBy=" +
@@ -127,7 +128,8 @@ const Alistings = () => {
 
     if (ascDesc === false) {
       const res = await fetch(
-        `http://localhost:4000/api/admin/sortcase?sortBy=asc` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/sortcase?sortBy=asc` +
           "&contract=" +
           contract +
           "&location=" +
@@ -146,7 +148,7 @@ const Alistings = () => {
           selectedFinishDay
       );
       const data = await res.json();
-      console.log(data);
+   
       setNoOfCases(data.noOfCases);
       setListings(data.adPosts);
       setPage(data.page);
@@ -156,7 +158,8 @@ const Alistings = () => {
 
     if (ascDesc === true) {
       const res = await fetch(
-        `http://localhost:4000/api/admin/sortcase?sortBy=desc` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/sortcase?sortBy=desc` +
           "&contract=" +
           contract +
           "&location=" +
@@ -175,7 +178,7 @@ const Alistings = () => {
           selectedFinishDay
       );
       const data = await res.json();
-      console.log(data);
+
       setNoOfCases(data.noOfCases);
       setListings(data.adPosts);
       setPage(data.page);
@@ -270,7 +273,8 @@ const Alistings = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/listings?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/listings?" +
           "location=" +
           location +
           "&contract=" +
@@ -289,7 +293,7 @@ const Alistings = () => {
           selectedFinishDay
       );
       const data = await res.json();
-      console.log(data);
+
       if (isCancelled === false) {
         setReload(true);
         setNoOfCases(data.noOfCases);
@@ -360,7 +364,8 @@ const Alistings = () => {
     setBackdrop(true);
 
     const res = await fetch(
-      `http://localhost:4000/api/admin/sleepAd/${slug}/?` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/sleepAd/${slug}/?` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -400,7 +405,8 @@ const Alistings = () => {
 
     setBackdrop(true);
     const res = await fetch(
-      `http://localhost:4000/api/admin/sleepAd/${slug}/?` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/sleepAd/${slug}/?` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -444,7 +450,8 @@ const Alistings = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/listings?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/listings?" +
           "location=" +
           location +
           "&sortBy=" +
@@ -1219,7 +1226,10 @@ const Alistings = () => {
                           <td className="cell edit">
                             <div>
                               <ExternalLink
-                                href={`http://localhost:4000/api/admin/listingedit/${list.slug}`}
+                                href={
+                                  process.env.REACT_APP_BACKEND_URL +
+                                  `api/admin/listingedit/${list.slug}`
+                                }
                                 target="_self"
                               >
                                 <input type="button" defaultValue="Edit" />

@@ -155,7 +155,8 @@ const Step3 = () => {
     // ============ PROFILE DATA ===========
     axios
       .get(
-        "http://localhost:4000/api/users/allusers/" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/users/allusers/" +
           localStorage.getItem("userId")
       )
       .then((response) => {
@@ -168,7 +169,7 @@ const Step3 = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     const isLocum = true;
-    fetch("http://localhost:4000/api/locums/step3", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/locums/step3", {
       method: "PUT",
       credentials: "include",
       headers: { "Content-type": "application/json" },

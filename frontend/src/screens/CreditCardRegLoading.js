@@ -15,7 +15,7 @@ const CreditCardRegLoading = () => {
 
   const paymentOutcome = async (InvoiceNumber, TotalAmount, Email) => {
     try {
-      fetch("http://localhost:4000/api/payment/regFinalise", {
+      fetch(process.env.REACT_APP_BACKEND_URL + "api/payment/regFinalise", {
         method: "PUT",
         credentials: "include",
         headers: { "Content-type": "application/json" },
@@ -61,7 +61,11 @@ const CreditCardRegLoading = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/payment/check?accessCode=" + accessCode)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/payment/check?accessCode=" +
+          accessCode
+      )
       .then((response) => {
         if (
           response.data.response.attributes.Transactions[0]

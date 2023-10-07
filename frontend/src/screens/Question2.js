@@ -16,9 +16,8 @@ const Question2 = () => {
 
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/listings/question2?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/listings/question2?page=${page <= 0 ? 0 : page - 1}` +
         "&professions=" +
         listOfProfessions +
         "&contract=" +
@@ -34,9 +33,10 @@ const Question2 = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/listings/question2?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/listings/question2?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "&professions=" +
         listOfProfessions +
         "&contract=" +
@@ -58,7 +58,8 @@ const Question2 = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/listings/question2?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/listings/question2?page=${id + 1}` +
         "&professions=" +
         listOfProfessions +
         "&contract=" +
@@ -85,7 +86,8 @@ const Question2 = () => {
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
-        "http://localhost:4000/api/listings/question2?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/listings/question2?" +
           "page=" +
           page +
           "&contract=" +
@@ -150,7 +152,7 @@ const Question2 = () => {
     <>
       <HelmetProvider>
         <Helmet>
-        <title>Q. Select Profession | MedClicker</title>
+          <title>Q. Select Profession | MedClicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>

@@ -22,9 +22,8 @@ const Alistings = () => {
 
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/applications?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/applications?page=${page <= 0 ? 0 : page - 1}` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -51,9 +50,10 @@ const Alistings = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/applications?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/applications?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -86,7 +86,8 @@ const Alistings = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/applications?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/applications?page=${id + 1}` +
         "&location=" +
         location +
         "&sortBy=" +
@@ -120,7 +121,8 @@ const Alistings = () => {
 
     if (ascDesc === false) {
       const res = await fetch(
-        `http://localhost:4000/api/admin/sortapplications?sortBy=asc` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/sortapplications?sortBy=asc` +
           "&location=" +
           location +
           "&contract=" +
@@ -145,7 +147,8 @@ const Alistings = () => {
 
     if (ascDesc === true) {
       const res = await fetch(
-        `http://localhost:4000/api/admin/sortapplications?sortBy=desc` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/sortapplications?sortBy=desc` +
           "&location=" +
           location +
           "&contract=" +
@@ -248,7 +251,8 @@ const Alistings = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/applications?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/applications?" +
           "location=" +
           location +
           "&contract=" +
@@ -337,7 +341,8 @@ const Alistings = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/applications?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/applications?" +
           "location=" +
           location +
           "&sortBy=" +

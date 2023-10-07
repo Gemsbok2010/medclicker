@@ -68,7 +68,8 @@ const HomeNav = () => {
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
-        "http://localhost:4000/api/listings/homenavlist?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/listings/homenavlist?" +
           "contract=" +
           contractType
       );
@@ -107,7 +108,7 @@ const HomeNav = () => {
   const onLoginForm = async (e) => {
     e.preventDefault();
     setIsloaded(true);
-    fetch("http://localhost:4000/api/auth/login", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/auth/login", {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },
@@ -190,7 +191,8 @@ const HomeNav = () => {
     if (id) {
       axios
         .get(
-          "http://localhost:4000/api/users/allusers/" +
+          process.env.REACT_APP_BACKEND_URL +
+            "api/users/allusers/" +
             localStorage.getItem("userId")
         )
         .then((response) => {
@@ -215,9 +217,11 @@ const HomeNav = () => {
     }
   }, [id]);
 
-  const googleUrlAddress = `http://localhost:4000/auth/google?dd=${location.pathname}`;
+  const googleUrlAddress =
+    process.env.REACT_APP_BACKEND_URL + `auth/google?dd=${location.pathname}`;
 
-  const facebookUrlAddress = `http://localhost:4000/auth/facebook?dd=${location.pathname}`;
+  const facebookUrlAddress =
+    process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
 
   // ================ POST ===================
   const [, setFirstName] = useState("");
@@ -233,7 +237,7 @@ const HomeNav = () => {
       ReactSession.remove("email");
     }
     setTimeout(() => {
-      fetch("http://localhost:4000/api/auth/login", {
+      fetch(process.env.REACT_APP_BACKEND_URL + "api/auth/login", {
         method: "POST",
         credentials: "include",
         headers: { "Content-type": "application/json" },

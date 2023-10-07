@@ -148,7 +148,9 @@ const LocumProfile = () => {
     setIsloaded(false);
     const fetchData = async () => {
       axios
-        .get("http://localhost:4000/api/locums/profile/" + user.email)
+        .get(
+          process.env.REACT_APP_BACKEND_URL + "api/locums/profile/" + user.email
+        )
         .then((response) => {
           if (response.status === 200) {
             setUserInfo(response.data);
@@ -192,7 +194,7 @@ const LocumProfile = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:4000/api/locums/updateProfile", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/locums/updateProfile", {
       method: "PUT",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
@@ -270,9 +272,12 @@ const LocumProfile = () => {
 
   // =========== DELETE PHOTO ==================
   const deletePhoto = async (id) => {
-    await fetch("http://localhost:4000/api/locums/allusers/" + id, {
-      method: "DELETE",
-    }).then((res) => {
+    await fetch(
+      process.env.REACT_APP_BACKEND_URL + "api/locums/allusers/" + id,
+      {
+        method: "DELETE",
+      }
+    ).then((res) => {
       if (res.ok === true) {
         setIdPhoto("");
         setImageHere("");
@@ -320,7 +325,7 @@ const LocumProfile = () => {
 
     if (newsletter === true) {
       const res = await fetch(
-        `http://localhost:4000/api/comm/delist/${email}`,
+        process.env.REACT_APP_BACKEND_URL + `api/comm/delist/${email}`,
         {
           method: "PUT",
           credentials: "include",
@@ -341,7 +346,7 @@ const LocumProfile = () => {
 
     if (newsletter === false) {
       const res = await fetch(
-        `http://localhost:4000/api/comm/subscribe/${email}`,
+        process.env.REACT_APP_BACKEND_URL + `api/comm/subscribe/${email}`,
         {
           method: "PUT",
           credentials: "include",
@@ -377,7 +382,7 @@ const LocumProfile = () => {
 
     if (newsletter === true) {
       const res = await fetch(
-        `http://localhost:4000/api/comm/delist/${email}`,
+        process.env.REACT_APP_BACKEND_URL + `api/comm/delist/${email}`,
         {
           method: "PUT",
           credentials: "include",
@@ -397,20 +402,23 @@ const LocumProfile = () => {
     }
 
     if (newsletter === false) {
-      const res = await fetch("http://localhost:4000/api/comm/update", {
-        method: "PUT",
-        credentials: "include",
-        headers: { "Content-type": "application/json" },
-        body: JSON.stringify({
-          email: email,
-          newsletter: true,
-          attributes: {
-            FIRSTNAME: firstName,
-            LASTNAME: lastName,
-            STATES: state,
-          },
-        }),
-      });
+      const res = await fetch(
+        process.env.REACT_APP_BACKEND_URL + "api/comm/update",
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify({
+            email: email,
+            newsletter: true,
+            attributes: {
+              FIRSTNAME: firstName,
+              LASTNAME: lastName,
+              STATES: state,
+            },
+          }),
+        }
+      );
       const data = await res.json();
 
       if (data) {
@@ -430,7 +438,10 @@ const LocumProfile = () => {
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
-        "http://localhost:4000/api/comm/mysubscription?" + "email=" + user.email
+        process.env.REACT_APP_BACKEND_URL +
+          "api/comm/mysubscription?" +
+          "email=" +
+          user.email
       );
       const data = await res.json();
 
@@ -459,7 +470,7 @@ const LocumProfile = () => {
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
-        "http://localhost:4000/api/locums/listOfProfessions"
+        process.env.REACT_APP_BACKEND_URL + "api/locums/listOfProfessions"
       );
       const data = await res.json();
 
@@ -721,7 +732,10 @@ const LocumProfile = () => {
                 </div>
                 <div>
                   <ExternalLink
-                    href={`http://localhost:4000/api/locums/resume/${userInfo.locumId}`}
+                    href={
+                      process.env.REACT_APP_BACKEND_URL +
+                      `api/locums/resume/${userInfo.locumId}`
+                    }
                     target="_self"
                   >
                     Preview CV
@@ -732,7 +746,10 @@ const LocumProfile = () => {
             <div className="allQuestionCards">
               <form
                 id="formZero"
-                action={`http://localhost:4000/api/locums/upload?email=${userInfo.email}`}
+                action={
+                  process.env.REACT_APP_BACKEND_URL +
+                  `api/locums/upload?email=${userInfo.email}`
+                }
                 method="POST"
                 encType="multipart/form-data"
               >

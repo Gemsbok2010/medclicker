@@ -23,7 +23,11 @@ const Resume = () => {
   useEffect(() => {
     // ============ PROFILE DATA ===========
     axios
-      .get("http://localhost:4000/api/locums/profileResume/" + user.email)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/locums/profileResume/" +
+          user.email
+      )
       .then((response) => {
         if (response.status === 200) {
           setUserInfo(response.data);

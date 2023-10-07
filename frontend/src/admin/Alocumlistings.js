@@ -23,9 +23,8 @@ const Alistings = () => {
 
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/locumsonly?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/locumsonly?page=${page <= 0 ? 0 : page - 1}` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -54,9 +53,10 @@ const Alistings = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/locumsonly?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/locumsonly?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -91,7 +91,8 @@ const Alistings = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/locumsonly?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/locumsonly?page=${id + 1}` +
         "&location=" +
         location +
         "&sortBy=" +
@@ -128,7 +129,8 @@ const Alistings = () => {
 
     if (ascDesc === false) {
       const res = await fetch(
-        `http://localhost:4000/api/admin/sortlocumcase?sortBy=asc` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/sortlocumcase?sortBy=asc` +
           "&location=" +
           location +
           "&isActiveJob=" +
@@ -154,7 +156,8 @@ const Alistings = () => {
 
     if (ascDesc === true) {
       const res = await fetch(
-        `http://localhost:4000/api/admin/sortlocumcase?sortBy=desc` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/sortlocumcase?sortBy=desc` +
           "&location=" +
           location +
           "&isActiveJob=" +
@@ -239,7 +242,8 @@ const Alistings = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/locumsonly?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/locumsonly?" +
           "location=" +
           location +
           "&isActiveJob=" +
@@ -326,7 +330,8 @@ const Alistings = () => {
     e.preventDefault();
     setBackdrop(true);
     const res = await fetch(
-      `http://localhost:4000/api/admin/locumSleepAd/${slug}/?` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/locumSleepAd/${slug}/?` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -363,7 +368,8 @@ const Alistings = () => {
     e.preventDefault();
     setBackdrop(true);
     const res = await fetch(
-      `http://localhost:4000/api/admin/locumSleepAd/${slug}/?` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/locumSleepAd/${slug}/?` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -405,7 +411,8 @@ const Alistings = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/locumsonly?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/locumsonly?" +
           "location=" +
           location +
           "&sortBy=" +
@@ -451,11 +458,13 @@ const Alistings = () => {
 
   // Hired
   useEffect(() => {
-    axios.get("http://localhost:4000/api/admin/hired").then((response) => {
-      if (response.status === 200) {
-        setHired(response.data.thisAd);
-      }
-    });
+    axios
+      .get(process.env.REACT_APP_BACKEND_URL + "api/admin/hired")
+      .then((response) => {
+        if (response.status === 200) {
+          setHired(response.data.thisAd);
+        }
+      });
   }, []);
 
   // =========== CUSTOMISED CSV FILE ============
@@ -1170,7 +1179,6 @@ const Alistings = () => {
                           <td className="cell locum">
                             <div>
                               {hired.map((appId) => {
-                                console.log(appId);
                                 return (
                                   appId.slugId === list.slug && (
                                     <span
@@ -1191,7 +1199,10 @@ const Alistings = () => {
                           <td className="cell edit">
                             <div>
                               <ExternalLink
-                                href={`http://localhost:4000/api/admin/listingedit/${list.slug}`}
+                                href={
+                                  process.env.REACT_APP_BACKEND_URL +
+                                  `api/admin/listingedit/${list.slug}`
+                                }
                                 target="_self"
                               >
                                 <input type="button" defaultValue="Edit" />

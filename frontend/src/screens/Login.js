@@ -15,9 +15,11 @@ const Login = () => {
   const location = useLocation();
   const [isloaded, setIsloaded] = useState(false);
 
-  const googleUrlAddress = `http://localhost:4000/auth/google?dd=${location.pathname}`;
+  const googleUrlAddress =
+    process.env.REACT_APP_BACKEND_URL + `auth/google?dd=${location.pathname}`;
 
-  const facebookUrlAddress = `http://localhost:4000/auth/facebook?dd=${location.pathname}`;
+  const facebookUrlAddress =
+    process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,7 +41,7 @@ const Login = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setIsloaded(true);
-    fetch("http://localhost:4000/api/auth/login", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/auth/login", {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },

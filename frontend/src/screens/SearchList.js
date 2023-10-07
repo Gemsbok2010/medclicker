@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useEffect } from "react";
 import axios from "axios";
+require("dotenv/config");
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { ExternalLink } from "react-external-link";
 // Three dots
@@ -187,7 +188,8 @@ const SearchList = () => {
     if (id) {
       axios
         .get(
-          "http://localhost:4000/api/users/allusers/" +
+          process.env.REACT_APP_BACKEND_URL +
+            "api/users/allusers/" +
             localStorage.getItem("userId")
         )
         .then((response) => {
@@ -219,7 +221,9 @@ const SearchList = () => {
     if (user.isLoggedIn) {
       axios
         .get(
-          "http://localhost:4000/api/applications/applied?nanoId=" + user.nanoId
+          process.env.REACT_APP_BACKEND_URL +
+            "api/applications/applied?nanoId=" +
+            user.nanoId
         )
         .then((response) => {
           if (response.status === 200) {
@@ -232,9 +236,8 @@ const SearchList = () => {
   // =============== PAGE BUTTONS ================
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/listings/search?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/listings/search?page=${page <= 0 ? 0 : page - 1}` +
         "sortBy=" +
         sort +
         "&contract=" +
@@ -260,9 +263,10 @@ const SearchList = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/listings/search?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/listings/search?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "sortBy=" +
         sort +
         "&contract=" +
@@ -294,7 +298,8 @@ const SearchList = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/listings/search?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/listings/search?page=${id + 1}` +
         "&contract=" +
         contract +
         "&professions=" +
@@ -324,7 +329,8 @@ const SearchList = () => {
   const sorting = async (ascDesc) => {
     if (ascDesc === false) {
       const res = await fetch(
-        "http://localhost:4000/api/listings/search?sortBy=asc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/listings/search?sortBy=asc" +
           "&contract=" +
           contract +
           "&professions=" +
@@ -345,7 +351,8 @@ const SearchList = () => {
 
     if (ascDesc === true) {
       const res = await fetch(
-        "http://localhost:4000/api/listings/search?sortBy=desc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/listings/search?sortBy=desc" +
           "&contract=" +
           contract +
           "&professions=" +
@@ -470,7 +477,8 @@ const SearchList = () => {
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
-        "http://localhost:4000/api/listings/search?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/listings/search?" +
           "contract=" +
           contract +
           "&professions=" +
@@ -1068,7 +1076,10 @@ const SearchList = () => {
                         return (
                           <div className="ads" key={listing._id}>
                             <ExternalLink
-                              href={`http://localhost:4000/api/listings/adPosts/${listing.slug}`}
+                              href={
+                                process.env.REACT_APP_BACKEND_URL +
+                                `api/listings/adPosts/${listing.slug}`
+                              }
                               target="_self"
                             >
                               <div className="rightmessage">

@@ -6,6 +6,7 @@ const url = require("url");
 const fs = require("fs-extra");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
+require("dotenv/config");
 
 // Imports
 const User = require("../models/userModel");

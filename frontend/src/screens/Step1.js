@@ -221,7 +221,8 @@ const Step1 = () => {
     // ============ PROFILE DATA ===========
     axios
       .get(
-        "http://localhost:4000/api/users/allusers/" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/users/allusers/" +
           localStorage.getItem("userId")
       )
       .then((response) => {
@@ -241,7 +242,7 @@ const Step1 = () => {
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
-        "http://localhost:4000/api/locums/listOfProfessions"
+        process.env.REACT_APP_BACKEND_URL + "api/locums/listOfProfessions"
       );
       const data = await res.json();
 
@@ -284,7 +285,7 @@ const Step1 = () => {
   // ======= ONSUBMIT TO NEXT STEP 2 =======
   const onSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:4000/api/locums/step1", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/locums/step1", {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },

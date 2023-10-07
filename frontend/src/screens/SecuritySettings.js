@@ -12,7 +12,8 @@ const SecuritySettings = () => {
     e.preventDefault();
     try {
       fetch(
-        "http://localhost:4000/api/secure/securitySettings/" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/secure/securitySettings/" +
           localStorage.getItem("userId"),
         {
           method: "PUT",

@@ -23,9 +23,8 @@ const LocumAgreements = () => {
 
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/applications/agreements?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/applications/agreements?page=${page <= 0 ? 0 : page - 1}` +
         "sortBy=" +
         sort +
         "&email=" +
@@ -50,9 +49,10 @@ const LocumAgreements = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/applications/agreements?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/applications/agreements?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "sortBy=" +
         sort +
         "&email=" +
@@ -83,7 +83,8 @@ const LocumAgreements = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/applications/agreements?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/applications/agreements?page=${id + 1}` +
         "&sortBy=" +
         sort +
         "&email=" +
@@ -115,7 +116,8 @@ const LocumAgreements = () => {
     const name = e.target.innerHTML;
     if (ascDesc === false) {
       const res = await fetch(
-        "http://localhost:4000/api/applications/sortagreements?sortBy=asc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/sortagreements?sortBy=asc" +
           "&page=" +
           page +
           "&email=" +
@@ -138,7 +140,8 @@ const LocumAgreements = () => {
 
     if (ascDesc === true) {
       const res = await fetch(
-        "http://localhost:4000/api/applications/sortagreements?sortBy=desc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/sortagreements?sortBy=desc" +
           "&page=" +
           page +
           "&email=" +
@@ -218,7 +221,8 @@ const LocumAgreements = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/applications/agreements?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/agreements?" +
           "sortBy=" +
           sort +
           "&page=" +
@@ -265,7 +269,8 @@ const LocumAgreements = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/applications/agreements?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/agreements?" +
           "sortBy=" +
           sort +
           "&page=" +
@@ -307,7 +312,11 @@ const LocumAgreements = () => {
   // Hired
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/applications/thisAd?email=" + email)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/thisAd?email=" +
+          email
+      )
       .then((response) => {
         if (response.status === 200) {
           setAds(response.data.thisAd);
@@ -602,7 +611,6 @@ const LocumAgreements = () => {
                           <td className="cell contractType">
                             <div>
                               {ads.map((appId) => {
-                                console.log(appId);
                                 return (
                                   appId.slug === contract.slugId && (
                                     <span
@@ -642,7 +650,10 @@ const LocumAgreements = () => {
                           <td className="cell edit">
                             <div>
                               <ExternalLink
-                                href={`http://localhost:4000/api/applications/agreement/${contract.caseId}`}
+                                href={
+                                  process.env.REACT_APP_BACKEND_URL +
+                                  `api/applications/agreement/${contract.caseId}`
+                                }
                                 target="_self"
                               >
                                 <input type="button" value="View Agreement" />

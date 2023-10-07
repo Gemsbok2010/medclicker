@@ -6,7 +6,7 @@ import axios from "axios";
 const Invoice = () => {
   const { pathname } = useLocation();
 
-  const invoiceNumber = pathname.split("/")[2]
+  const invoiceNumber = pathname.split("/")[2];
   const [invoice, setInvoice] = useState([]);
   const [gst, setGst] = useState("");
   const [total, setTotal] = useState("");
@@ -18,7 +18,11 @@ const Invoice = () => {
   useEffect(() => {
     // ============ PROFILE DATA ===========
     axios
-      .get("http://localhost:4000/api/payment/invoicenumber/" + invoiceNumber)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/payment/invoicenumber/" +
+          invoiceNumber
+      )
       .then((response) => {
         if (response.status === 200) {
           setInvoice(response.data.invoice);

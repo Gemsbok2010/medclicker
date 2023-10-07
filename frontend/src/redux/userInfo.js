@@ -14,7 +14,7 @@ export const userSlice = createSlice({
       filename: "",
       isLoggedIn: null,
       isLocum: null,
-      isActive: null,
+      isActive: true,
       isAdmin: null,
       nanoId: null,
       completeAccess: null,

@@ -66,7 +66,11 @@ const Ad_details_std = () => {
   useEffect(() => {
     // ============ LISTINGS DATA ===========
     axios
-      .get("http://localhost:4000/api/listings/Ad_details_std/" + slug)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/listings/Ad_details_std/" +
+          slug
+      )
       .then((response) => {
         if (response.status === 200) {
           setList(response.data.listing);
@@ -117,7 +121,8 @@ const Ad_details_std = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:4000/api/applications/Ad_details/${slug}?nanoId=` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/applications/Ad_details/${slug}?nanoId=` +
           user.nanoId
       )
       .then((response) => {
@@ -208,8 +213,10 @@ const Ad_details_std = () => {
               id="selectdate"
               action={
                 selectedFile && selectedCover
-                  ? `http://localhost:4000/api/applications/upload?email=${user.email}&caseId=${list.caseId}&ahpra=${ahpra}&status=${status}`
-                  : `http://localhost:4000/api/applications/singleUpload?email=${user.email}&caseId=${list.caseId}&ahpra=${ahpra}&status=${status}`
+                  ? process.env.REACT_APP_BACKEND_URL +
+                    `api/applications/upload?email=${user.email}&caseId=${list.caseId}&ahpra=${ahpra}&status=${status}`
+                  : process.env.REACT_APP_BACKEND_URL +
+                    `api/applications/singleUpload?email=${user.email}&caseId=${list.caseId}&ahpra=${ahpra}&status=${status}`
               }
               method="POST"
               encType="multipart/form-data"

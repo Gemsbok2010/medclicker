@@ -16,9 +16,11 @@ const Footer = ({ asx }) => {
   const [email, setEmail] = useState("");
   const [thisyear, setThisyear] = useState(null);
 
-  const googleUrlAddress = `http://localhost:4000/auth/google?dd=${location.pathname}`;
+  const googleUrlAddress =
+    process.env.REACT_APP_BACKEND_URL + `auth/google?dd=${location.pathname}`;
 
-  const facebookUrlAddress = `http://localhost:4000/auth/facebook?dd=${location.pathname}`;
+  const facebookUrlAddress =
+    process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
 
   // ============ GET CURRENT YEAR ===============
   useEffect(() => {
@@ -38,7 +40,9 @@ const Footer = ({ asx }) => {
 
     // declare the data fetching function
     const fetchData = async () => {
-      const res = await fetch("http://localhost:4000/api/admin/footer");
+      const res = await fetch(
+        process.env.REACT_APP_BACKEND_URL + "api/admin/footer"
+      );
       const data = await res.json();
 
       if (isCancelled === false) {
@@ -87,7 +91,7 @@ const Footer = ({ asx }) => {
   const onLoginForm = async (e) => {
     e.preventDefault();
     setIsloaded(true);
-    fetch("http://localhost:4000/api/auth/login", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/auth/login", {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },
@@ -358,6 +362,7 @@ const Footer = ({ asx }) => {
                       ) : (
                         <Link
                           to="#"
+                          key={profession._id}
                           onClick={() => {
                             setQuestionCard(true);
                             setBackdrop(true);

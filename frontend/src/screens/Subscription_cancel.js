@@ -17,7 +17,10 @@ const Subscription_cancel = () => {
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
-        "http://localhost:4000/api/comm/mysubscription?" + "email=" + user.email
+        process.env.REACT_APP_BACKEND_URL +
+          "api/comm/mysubscription?" +
+          "email=" +
+          user.email
       );
       const data = await res.json();
 

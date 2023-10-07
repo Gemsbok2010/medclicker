@@ -299,7 +299,9 @@ const LocumCV = () => {
     setIsloaded(false);
     // ============ PROFILE DATA ===========
     axios
-      .get("http://localhost:4000/api/locums/profile/" + user.email)
+      .get(
+        process.env.REACT_APP_BACKEND_URL + "api/locums/profile/" + user.email
+      )
       .then((response) => {
         if (response.status === 200) {
           setUserInfo(response.data);
@@ -440,7 +442,7 @@ const LocumCV = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:4000/api/locums/updateCv", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/locums/updateCv", {
       method: "PUT",
       credentials: "include",
       headers: { "Content-type": "application/json" },
@@ -565,8 +567,6 @@ const LocumCV = () => {
         </Helmet>
         <LoggedInNavbar />
 
-      
-
         <div className="wrap">
           {updateNote && (
             <div className="updateNote container-fluid">
@@ -590,7 +590,10 @@ const LocumCV = () => {
                 </div>
                 <div>
                   <ExternalLink
-                    href={`http://localhost:4000/api/locums/resume/${userInfo.locumId}`}
+                    href={
+                      process.env.REACT_APP_BACKEND_URL +
+                      `api/locums/resume/${userInfo.locumId}`
+                    }
                     target="_self"
                   >
                     Preview CV

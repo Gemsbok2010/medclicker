@@ -247,10 +247,7 @@ function App() {
             <Route path="/invoice/:invoiceNumber" element={<Invoice />} />
             <Route path="/agreements" element={<Agreements />} />
             <Route path="/agreement/:caseId" element={<Agreement />} />
-            {/* 3. BLOCK BLACKLISTED USERS */}
-            <Route element={<BlockInactives />}>
-              <Route path="/personal-details" element={<PersonalDetails />} />
-            </Route>
+            <Route path="/personal-details" element={<PersonalDetails />} />
 
             {/* 3. BLOCK INCOMPLETE USERS */}
             <Route element={<ProtectedAllusers />}>

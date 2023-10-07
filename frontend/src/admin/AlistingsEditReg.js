@@ -4,6 +4,7 @@ import axios from "axios";
 import $ from "jquery";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+
 import {
   GoogleMap,
   useJsApiLoader,
@@ -140,12 +141,15 @@ const ListingEditReg = () => {
 
   const onDelete = async (e) => {
     e.preventDefault();
-    await fetch("http://localhost:4000/api/admin/delete/" + list.slug, {
-      method: "PUT",
-      credentials: "include",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({ isDeletedJob: true, isActiveJob: false }),
-    })
+    await fetch(
+      process.env.REACT_APP_BACKEND_URL + "api/admin/delete/" + list.slug,
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({ isDeletedJob: true, isActiveJob: false }),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data) {
@@ -169,7 +173,7 @@ const ListingEditReg = () => {
     const firstName = user.firstName;
     const lastName = user.lastName;
     const nanoId = user.nanoId;
-    fetch("http://localhost:4000/api/listings/edit", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/listings/edit", {
       method: "PUT",
       credentials: "include",
       headers: { "Content-type": "application/json" },
@@ -219,7 +223,11 @@ const ListingEditReg = () => {
   useEffect(() => {
     // ============ LISTINGS DATA ===========
     axios
-      .get("http://localhost:4000/api/listings/listingEditReg/" + slug)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/listings/listingEditReg/" +
+          slug
+      )
       .then((response) => {
         if (response.status === 200) {
           setList(response.data.listing);

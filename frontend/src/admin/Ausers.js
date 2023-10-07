@@ -24,9 +24,8 @@ const Ausers = () => {
 
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/allusers?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/allusers?page=${page <= 0 ? 0 : page - 1}` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -52,9 +51,10 @@ const Ausers = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/allusers?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/allusers?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -86,7 +86,8 @@ const Ausers = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/allusers?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/allusers?page=${id + 1}` +
         "&location=" +
         location +
         "&sortBy=" +
@@ -118,7 +119,8 @@ const Ausers = () => {
     setReload(false);
     if (ascDesc === false) {
       const res = await fetch(
-        "http://localhost:4000/api/admin/allusers?sortBy=asc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/allusers?sortBy=asc" +
           "&location=" +
           location +
           "&page=" +
@@ -142,7 +144,8 @@ const Ausers = () => {
     if (ascDesc === true) {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/allusers?sortBy=desc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/allusers?sortBy=desc" +
           "&location=" +
           location +
           "&page=" +
@@ -169,7 +172,8 @@ const Ausers = () => {
 
     if (ascDesc === false) {
       const res = await fetch(
-        `http://localhost:4000/api/admin/sortusers?sortBy=asc` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/sortusers?sortBy=asc` +
           "&location=" +
           location +
           "&page=" +
@@ -193,7 +197,8 @@ const Ausers = () => {
 
     if (ascDesc === true) {
       const res = await fetch(
-        `http://localhost:4000/api/admin/sortusers?sortBy=desc` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/sortusers?sortBy=desc` +
           "&location=" +
           location +
           "&page=" +
@@ -268,7 +273,8 @@ const Ausers = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/allusers?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/allusers?" +
           "location=" +
           location +
           "&sortBy=" +
@@ -350,7 +356,10 @@ const Ausers = () => {
 
     setBackdrop(true);
     const res = await fetch(
-      `http://localhost:4000/api/admin/makeAdmin/${id}` + "?sortBy=" + sort,
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/makeAdmin/${id}` +
+        "?sortBy=" +
+        sort,
       {
         method: "PUT",
         credentials: "include",
@@ -374,7 +383,10 @@ const Ausers = () => {
     e.preventDefault();
     setBackdrop(true);
     const res = await fetch(
-      `http://localhost:4000/api/admin/makeAdmin/${id}` + "?sortBy=" + sort,
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/makeAdmin/${id}` +
+        "?sortBy=" +
+        sort,
       {
         method: "PUT",
         credentials: "include",
@@ -400,7 +412,10 @@ const Ausers = () => {
     e.preventDefault();
     setBackdrop(true);
     const res = await fetch(
-      `http://localhost:4000/api/admin/blackme/${id}` + "?sortBy=" + sort,
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/blackme/${id}` +
+        "?sortBy=" +
+        sort,
       {
         method: "PUT",
         credentials: "include",
@@ -425,7 +440,10 @@ const Ausers = () => {
     e.preventDefault();
     setBackdrop(true);
     const res = await fetch(
-      `http://localhost:4000/api/admin/blackme/${id}` + "?sortBy=" + sort,
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/blackme/${id}` +
+        "?sortBy=" +
+        sort,
       {
         method: "PUT",
         credentials: "include",
@@ -458,7 +476,8 @@ const Ausers = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/allusers?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/allusers?" +
           "location=" +
           location +
           "&sortBy=" +
@@ -1127,7 +1146,10 @@ const Ausers = () => {
                         <td className="cell edit">
                           <div>
                             <ExternalLink
-                              href={`http://localhost:4000/api/admin/users/${user._id}`}
+                              href={
+                                process.env.REACT_APP_BACKEND_URL +
+                                `api/admin/users/${user._id}`
+                              }
                               target="_blank"
                             >
                               <input type="button" value="Edit" />

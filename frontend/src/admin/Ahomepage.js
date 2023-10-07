@@ -25,7 +25,7 @@ const Ahomepage = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     try {
-      fetch("http://localhost:4000/api/admin/homepage", {
+      fetch(process.env.REACT_APP_BACKEND_URL + "api/admin/homepage", {
         method: "PUT",
         credentials: "include",
         headers: { "Content-type": "application/json" },
@@ -97,7 +97,7 @@ const Ahomepage = () => {
   useEffect(() => {
     const fetchData = async () => {
       axios
-        .get("http://localhost:4000/api/admin/storedInfo")
+        .get(process.env.REACT_APP_BACKEND_URL + "api/admin/storedInfo")
         .then((response) => {
           if (response.status === 200) {
             setUserInfo(response.data);

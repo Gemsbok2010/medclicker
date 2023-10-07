@@ -191,7 +191,9 @@ const QuestionLocumReview = () => {
     const isActiveJob = true;
 
     fetch(
-      "http://localhost:4000/api/listings/locumList?expiryDate=" + expiryDate,
+      process.env.REACT_APP_BACKEND_URL +
+        "api/listings/locumList?expiryDate=" +
+        expiryDate,
       {
         method: "POST",
         credentials: "include",

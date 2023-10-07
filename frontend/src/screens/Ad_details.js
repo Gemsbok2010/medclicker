@@ -52,7 +52,9 @@ const Ad_details = () => {
 
     // ============ LISTINGS DATA ===========
     axios
-      .get("http://localhost:4000/api/listings/Ad_details/" + slug)
+      .get(
+        process.env.REACT_APP_BACKEND_URL + "api/listings/Ad_details/" + slug
+      )
       .then((response) => {
         if (response.status === 200) {
           setList(response.data.listing);
@@ -97,7 +99,9 @@ const Ad_details = () => {
     // ============ PROFILE DATA ===========
 
     axios
-      .get("http://localhost:4000/api/locums/candidate/" + user.email)
+      .get(
+        process.env.REACT_APP_BACKEND_URL + "api/locums/candidate/" + user.email
+      )
       .then((response) => {
         if (response.status === 200) {
           setCountry(response.data.country);
@@ -131,7 +135,8 @@ const Ad_details = () => {
     const expiryDate = new Date();
 
     fetch(
-      "http://localhost:4000/api/applications/applications?expiryDate=" +
+      process.env.REACT_APP_BACKEND_URL +
+        "api/applications/applications?expiryDate=" +
         expiryDate,
       {
         method: "POST",
@@ -205,7 +210,8 @@ const Ad_details = () => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:4000/api/applications/Ad_details/${slug}?nanoId=` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/applications/Ad_details/${slug}?nanoId=` +
           user.nanoId
       )
       .then((response) => {

@@ -74,8 +74,12 @@ router.get("/dashboard/:email", async (req, res) => {
 router.get("/jobcases", async (req, res, next) => {
   const who = await User.find({ nanoId: req.query.nanoId });
 
-  const state = who[0].state;
-
+  let state;
+  if (who.length !== 0) {
+    state = who[0].state;
+  } else {
+    state = "NSW";
+  }
   try {
     const nsw = await Listing.find({
       state: "NSW",

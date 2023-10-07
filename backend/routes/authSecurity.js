@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { config } = require("../config");
 const moment = require("moment");
+require("dotenv/config");
 
 // Imports
 const User = require("../models/userModel");
@@ -127,7 +128,8 @@ router.post("/forgotpassword", async (req, res) => {
     };
 
     const token = jwt.sign(payload, secret, { expiresIn: "35m" });
-    const link = `http://localhost:3000/resetpassword/${user._id}/${token}`;
+    const link =
+      process.env.FRONTEND_URL + `resetpassword/${user._id}/${token}`;
     forgotPasswordEmail(firstName, logo, link, email, thisyear);
     const subject = "Medclicker Reset Password";
     const to = `${email}`;

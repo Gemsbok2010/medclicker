@@ -15,7 +15,7 @@ const ForgotPassword = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     setIsloaded(true);
-    fetch("http://localhost:4000/api/admin/forgotpassword", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/admin/forgotpassword", {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },

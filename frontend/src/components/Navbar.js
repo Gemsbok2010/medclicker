@@ -41,7 +41,8 @@ const Navbar = () => {
     if (id) {
       axios
         .get(
-          "http://localhost:4000/api/users/allusers/" +
+          process.env.REACT_APP_BACKEND_URL +
+            "api/users/allusers/" +
             localStorage.getItem("userId")
         )
         .then((response) => {
@@ -67,9 +68,11 @@ const Navbar = () => {
   }, [id]);
 
   // ============= GOOGLE AND FACEBOOK LOGIN ===============
-  const urlAddress = `http://localhost:4000/auth/google?dd=${location.pathname}`;
+  const urlAddress =
+    process.env.REACT_APP_BACKEND_URL + `auth/google?dd=${location.pathname}`;
 
-  const facebookUrlAddress = `http://localhost:4000/auth/facebook?dd=${location.pathname}`;
+  const facebookUrlAddress =
+    process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
 
   const [openDropDown, setOpenDropDown] = useState(false);
   const [openHamburger, setOpenHamburger] = useState(false);
@@ -88,7 +91,7 @@ const Navbar = () => {
       ReactSession.remove("email");
     }
     setTimeout(() => {
-      fetch("http://localhost:4000/api/auth/login", {
+      fetch(process.env.REACT_APP_BACKEND_URL + "api/auth/login", {
         method: "POST",
         credentials: "include",
         headers: { "Content-type": "application/json" },

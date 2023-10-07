@@ -16,7 +16,11 @@ const CreditCardSuccess = () => {
   useEffect(() => {
     setIsloaded(false);
     axios
-      .get("http://localhost:4000/api/dashboard/dashboard/" + user.email)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/dashboard/dashboard/" +
+          user.email
+      )
       .then((response) => {
         if (response.status === 200) {
           setNewApply(response.data.newApply);

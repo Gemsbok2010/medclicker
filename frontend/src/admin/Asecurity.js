@@ -15,7 +15,8 @@ const Asecurity = () => {
     e.preventDefault();
     try {
       fetch(
-        "http://localhost:4000/api/admin/securitySettings/" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/securitySettings/" +
           localStorage.getItem("userId"),
         {
           method: "PUT",

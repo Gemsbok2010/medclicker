@@ -17,7 +17,7 @@ const CreditCardLoading = () => {
 
   const paymentOutcome = async (InvoiceNumber, TotalAmount, Email) => {
     try {
-      fetch("http://localhost:4000/api/payment/finalise", {
+      fetch(process.env.REACT_APP_BACKEND_URL + "api/payment/finalise", {
         method: "PUT",
         credentials: "include",
         headers: { "Content-type": "application/json" },
@@ -53,7 +53,8 @@ const CreditCardLoading = () => {
     const dateIssued = new Date();
     try {
       fetch(
-        "http://localhost:4000/api/payment/emailToLocum?dateIssued=" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/payment/emailToLocum?dateIssued=" +
           dateIssued,
         {
           method: "PUT",
@@ -80,7 +81,11 @@ const CreditCardLoading = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/payment/check?accessCode=" + AccessCode)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/payment/check?accessCode=" +
+          AccessCode
+      )
       .then((response) => {
         window.history.pushState(
           {},

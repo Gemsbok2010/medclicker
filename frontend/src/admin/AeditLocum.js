@@ -147,7 +147,9 @@ const AeditLocum = () => {
     const fetchData = async () => {
       axios
         .get(
-          "http://localhost:4000/api/admin/profile/" + pathname.split("/")[2]
+          process.env.REACT_APP_BACKEND_URL +
+            "api/admin/profile/" +
+            pathname.split("/")[2]
         )
         .then((response) => {
           if (response.status === 200) {
@@ -192,7 +194,7 @@ const AeditLocum = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:4000/api/locums/updateProfile", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/locums/updateProfile", {
       method: "PUT",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
@@ -271,7 +273,7 @@ const AeditLocum = () => {
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
-        "http://localhost:4000/api/locums/listOfProfessions"
+        process.env.REACT_APP_BACKEND_URL + "api/locums/listOfProfessions"
       );
       const data = await res.json();
 
@@ -361,9 +363,12 @@ const AeditLocum = () => {
 
   // =========== DELETE PHOTO ==================
   const deletePhoto = async (id) => {
-    await fetch("http://localhost:4000/api/locums/allusers/" + id, {
-      method: "DELETE",
-    }).then((res) => {
+    await fetch(
+      process.env.REACT_APP_BACKEND_URL + "api/locums/allusers/" + id,
+      {
+        method: "DELETE",
+      }
+    ).then((res) => {
       if (res.ok === true) {
         setIdPhoto("");
         setImageHere("");
@@ -578,7 +583,10 @@ const AeditLocum = () => {
                 </div>
                 <div>
                   <ExternalLink
-                    href={`http://localhost:4000/api/admin/resume/${userInfo.locumId}`}
+                    href={
+                      process.env.REACT_APP_BACKEND_URL +
+                      `api/admin/resume/${userInfo.locumId}`
+                    }
                     target="_self"
                   >
                     Preview CV
@@ -589,7 +597,10 @@ const AeditLocum = () => {
             <div className="allQuestionCards">
               <form
                 id="formZero"
-                action={`http://localhost:4000/api/admin/upload-locum?email=${userInfo.email}`}
+                action={
+                  process.env.REACT_APP_BACKEND_URL +
+                  `api/admin/upload-locum?email=${userInfo.email}`
+                }
                 method="POST"
                 encType="multipart/form-data"
               >

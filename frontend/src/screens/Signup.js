@@ -23,9 +23,11 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const googleUrlAddress = `http://localhost:4000/auth/google?dd=${location.pathname}`;
+  const googleUrlAddress =
+    process.env.REACT_APP_BACKEND_URL + `auth/google?dd=${location.pathname}`;
 
-  const facebookUrlAddress = `http://localhost:4000/auth/facebook?dd=${location.pathname}`;
+  const facebookUrlAddress =
+    process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
 
   const [tickBox, setTickBox] = useState(false);
   const [vanishfirst, setVanishfirst] = useState(true);
@@ -118,7 +120,9 @@ const Signup = () => {
     const createdAt = new Date();
     try {
       const res = await fetch(
-        "http://localhost:4000/api/auth/signup?createdAt=" + createdAt,
+        process.env.REACT_APP_BACKEND_URL +
+          "api/auth/signup?createdAt=" +
+          createdAt,
         {
           method: "POST",
           credentials: "include",
@@ -148,7 +152,6 @@ const Signup = () => {
         setIsloaded(false);
         dispatch(
           login({
-          
             firstName: data.user.firstName,
             lastName: data.user.lastName,
             email: data.user.email,

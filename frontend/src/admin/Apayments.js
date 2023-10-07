@@ -22,9 +22,8 @@ const Alistings = () => {
 
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/payments?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/payments?page=${page <= 0 ? 0 : page - 1}` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -51,9 +50,10 @@ const Alistings = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/payments?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/payments?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -86,7 +86,8 @@ const Alistings = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/payments?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/payments?page=${id + 1}` +
         "&location=" +
         location +
         "&sortBy=" +
@@ -121,7 +122,8 @@ const Alistings = () => {
     if (ascDesc === false) {
       setReload(false);
       const res = await fetch(
-        `http://localhost:4000/api/admin/sortpayments?sortBy=asc` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/sortpayments?sortBy=asc` +
           "&location=" +
           location +
           "&page=" +
@@ -147,7 +149,8 @@ const Alistings = () => {
     if (ascDesc === true) {
       setReload(false);
       const res = await fetch(
-        `http://localhost:4000/api/admin/sortpayments?sortBy=desc` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/sortpayments?sortBy=desc` +
           "&location=" +
           location +
           "&page=" +
@@ -250,7 +253,8 @@ const Alistings = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/payments?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/payments?" +
           "location=" +
           location +
           "&contract=" +
@@ -339,7 +343,8 @@ const Alistings = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/payments?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/payments?" +
           "location=" +
           location +
           "&sortBy=" +
@@ -415,7 +420,7 @@ const Alistings = () => {
   const sendInvoice = (e, invoiceNumber) => {
     e.preventDefault();
 
-    fetch("http://localhost:4000/api/admin/sendinvoice", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/admin/sendinvoice", {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },
@@ -1022,7 +1027,10 @@ const Alistings = () => {
                           <td className="cell edit">
                             <div>
                               <ExternalLink
-                                href={`http://localhost:4000/api/payment/invoice/${payment.invoiceNumber}`}
+                                href={
+                                  process.env.REACT_APP_BACKEND_URL +
+                                  `api/payment/invoice/${payment.invoiceNumber}`
+                                }
                                 target="_self"
                               >
                                 <input type="button" value="View Invoice" />

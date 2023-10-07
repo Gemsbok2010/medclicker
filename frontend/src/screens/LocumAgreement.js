@@ -18,9 +18,13 @@ const LocumAgreement = () => {
   useEffect(() => {
     // ============ PROFILE DATA ===========
     axios
-      .get("http://localhost:4000/api/applications/contract/" + caseId)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/contract/" +
+          caseId
+      )
       .then((response) => {
-        console.log(response);
+    
         if (response.status === 200) {
           setAgreement(response.data.caseId);
           setList(response.data.list);

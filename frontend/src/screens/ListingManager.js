@@ -30,9 +30,8 @@ const ListingManager = () => {
 
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/listings/listingmanager?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/listings/listingmanager?page=${page <= 0 ? 0 : page - 1}` +
         "sortBy=" +
         sort +
         "&contract=" +
@@ -59,9 +58,10 @@ const ListingManager = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/listings/listingmanager?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/listings/listingmanager?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "sortBy=" +
         sort +
         "&contract=" +
@@ -94,7 +94,8 @@ const ListingManager = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/listings/listingmanager?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/listings/listingmanager?page=${id + 1}` +
         "&contract=" +
         contract +
         "&professions=" +
@@ -129,7 +130,8 @@ const ListingManager = () => {
     setReload(false);
     if (ascDesc === false) {
       const res = await fetch(
-        "http://localhost:4000/api/listings/listingmanager?sortBy=asc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/listings/listingmanager?sortBy=asc" +
           "&contract=" +
           contract +
           "&professions=" +
@@ -157,7 +159,8 @@ const ListingManager = () => {
     if (ascDesc === true) {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/listings/listingmanager?sortBy=desc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/listings/listingmanager?sortBy=desc" +
           "&contract=" +
           contract +
           "&professions=" +
@@ -305,7 +308,8 @@ const ListingManager = () => {
     ReactSession.set("slug", slug);
     setReload(false);
     const res = await fetch(
-      `http://localhost:4000/api/listings/candidates?` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/listings/candidates?` +
         "sortBy=" +
         sort +
         "&contract=" +
@@ -338,7 +342,8 @@ const ListingManager = () => {
     e.preventDefault();
     setBackdrop(true);
     const res = await fetch(
-      `http://localhost:4000/api/listings/sleepAd/${slug}/?` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/listings/sleepAd/${slug}/?` +
         "sortBy=" +
         sort +
         "&page=" +
@@ -365,7 +370,8 @@ const ListingManager = () => {
     e.preventDefault();
     setBackdrop(true);
     const res = await fetch(
-      `http://localhost:4000/api/listings/sleepAd/${slug}/?` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/listings/sleepAd/${slug}/?` +
         "sortBy=" +
         sort +
         "&page=" +
@@ -392,7 +398,8 @@ const ListingManager = () => {
     e.preventDefault();
 
     const res = await fetch(
-      `http://localhost:4000/api/listings/reject/${slugId}/${nanoId}?` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/listings/reject/${slugId}/${nanoId}?` +
         "sortBy=" +
         sort +
         "&page=" +
@@ -429,7 +436,8 @@ const ListingManager = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/listings/listingmanager?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/listings/listingmanager?" +
           "contract=" +
           contract +
           "&professions=" +
@@ -488,14 +496,18 @@ const ListingManager = () => {
   const toPayment = async (e, nanoId, slugId) => {
     e.preventDefault();
 
-    await fetch(`http://localhost:4000/api/locums/bookme/${nanoId}/${slugId}`, {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({
-        email: email,
-      }),
-    })
+    await fetch(
+      process.env.REACT_APP_BACKEND_URL +
+        `api/locums/bookme/${nanoId}/${slugId}`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          email: email,
+        }),
+      }
+    )
       .then((response) => {
         if (response.ok === true) {
           return response.json();
@@ -524,7 +536,11 @@ const ListingManager = () => {
 
   const myDates = (slug) => {
     axios
-      .get("http://localhost:4000/api/applications/getdates?slug=" + slug)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/getdates?slug=" +
+          slug
+      )
       .then((response) => {
         if (response.status === 200) {
           setThisApplicant(response.data.thisAd);
@@ -587,7 +603,8 @@ const ListingManager = () => {
     e.preventDefault();
 
     const res = await fetch(
-      `http://localhost:4000/api/applications/seen?` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/applications/seen?` +
         "slugId=" +
         slugId +
         "&nanoId=" +
@@ -967,14 +984,20 @@ const ListingManager = () => {
                       <div className="ads" key={listing._id}>
                         <div className="leftmessage">
                           <ExternalLink
-                            href={`http://localhost:4000/api/listings/edit/${listing.slug}`}
+                            href={
+                              process.env.REACT_APP_BACKEND_URL +
+                              `api/listings/edit/${listing.slug}`
+                            }
                             target="_self"
                           >
                             <div className="edit-ad">Edit</div>
                           </ExternalLink>
 
                           <ExternalLink
-                            href={`http://localhost:4000/api/listings/adPosts/${listing.slug}`}
+                            href={
+                              process.env.REACT_APP_BACKEND_URL +
+                              `api/listings/adPosts/${listing.slug}`
+                            }
                             target="_self"
                           >
                             <div className="preview-ad">View</div>
@@ -993,7 +1016,7 @@ const ListingManager = () => {
                             }}
                           >
                             {newApplicants.map((newApplicant) => {
-                              console.log(newApplicant);
+                         
                               return newApplicant.slugId === listing.slug ? (
                                 ReactSession.get("slug") === listing.slug ? (
                                   <span
@@ -1179,7 +1202,10 @@ const ListingManager = () => {
                               {candidate.isSelected === true ? (
                                 <ExternalLink
                                   target="_self"
-                                  href={`http://localhost:4000/api/locums/isSelected/${candidate.nanoId}/${candidate.slugId}`}
+                                  href={
+                                    process.env.REACT_APP_BACKEND_URL +
+                                    `api/locums/isSelected/${candidate.nanoId}/${candidate.slugId}`
+                                  }
                                 >
                                   <button>Locum Details</button>
                                 </ExternalLink>
@@ -1206,14 +1232,20 @@ const ListingManager = () => {
                             {candidate.isSelected === true ? (
                               <ExternalLink
                                 target="_self"
-                                href={`http://localhost:4000/api/locums/isSelected/${candidate.nanoId}/${candidate.slugId}`}
+                                href={
+                                  process.env.REACT_APP_BACKEND_URL +
+                                  `api/locums/isSelected/${candidate.nanoId}/${candidate.slugId}`
+                                }
                               >
                                 {candidate.firstName} {candidate.lastName}
                               </ExternalLink>
                             ) : (
                               <ExternalLink
                                 target="_self"
-                                href={`http://localhost:4000/api/locums/resumeCandidate/${candidate.nanoId}/${candidate.slugId}`}
+                                href={
+                                  process.env.REACT_APP_BACKEND_URL +
+                                  `api/locums/resumeCandidate/${candidate.nanoId}/${candidate.slugId}`
+                                }
                               >
                                 {candidate.firstName}
                               </ExternalLink>

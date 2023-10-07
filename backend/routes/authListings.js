@@ -4,6 +4,7 @@ const moment = require("moment");
 const generate = require("nanoid-generate");
 const generateCaseId = generate.numbers(3);
 const cron = require("node-cron");
+require("dotenv/config");
 
 // Imports
 const Listing = require("../models/listingModel");

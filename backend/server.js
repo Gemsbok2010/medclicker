@@ -36,7 +36,10 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [
+      "https://www.medclicker.com.au:3000",
+      "https://medclicker.com.au:3000",
+    ],
     credentials: true,
   })
 );
@@ -119,8 +122,7 @@ app.get(
             "personal-details" +
             "?id=" +
             req.user._id +
-            "&isLoggedIn=true" +
-            "&access=false"
+            "&isLoggedIn=true"
         );
       });
     } else if (
@@ -136,8 +138,7 @@ app.get(
             req.user._id +
             "&isLoggedIn=true" +
             "&token=" +
-            token +
-            "&access=true"
+            token
         );
       });
     } else if (remainOnSamePage === "") {
@@ -148,8 +149,7 @@ app.get(
             req.user._id +
             "&isLoggedIn=true" +
             "&token=" +
-            token +
-            "&access=true"
+            token
         );
       });
     } else {
@@ -161,8 +161,7 @@ app.get(
             req.user._id +
             "&isLoggedIn=true" +
             "&token=" +
-            token +
-            "&access=true"
+            token
         );
       });
     }
@@ -217,8 +216,7 @@ app.get(
             req.user._id +
             "&isLoggedIn=true" +
             "&token=" +
-            token +
-            "&access=false"
+            token
         );
       });
     } else if (
@@ -234,8 +232,7 @@ app.get(
             req.user._id +
             "&isLoggedIn=true" +
             "&token=" +
-            token +
-            "&access=true"
+            token
         );
       });
     } else if (remainOnSamePage === "") {
@@ -246,8 +243,7 @@ app.get(
             req.user._id +
             "&isLoggedIn=true" +
             "&token=" +
-            token +
-            "&access=true"
+            token
         );
       });
     } else {
@@ -259,8 +255,7 @@ app.get(
             req.user._id +
             "&isLoggedIn=true" +
             "&token=" +
-            token +
-            "&access=true"
+            token
         );
       });
     }

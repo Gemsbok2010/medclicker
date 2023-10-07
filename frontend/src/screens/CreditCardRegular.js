@@ -42,7 +42,9 @@ const CreditCardRegular = () => {
   const inputRef = useRef(null);
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/payment/anyCard/" + user.email)
+      .get(
+        process.env.REACT_APP_BACKEND_URL + "api/payment/anyCard/" + user.email
+      )
       .then((response) => {
         if (response.status === 200) {
           if (response.data.existingCard === null) {
@@ -75,7 +77,7 @@ const CreditCardRegular = () => {
 
     if (show === true) {
       const res = await fetch(
-        `http://localhost:4000/api/payment/removeCard/${email}`,
+        process.env.REACT_APP_BACKEND_URL + `api/payment/removeCard/${email}`,
         {
           method: "PUT",
           credentials: "include",
@@ -102,7 +104,7 @@ const CreditCardRegular = () => {
       expiry.length === 5
     ) {
       const res = await fetch(
-        `http://localhost:4000/api/payment/storeCard/${email}`,
+        process.env.REACT_APP_BACKEND_URL + `api/payment/storeCard/${email}`,
         {
           method: "PUT",
           credentials: "include",
@@ -195,7 +197,7 @@ const CreditCardRegular = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/payments_plans/storedPlans")
+      .get(process.env.REACT_APP_BACKEND_URL + "api/payments_plans/storedPlans")
       .then((response) => {
         if (response.status === 200) {
           setStart(response.data.start);
@@ -313,7 +315,7 @@ const CreditCardRegular = () => {
       ReactSession.set("expireIn", expireIn);
     }
 
-    fetch("http://localhost:4000/api/payment/regularList", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/payment/regularList", {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },
@@ -327,7 +329,6 @@ const CreditCardRegular = () => {
         if (data.accessCode) {
           setAccessCode(data.accessCode);
           ReactSession.set("accessCode", data.accessCode);
-        
         }
       })
       .catch((err) => {

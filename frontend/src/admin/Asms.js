@@ -60,7 +60,8 @@ const Asms = () => {
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
-        "http://localhost:4000/api/admin/smslocums?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/smslocums?" +
           "location=" +
           location +
           "&profession=" +
@@ -93,7 +94,8 @@ const Asms = () => {
     e.preventDefault();
     try {
       fetch(
-        "http://localhost:4000/api/comm/fireSMS?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/comm/fireSMS?" +
           "location=" +
           location +
           "&profession=" +
@@ -157,7 +159,7 @@ const Asms = () => {
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
-        "http://localhost:4000/api/admin/smsProfessions?"
+        process.env.REACT_APP_BACKEND_URL + "api/admin/smsProfessions?"
       );
       const data = await res.json();
 

@@ -15,6 +15,7 @@ import { ThreeDots } from "react-loader-spinner";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userInfo.value);
+
   ReactSession.setStoreType("sessionStorage");
 
   // ============== BACKDROP ============== //
@@ -49,7 +50,11 @@ const Dashboard = () => {
     setIsloaded(false);
     setContractType(ReactSession.get("contractType"));
     axios
-      .get("http://localhost:4000/api/dashboard/dashboard/" + user.email)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/dashboard/dashboard/" +
+          user.email
+      )
       .then((response) => {
         if (response.status === 200) {
           if (response.data.locum !== null) {
@@ -84,7 +89,11 @@ const Dashboard = () => {
   // ========== LOGGEDIN APPLICANT APPLIED =========
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/dashboard/jobcases?nanoId=" + user.nanoId)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/dashboard/jobcases?nanoId=" +
+          user.nanoId
+      )
       .then((response) => {
         if (response.status === 200) {
           setApplied(response.data.applied);
@@ -107,7 +116,7 @@ const Dashboard = () => {
     if (show === true) {
       setBackdrop(true);
       const res = await fetch(
-        `http://localhost:4000/api/dashboard/hideme/${id}`,
+        process.env.REACT_APP_BACKEND_URL + `api/dashboard/hideme/${id}`,
         {
           method: "PUT",
           credentials: "include",
@@ -124,7 +133,7 @@ const Dashboard = () => {
     if (show === false) {
       setBackdrop(true);
       const res = await fetch(
-        `http://localhost:4000/api/dashboard/hideme/${id}`,
+        process.env.REACT_APP_BACKEND_URL + `api/dashboard/hideme/${id}`,
         {
           method: "PUT",
           credentials: "include",
@@ -146,15 +155,16 @@ const Dashboard = () => {
 
   const fetchData = async () => {
     setIsloaded(false);
-    axios.get("http://localhost:4000/api/admin/homepage").then((response) => {
-      if (response.status === 200) {
-        console.log(response.data);
-        setMessageToAll(response.data.plans.messageToAll);
-        setMessageOn(response.data.plans.messageOn);
-        setTitleOfMessage(response.data.plans.titleOfMessage);
-        setIsloaded(true);
-      }
-    });
+    axios
+      .get(process.env.REACT_APP_BACKEND_URL + "api/admin/homepage")
+      .then((response) => {
+        if (response.status === 200) {
+          setMessageToAll(response.data.plans.messageToAll);
+          setMessageOn(response.data.plans.messageOn);
+          setTitleOfMessage(response.data.plans.titleOfMessage);
+          setIsloaded(true);
+        }
+      });
   };
 
   useEffect(() => {
@@ -434,20 +444,7 @@ const Dashboard = () => {
                     <span className="material-icons-sharp">dashboard</span>
                     <h4>Dashboard Home</h4>
                   </Link>
-                  <Link
-                    to={
-                      user.completeAccess === false &&
-                      userInfo.isActive === true
-                        ? "/personal-details"
-                        : "#"
-                    }
-                    className={
-                      user.completeAccess === false &&
-                      userInfo.isActive === true
-                        ? ""
-                        : "disabled"
-                    }
-                  >
+                  <Link to={"/personal-details"}>
                     <span className="material-icons-sharp">person</span>
                     <h4>Personal Details</h4>
                   </Link>

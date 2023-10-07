@@ -22,9 +22,8 @@ const Aprofessions = () => {
 
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/professions?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/professions?page=${page <= 0 ? 0 : page - 1}` +
         "sortBy=" +
         sort +
         "&contract=" +
@@ -49,9 +48,10 @@ const Aprofessions = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/professions?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/professions?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "sortBy=" +
         sort +
         "&contract=" +
@@ -82,7 +82,8 @@ const Aprofessions = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/professions?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/professions?page=${id + 1}` +
         "&sortBy=" +
         sort +
         "&contract=" +
@@ -108,7 +109,8 @@ const Aprofessions = () => {
   const sortNames = async (ascDesc) => {
     if (ascDesc === false) {
       const res = await fetch(
-        "http://localhost:4000/api/admin/sortnames?sortBy=asc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/sortnames?sortBy=asc" +
           "&contract=" +
           contract +
           "&page=" +
@@ -128,7 +130,8 @@ const Aprofessions = () => {
 
     if (ascDesc === true) {
       const res = await fetch(
-        "http://localhost:4000/api/admin/sortnames?sortBy=desc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/sortnames?sortBy=desc" +
           "&contract=" +
           contract +
           "&page=" +
@@ -151,7 +154,8 @@ const Aprofessions = () => {
   const sortContractType = async (ascDesc) => {
     if (ascDesc === false) {
       const res = await fetch(
-        "http://localhost:4000/api/admin/contractType?sortBy=asc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/contractType?sortBy=asc" +
           "&contract=" +
           contract +
           "&page=" +
@@ -171,7 +175,8 @@ const Aprofessions = () => {
 
     if (ascDesc === true) {
       const res = await fetch(
-        "http://localhost:4000/api/admin/contractType?sortBy=desc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/contractType?sortBy=desc" +
           "&contract=" +
           contract +
           "&page=" +
@@ -199,7 +204,8 @@ const Aprofessions = () => {
     setReload(false);
     if (ascDesc === false) {
       const res = await fetch(
-        "http://localhost:4000/api/admin/professions?sortBy=asc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/professions?sortBy=asc" +
           "&contract=" +
           contract +
           "&page=" +
@@ -221,7 +227,8 @@ const Aprofessions = () => {
     if (ascDesc === true) {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/professions?sortBy=desc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/professions?sortBy=desc" +
           "&contract=" +
           contract +
           "&page=" +
@@ -284,7 +291,8 @@ const Aprofessions = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/professions?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/professions?" +
           "contract=" +
           contract +
           "&sortBy=" +
@@ -369,7 +377,10 @@ const Aprofessions = () => {
 
     setBackdrop(true);
     const res = await fetch(
-      `http://localhost:4000/api/admin/hideProf/${id}` + "?sortBy=" + sort,
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/hideProf/${id}` +
+        "?sortBy=" +
+        sort,
       {
         method: "PUT",
         credentials: "include",
@@ -392,7 +403,10 @@ const Aprofessions = () => {
     e.preventDefault();
     setBackdrop(true);
     const res = await fetch(
-      `http://localhost:4000/api/admin/hideProf/${id}` + "?sortBy=" + sort,
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/hideProf/${id}` +
+        "?sortBy=" +
+        sort,
       {
         method: "PUT",
         credentials: "include",
@@ -429,7 +443,10 @@ const Aprofessions = () => {
     setBackdrop(true);
     try {
       const res = await fetch(
-        `http://localhost:4000/api/admin/profession` + "?sortBy=" + sort,
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/profession` +
+          "?sortBy=" +
+          sort,
         {
           method: "POST",
           credentials: "include",
@@ -460,7 +477,7 @@ const Aprofessions = () => {
     e.preventDefault();
     setBackdrop(true);
     const res = await fetch(
-      `http://localhost:4000/api/admin/deleteProfession/${id}?`,
+      process.env.REACT_APP_BACKEND_URL + `api/admin/deleteProfession/${id}?`,
       {
         method: "DELETE",
       }
@@ -484,7 +501,8 @@ const Aprofessions = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/professions?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/professions?" +
           "sortBy=" +
           sort +
           "&page=" +

@@ -11,7 +11,7 @@ const ForgotPassword = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:4000/api/secure/forgotpassword", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/secure/forgotpassword", {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },

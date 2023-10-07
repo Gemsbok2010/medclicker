@@ -22,7 +22,8 @@ const Resume = () => {
     // ============ PROFILE DATA ===========
     axios
       .get(
-        "http://localhost:4000/api/admin/profileResume/" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/profileResume/" +
           pathname.split("/")[2]
       )
       .then((response) => {

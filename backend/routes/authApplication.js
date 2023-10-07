@@ -7,6 +7,7 @@ const fs = require("fs-extra");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
 const cron = require("node-cron");
+require("dotenv/config");
 
 // Imports
 const Pub = require("../models/applicationModel");
@@ -16,7 +17,6 @@ const User = require("../models/userModel");
 const Locum = require("../models/locumModel");
 const { uploadResume, uploadCover } = require("../../s3");
 const { applicationValidation } = require("../validation");
-
 const { locumApplication, sendLocumEmail } = require("../emails/sendEmail");
 
 // ======== CRON JOB - Schedule tasks to be run on the server ======== //.

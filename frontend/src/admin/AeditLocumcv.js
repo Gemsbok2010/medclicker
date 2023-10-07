@@ -296,7 +296,11 @@ const AeditLocumcv = () => {
     setIsloaded(false);
     // ============ PROFILE DATA ===========
     axios
-      .get("http://localhost:4000/api/admin/profile/" + pathname.split("/")[2])
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/profile/" +
+          pathname.split("/")[2]
+      )
       .then((response) => {
         if (response.status === 200) {
           setUserInfo(response.data);
@@ -437,7 +441,7 @@ const AeditLocumcv = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:4000/api/locums/updateCv", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/locums/updateCv", {
       method: "PUT",
       credentials: "include",
       headers: { "Content-type": "application/json" },
@@ -586,7 +590,10 @@ const AeditLocumcv = () => {
                 </div>
                 <div>
                   <ExternalLink
-                    href={`http://localhost:4000/api/admin/resume/${userInfo.locumId}`}
+                    href={
+                      process.env.REACT_APP_BACKEND_URL +
+                      `api/admin/resume/${userInfo.locumId}`
+                    }
                     target="_self"
                   >
                     Preview CV

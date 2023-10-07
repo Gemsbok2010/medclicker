@@ -27,22 +27,24 @@ const Home = () => {
 
   const fetchData = async () => {
     setIsloaded(false);
-    axios.get("http://localhost:4000/api/admin/homepage").then((response) => {
-      if (response.status === 200) {
-        setNoOfCases(response.data.noOfCases);
-        setNoOfUsers(response.data.noOfUsers);
-        setSwiperOn(response.data.plans.swiperOn);
-        setComment1(response.data.plans.comment1);
-        setComment2(response.data.plans.comment2);
-        setComment3(response.data.plans.comment3);
-        setComment4(response.data.plans.comment4);
-        setCommentator1(response.data.plans.commentator1);
-        setCommentator2(response.data.plans.commentator2);
-        setCommentator3(response.data.plans.commentator3);
-        setCommentator4(response.data.plans.commentator4);
-        setIsloaded(true);
-      }
-    });
+    axios
+      .get(process.env.REACT_APP_BACKEND_URL + "api/admin/homepage")
+      .then((response) => {
+        if (response.status === 200) {
+          setNoOfCases(response.data.noOfCases);
+          setNoOfUsers(response.data.noOfUsers);
+          setSwiperOn(response.data.plans.swiperOn);
+          setComment1(response.data.plans.comment1);
+          setComment2(response.data.plans.comment2);
+          setComment3(response.data.plans.comment3);
+          setComment4(response.data.plans.comment4);
+          setCommentator1(response.data.plans.commentator1);
+          setCommentator2(response.data.plans.commentator2);
+          setCommentator3(response.data.plans.commentator3);
+          setCommentator4(response.data.plans.commentator4);
+          setIsloaded(true);
+        }
+      });
   };
 
   useEffect(() => {

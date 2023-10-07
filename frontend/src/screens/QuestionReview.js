@@ -98,7 +98,9 @@ const QuestionReview = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/payments_plans/paymentPlans")
+      .get(
+        process.env.REACT_APP_BACKEND_URL + "api/payments_plans/paymentPlans"
+      )
       .then((response) => {
         if (response.status === 200) {
           setFreeDays(response.data.freeDays);
@@ -113,7 +115,7 @@ const QuestionReview = () => {
     const nanoId = user.nanoId;
     setIsloaded(true);
     try {
-      fetch("http://localhost:4000/api/payment/free", {
+      fetch(process.env.REACT_APP_BACKEND_URL + "api/payment/free", {
         method: "POST",
         credentials: "include",
         headers: { "Content-type": "application/json" },

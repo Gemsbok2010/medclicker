@@ -28,7 +28,7 @@ const Administrator = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setIsloaded(true);
-    fetch("http://localhost:4000/api/admin/login", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/admin/login", {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },

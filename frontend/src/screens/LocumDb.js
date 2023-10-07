@@ -20,9 +20,8 @@ const LocumDb = () => {
 
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/locums/database?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/locums/database?page=${page <= 0 ? 0 : page - 1}` +
         "sortBy=" +
         sort +
         "&language=" +
@@ -50,9 +49,10 @@ const LocumDb = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/locums/database?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/locums/database?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "sortBy=" +
         sort +
         "&language=" +
@@ -86,7 +86,8 @@ const LocumDb = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/locums/database?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/locums/database?page=${id + 1}` +
         "&language=" +
         language +
         "&professions=" +
@@ -120,7 +121,8 @@ const LocumDb = () => {
     setReload(false);
     if (ascDesc === false) {
       const res = await fetch(
-        "http://localhost:4000/api/locums/database?sortBy=asc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/locums/database?sortBy=asc" +
           "&language=" +
           language +
           "&professions=" +
@@ -147,7 +149,8 @@ const LocumDb = () => {
     if (ascDesc === true) {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/locums/database?sortBy=desc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/locums/database?sortBy=desc" +
           "&language=" +
           language +
           "&professions=" +
@@ -317,7 +320,8 @@ const LocumDb = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/locums/database?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/locums/database?" +
           "language=" +
           language +
           "&professions=" +
@@ -784,7 +788,10 @@ const LocumDb = () => {
                     <div className="tiles" key={locum._id}>
                       <ExternalLink
                         target="_blank"
-                        href={`http://localhost:4000/api/locums/resumeCandidate/${locum.nanoId}/${locum.slugId}`}
+                        href={
+                          process.env.REACT_APP_BACKEND_URL +
+                          `api/locums/resumeCandidate/${locum.nanoId}/${locum.slugId}`
+                        }
                       >
                         <div className="topBox" style={{ overflow: "hidden" }}>
                           <div>

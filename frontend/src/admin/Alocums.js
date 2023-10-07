@@ -23,9 +23,8 @@ const Alocums = () => {
 
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/alllocums?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/alllocums?page=${page <= 0 ? 0 : page - 1}` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -50,9 +49,10 @@ const Alocums = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/alllocums?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/alllocums?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -83,7 +83,8 @@ const Alocums = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/alllocums?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/alllocums?page=${id + 1}` +
         "&location=" +
         location +
         "&sortBy=" +
@@ -114,7 +115,8 @@ const Alocums = () => {
     setReload(false);
     if (ascDesc === false) {
       const res = await fetch(
-        "http://localhost:4000/api/admin/alllocums?sortBy=asc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/alllocums?sortBy=asc" +
           "&location=" +
           location +
           "&page=" +
@@ -136,7 +138,8 @@ const Alocums = () => {
     if (ascDesc === true) {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/alllocums?sortBy=desc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/alllocums?sortBy=desc" +
           "&location=" +
           location +
           "&page=" +
@@ -161,7 +164,8 @@ const Alocums = () => {
     setReload(false);
     if (ascDesc === false) {
       const res = await fetch(
-        `http://localhost:4000/api/admin/sortlocums?sortBy=asc` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/sortlocums?sortBy=asc` +
           "&location=" +
           location +
           "&page=" +
@@ -184,7 +188,8 @@ const Alocums = () => {
 
     if (ascDesc === true) {
       const res = await fetch(
-        `http://localhost:4000/api/admin/sortlocums?sortBy=desc` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/sortlocums?sortBy=desc` +
           "&location=" +
           location +
           "&page=" +
@@ -259,7 +264,8 @@ const Alocums = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/alllocums?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/alllocums?" +
           "location=" +
           location +
           "&sortBy=" +
@@ -345,7 +351,8 @@ const Alocums = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/alllocums?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/alllocums?" +
           "location=" +
           location +
           "&sortBy=" +
@@ -387,7 +394,10 @@ const Alocums = () => {
 
     setBackdrop(true);
     const res = await fetch(
-      `http://localhost:4000/api/admin/hideme/${id}` + "?sortBy=" + sort,
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/hideme/${id}` +
+        "?sortBy=" +
+        sort,
       {
         method: "PUT",
         credentials: "include",
@@ -410,7 +420,10 @@ const Alocums = () => {
     e.preventDefault();
     setBackdrop(true);
     const res = await fetch(
-      `http://localhost:4000/api/admin/hideme/${id}` + "?sortBy=" + sort,
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/hideme/${id}` +
+        "?sortBy=" +
+        sort,
       {
         method: "PUT",
         credentials: "include",
@@ -1060,7 +1073,10 @@ const Alocums = () => {
                             <div>
                               <ExternalLink
                                 target="_blank"
-                                href={`http://localhost:4000/api/admin/locumProfile/${locum.locumId}`}
+                                href={
+                                  process.env.REACT_APP_BACKEND_URL +
+                                  `api/admin/locumProfile/${locum.locumId}`
+                                }
                               >
                                 <input type="button" defaultValue="Edit" />
                               </ExternalLink>

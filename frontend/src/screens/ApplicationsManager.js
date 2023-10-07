@@ -25,9 +25,8 @@ const ApplicationsManager = () => {
 
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/applications/getList?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/applications/getList?page=${page <= 0 ? 0 : page - 1}` +
         "sortBy=" +
         sort +
         "&contract=" +
@@ -55,9 +54,10 @@ const ApplicationsManager = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/applications/getList?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/applications/getList?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "sortBy=" +
         sort +
         "&contract=" +
@@ -91,7 +91,8 @@ const ApplicationsManager = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/applications/getList?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/applications/getList?page=${id + 1}` +
         "&contract=" +
         contract +
         "&professions=" +
@@ -126,7 +127,8 @@ const ApplicationsManager = () => {
     setReload(false);
     if (ascDesc === false) {
       const res = await fetch(
-        "http://localhost:4000/api/applications/getList?sortBy=asc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/getList?sortBy=asc" +
           "&contract=" +
           contract +
           "&professions=" +
@@ -155,7 +157,8 @@ const ApplicationsManager = () => {
     if (ascDesc === true) {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/applications/getList?sortBy=desc" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/getList?sortBy=desc" +
           "&contract=" +
           contract +
           "&professions=" +
@@ -320,7 +323,8 @@ const ApplicationsManager = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/applications/applicationsmanager?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/applicationsmanager?" +
           "contract=" +
           contract +
           "&professions=" +
@@ -337,13 +341,13 @@ const ApplicationsManager = () => {
           ReactSession.get("slug")
       );
       const data = await res.json();
-      console.log(data);
+
       if (isCancelled === false) {
         window.scrollTo({
           top: 0,
           behavior: "smooth",
         });
-        console.log(data, "apply");
+
         setReload(true);
         setNoOfCases(data.num);
         setApplications(data.applications);
@@ -375,7 +379,8 @@ const ApplicationsManager = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/applications/getList?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/getList?" +
           "contract=" +
           contract +
           "&professions=" +
@@ -392,13 +397,13 @@ const ApplicationsManager = () => {
           ReactSession.get("slug")
       );
       const data = await res.json();
-      console.log(data);
+
       if (isCancelled === false) {
         window.scrollTo({
           top: 0,
           behavior: "smooth",
         });
-        console.log(data, "list");
+
         setReload(true);
         setNoOfCases(data.num);
         setListingInfo(data.adPosts);
@@ -424,7 +429,8 @@ const ApplicationsManager = () => {
     ReactSession.set("slug", slug);
     setReload(false);
     const res = await fetch(
-      `http://localhost:4000/api/applications/myapplications/${slug}?` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/applications/myapplications/${slug}?` +
         "sortBy=" +
         sort +
         "&contract=" +
@@ -451,7 +457,8 @@ const ApplicationsManager = () => {
   const onWithdraw = async (e, slugId, nanoId) => {
     e.preventDefault();
     const res = await fetch(
-      `http://localhost:4000/api/applications/withdraw/${slugId}/${nanoId}?`,
+      process.env.REACT_APP_BACKEND_URL +
+        `api/applications/withdraw/${slugId}/${nanoId}?`,
       {
         method: "DELETE",
       }
@@ -472,7 +479,11 @@ const ApplicationsManager = () => {
   // Hired
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/applications/hired?email=" + email)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/hired?email=" +
+          email
+      )
       .then((response) => {
         if (response.status === 200) {
           setHired(response.data.thisAd);
@@ -483,7 +494,11 @@ const ApplicationsManager = () => {
   // Rejected
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/applications/nothired?email=" + email)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/nothired?email=" +
+          email
+      )
       .then((response) => {
         if (response.status === 200) {
           setNothired(response.data.thisAd);
@@ -494,7 +509,11 @@ const ApplicationsManager = () => {
   // No response
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/applications/noresponse?email=" + email)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/noresponse?email=" +
+          email
+      )
       .then((response) => {
         if (response.status === 200) {
           setNoResponse(response.data.thisAd);
@@ -506,7 +525,11 @@ const ApplicationsManager = () => {
 
   const myDates = (slug) => {
     axios
-      .get("http://localhost:4000/api/applications/getdates?slug=" + slug)
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/applications/getdates?slug=" +
+          slug
+      )
       .then((response) => {
         if (response.status === 200) {
           setThisApplicant(response.data.thisAd);
@@ -944,7 +967,10 @@ const ApplicationsManager = () => {
                                   </div>
                                 ) : (
                                   <ExternalLink
-                                    href={`http://localhost:4000/api/listings/adPosts/${list.slug}`}
+                                    href={
+                                      process.env.REACT_APP_BACKEND_URL +
+                                      `api/listings/adPosts/${list.slug}`
+                                    }
                                     target="_self"
                                   >
                                     <div className="preview-ad">View Job</div>
@@ -1160,7 +1186,10 @@ const ApplicationsManager = () => {
                           <h2>
                             <ExternalLink
                               target="_self"
-                              href={`http://localhost:4000/api/locums/resumeMe/${candidate.nanoId}`}
+                              href={
+                                process.env.REACT_APP_BACKEND_URL +
+                                `api/locums/resumeMe/${candidate.nanoId}`
+                              }
                             >
                               {candidate.firstName}
                             </ExternalLink>

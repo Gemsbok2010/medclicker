@@ -234,7 +234,7 @@ const Question6 = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    fetch("http://localhost:4000/api/listings/question6", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/listings/question6", {
       method: "PUT",
       credentials: "include",
       headers: { "Content-type": "application/json" },

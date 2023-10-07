@@ -23,9 +23,8 @@ const AlocumAgreements = () => {
 
   const pagePrevious = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/locum_applications?page=${
-        page <= 0 ? 0 : page - 1
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/locum_applications?page=${page <= 0 ? 0 : page - 1}` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -50,9 +49,10 @@ const AlocumAgreements = () => {
 
   const pageNext = async () => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/locum_applications?page=${
-        page < maxPage ? 1 + parseInt(page) : page
-      }` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/locum_applications?page=${
+          page < maxPage ? 1 + parseInt(page) : page
+        }` +
         "sortBy=" +
         sort +
         "&location=" +
@@ -83,7 +83,8 @@ const AlocumAgreements = () => {
 
   const IntermediateButtons = async (id) => {
     const res = await fetch(
-      `http://localhost:4000/api/admin/locum_applications?page=${id + 1}` +
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/locum_applications?page=${id + 1}` +
         "&location=" +
         location +
         "&sortBy=" +
@@ -115,7 +116,8 @@ const AlocumAgreements = () => {
 
     if (ascDesc === false) {
       const res = await fetch(
-        `http://localhost:4000/api/admin/sortlocum_applications?sortBy=asc` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/sortlocum_applications?sortBy=asc` +
           "&location=" +
           location +
           "&page=" +
@@ -138,7 +140,8 @@ const AlocumAgreements = () => {
 
     if (ascDesc === true) {
       const res = await fetch(
-        `http://localhost:4000/api/admin/sortlocum_applications?sortBy=desc` +
+        process.env.REACT_APP_BACKEND_URL +
+          `api/admin/sortlocum_applications?sortBy=desc` +
           "&location=" +
           location +
           "&page=" +
@@ -213,7 +216,8 @@ const AlocumAgreements = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/locum_applications?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/locum_applications?" +
           "location=" +
           location +
           "&sortBy=" +
@@ -300,7 +304,8 @@ const AlocumAgreements = () => {
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
-        "http://localhost:4000/api/admin/locum_applications?" +
+        process.env.REACT_APP_BACKEND_URL +
+          "api/admin/locum_applications?" +
           "location=" +
           location +
           "&sortBy=" +
@@ -343,7 +348,7 @@ const AlocumAgreements = () => {
   // Hired
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/applications/thisAd")
+      .get(process.env.REACT_APP_BACKEND_URL + "api/applications/thisAd")
       .then((response) => {
         if (response.status === 200) {
           setAds(response.data.thisAd);
@@ -358,7 +363,7 @@ const AlocumAgreements = () => {
   const sendAgreement = (e, caseId) => {
     e.preventDefault();
 
-    fetch("http://localhost:4000/api/admin/sendagreement", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/admin/sendagreement", {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },
@@ -945,7 +950,10 @@ const AlocumAgreements = () => {
                           <td className="cell edit">
                             <div>
                               <ExternalLink
-                                href={`http://localhost:4000/api/applications/agreement/${apply.caseId}`}
+                                href={
+                                  process.env.REACT_APP_BACKEND_URL +
+                                  `api/applications/agreement/${apply.caseId}`
+                                }
                                 target="_self"
                               >
                                 <input type="button" value="View Agreement" />
