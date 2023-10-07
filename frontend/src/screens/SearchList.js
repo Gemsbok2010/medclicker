@@ -5,7 +5,6 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useEffect } from "react";
 import axios from "axios";
-require("dotenv/config");
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { ExternalLink } from "react-external-link";
 // Three dots
