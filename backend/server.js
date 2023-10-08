@@ -36,7 +36,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: ["https://medclicker.com.au"],
+    origin: ["https://medclicker.com.au", "https://www.medclicker.com.au"],
     credentials: true,
   })
 );
