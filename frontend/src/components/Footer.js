@@ -719,7 +719,7 @@ const Footer = ({ asx }) => {
             style={{ display: "flex", justifyContent: "space-between" }}
           >
             <Link to="/terms_and_conditions_au">Terms & Conditions</Link>{" "}
-            <Link to="/privacy_au">Privacy</Link>{" "}
+            <Link to="/privacy_au">Privacy Policy</Link>{" "}
             <Link to="/refund_au">Refund Policy</Link>{" "}
             <ExternalLink
               id="fbicon"

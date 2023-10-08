@@ -130,6 +130,8 @@ const PersonalDetails = () => {
   let params = new URLSearchParams(search);
   let id = params.get("id");
   let token = params.get("token");
+  let access = params.get("access");
+  access = access === "true";
 
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");

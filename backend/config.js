@@ -2,8 +2,8 @@ const config = {
   JWT_SECRET: process.env.JWT_SECRET || "motdepasse",
 };
 const facebook = {
-  clientID: "501057722218648",
-  clientSecret: "d7bf32c1bbe73f6157bc57549f363b0f",
+  clientID: "1391738818445498",
+  clientSecret: "9687c4786d03e4b79171fdc03b1a98c0",
 };
 
 const google = {
