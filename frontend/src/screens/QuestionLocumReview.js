@@ -1759,46 +1759,46 @@ const QuestionLocumReview = () => {
           }
 
           .calendar {
-            background-image: url(./../../Images/calendarmarker.png);
+            background-image: url("./../../images/calendarmarker.png");
             background-repeat: no-repeat;
             background-position: 1px 2px;
             background-size: 18px;
           }
 
           .chart {
-            background-image: url(./../../Images/pencilmarker.png);
+            background-image: url("./../../images/pencilmarker.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
           }
 
           .car {
-            background-image: url(./../../Images/busmarker.png);
+            background-image: url("./../../images/busmarker.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 16px;
           }
           .aircraft {
-            background-image: url(./../../Images/aircraft.png);
+            background-image: url("./../../images/aircraft.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 20px;
           }
           .house {
-            background-image: url(./../../Images/housemarker.png);
+            background-image: url("./../../images/housemarker.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
           }
           .pig {
-            background-image: url(./../../Images/pigmarker.png);
+            background-image: url("./../../images/pigmarker.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 20px;
           }
 
           .pencil {
-            background-image: url(./../../Images/pencil.png);
+            background-image: url("./../../images/pencil.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;

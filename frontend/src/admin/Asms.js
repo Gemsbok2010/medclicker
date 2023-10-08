@@ -655,7 +655,6 @@ const Asms = () => {
           @media only screen and (min-width: 768px) {
             .wrap .questionCard {
               width: 400px;
-              height: 75vh;
             }
             .sms-btn {
               width: 200px;

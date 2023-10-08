@@ -2014,7 +2014,7 @@ const Alistings = () => {
           }
 
           .paginate .next {
-            background-image: url(./../../images/arrow-down.png);
+            background-image: url("./../../images/arrow-down.png");
             background-position: center;
             background-repeat: no-repeat;
             background-size: 15px;
@@ -2022,7 +2022,7 @@ const Alistings = () => {
             transform: rotate(-90deg);
           }
           .paginate .previous {
-            background-image: url(./../../images/left.png);
+            background-image: url("./../../images/left.png");
             background-position: center;
             background-repeat: no-repeat;
             background-size: 15px;

@@ -152,7 +152,7 @@ const CreditCardSuccess = () => {
           }
 
           .yes {
-            background-image: url(./../../images/check.png);
+            background-image: url("./../../images/check.png");
             background-repeat: no-repeat;
             background-position: 15px 7px;
             background-size: 18px;
@@ -389,7 +389,7 @@ const CreditCardSuccess = () => {
           }
 
           .creditcard {
-            background-image: url(./../../images/creditcard.png);
+            background-image: url("./../../images/creditcard.png");
             background-repeat: no-repeat;
             background-position: 5px 15px;
             background-size: 25px;

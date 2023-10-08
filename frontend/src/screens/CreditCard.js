@@ -1133,7 +1133,7 @@ const CreditCard = () => {
           <Footer />
         </div>
         <style jsx="true">{`
-          /* ============ RIGHT BOX =============== */
+        /* ============ RIGHT BOX =============== */
           .rightBox {
             position: relative;
             background-color: white;
@@ -1304,37 +1304,37 @@ const CreditCard = () => {
             padding-right: 0;
           }
           .calendar {
-            background-image: url(./../../Images/calendarmarker.png);
+            background-image: url("./../../images/calendarmarker.png");
             background-repeat: no-repeat;
             background-position: 1px 2px;
             background-size: 18px;
           }
           .pig {
-            background-image: url(./../../Images/pigmarker.png);
+            background-image: url("./../../images/pigmarker.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 20px;
           }
           .yes {
-            background-image: url(./../../images/check.png);
+            background-image: url("./../../images/check.png");
             background-repeat: no-repeat;
             background-position: 0px 2px;
             background-size: 18px;
           }
           .forbid {
-            background-image: url(./../../images/forbid.png);
+            background-image: url("./../../images/forbid.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
           }
           .aircraft {
-            background-image: url(./../../Images/aircraft.png);
+            background-image: url("./../../images/aircraft.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 20px;
           }
           .pencil {
-            background-image: url(./../../Images/pencilmarker.png);
+            background-image: url("./../../images/pencilmarker.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
@@ -1685,7 +1685,7 @@ const CreditCard = () => {
           }
 
           .creditcard {
-            background-image: url(./../../images/creditcard.png);
+            background-image: url("./../../images/creditcard.png");
             background-repeat: no-repeat;
             background-position: 5px 15px;
             background-size: 25px;

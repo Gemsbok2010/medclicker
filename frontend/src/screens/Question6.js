@@ -468,7 +468,6 @@ const Question6 = () => {
           }
           .wrap .questionCard {
             width: 475px;
-            min-height: 100vh;
             padding: 20px 10px;
             display: -webkit-box;
             display: -ms-flexbox;
@@ -521,7 +520,7 @@ const Question6 = () => {
             background-color: #14a248;
             color: white;
             font-weight: 800;
-            width: 150px;
+            width: 220px;
             height: 36px;
             outline: none;
             border: none;

@@ -1367,21 +1367,21 @@ const CreditCardRegular = () => {
 }
 
 .calendar {
-    background-image: url(./../../Images/calendarmarker.png);
+    background-image: url("./../../images/calendarmarker.png");
     background-repeat: no-repeat;
     background-position: 1px 2px;
     background-size: 18px;
 }
 
 .yes {
-    background-image: url(./../../images/check.png);
+    background-image: url("./../../images/check.png");
     background-repeat: no-repeat;
     background-position: 0px 2px;
     background-size: 18px;
 }
 
 .fb {
-    background-image: url(./../../images/fb.png);
+    background-image: url("./../../images/fb.png");
     background-repeat: no-repeat;
     background-position: 0px 2px;
     background-size: 18px;
@@ -1390,21 +1390,21 @@ const CreditCardRegular = () => {
 
 
 .online {
-    background-image: url(./../../Images/online.png);
+    background-image: url("./../../images/online.png");
     background-repeat: no-repeat;
     background-position: 2px 2px;
     background-size: 16px;
 }
 
 .email {
-    background-image: url(./../../Images/email.png);
+    background-image: url("./../../images/email.png");
     background-repeat: no-repeat;
     background-position: 0px 0px;
     background-size: 20px;
 }
 
 .pencil {
-    background-image: url(./../../Images/pencilmarker.png);
+    background-image: url("./../../images/pencilmarker.png");
     background-repeat: no-repeat;
     background-position: 0px 0px;
     background-size: 17px;
@@ -1818,7 +1818,7 @@ section {
 }
 
 .creditcard {
-    background-image: url(./../../images/creditcard.png);
+    background-image: url("./../../images/creditcard.png");
     background-repeat: no-repeat;
     background-position: 5px 15px;
     background-size: 25px;

@@ -1016,7 +1016,6 @@ const ListingManager = () => {
                             }}
                           >
                             {newApplicants.map((newApplicant) => {
-                         
                               return newApplicant.slugId === listing.slug ? (
                                 ReactSession.get("slug") === listing.slug ? (
                                   <span
@@ -1823,7 +1822,7 @@ const ListingManager = () => {
           }
 
           #arrow-up {
-            background-image: url(./../../images/arrow-up.png);
+            background-image: url("./../../images/arrow-up.png");
             height: 40px;
             width: 150px;
             line-height: 32px;
@@ -1847,7 +1846,7 @@ const ListingManager = () => {
           }
 
           #arrow-down {
-            background-image: url(./../../images/arrow-down.png);
+            background-image: url("./../../images/arrow-down.png");
             height: 40px;
             width: 150px;
             line-height: 32px;
@@ -1889,7 +1888,7 @@ const ListingManager = () => {
             line-height: 40px;
           }
           #filter {
-            background-image: url(./../../images/filters-small.png);
+            background-image: url("./../../images/filters-small.png");
             height: 30px;
             width: 30px;
             background-repeat: no-repeat;
@@ -2344,7 +2343,7 @@ const ListingManager = () => {
             background-color: #484848;
             left: 95%;
             top: -1%;
-            background-image: url(./../../Images/bin.png);
+            background-image: url("./../../images/bin.png");
             background-position: center;
             background-size: 12px;
             background-repeat: no-repeat;
@@ -2628,43 +2627,43 @@ const ListingManager = () => {
           }
 
           .yes {
-            background-image: url(./../../images/check.png);
+            background-image: url("./../../images/check.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
           }
           .forbid {
-            background-image: url(./../../images/forbid.png);
+            background-image: url("./../../images/forbid.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
           }
           .aircraft {
-            background-image: url(./../../Images/aircraft.png);
+            background-image: url("./../../images/aircraft.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 20px;
           }
           .phone {
-            background-image: url(./../../images/phone.png);
+            background-image: url("./../../images/phone.png");
             background-repeat: no-repeat;
             background-position: 0px 1px;
             background-size: 19px;
           }
           .applied {
-            background-image: url(./../../Images/paperairplane.png);
+            background-image: url("./../../images/paperairplane.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 20px;
           }
           .home {
-            background-image: url(./../../images/housemarker.png);
+            background-image: url("./../../images/housemarker.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
           }
           .email {
-            background-image: url(./../../Images/email.png);
+            background-image: url("./../../images/email.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 20px;
@@ -2701,7 +2700,7 @@ const ListingManager = () => {
           }
 
           .paginate .next {
-            background-image: url(./../../images/arrow-down.png);
+            background-image: url("./../../images/arrow-down.png");
             background-position: center;
             background-repeat: no-repeat;
             background-size: 15px;
@@ -2709,7 +2708,7 @@ const ListingManager = () => {
             transform: rotate(-90deg);
           }
           .paginate .previous {
-            background-image: url(./../../images/left.png);
+            background-image: url("./../../images/left.png");
             background-position: center;
             background-repeat: no-repeat;
             background-size: 15px;

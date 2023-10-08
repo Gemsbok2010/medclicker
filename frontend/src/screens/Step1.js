@@ -603,201 +603,204 @@ const Step1 = () => {
                     ""
                   )}
                 </div>
-                <div className="row">
-                  <div className="col-md-6">
-                    <div className="form-group row">
-                      <label
-                        htmlFor="firstName"
-                        className="col-sm-3 col-form-label"
-                      >
-                        First Name
-                      </label>
-                      <div className="col-sm-9">
-                        <input
-                          type="text"
-                          autoComplete="nope"
-                          disabled
-                          className="form-control-lg"
-                          id="firstName"
-                          defaultValue={firstName}
-                        />
+
+                <div className="container-fluid regCon">
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="form-group row">
+                        <label
+                          htmlFor="firstName"
+                          className="col-sm-3 col-form-label"
+                        >
+                          First Name
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="text"
+                            autoComplete="nope"
+                            disabled
+                            className="form-control-lg"
+                            id="firstName"
+                            defaultValue={firstName}
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="form-group row">
-                      <label
-                        htmlFor="lastName"
-                        className="col-sm-3 col-form-label"
-                      >
-                        LastName
-                      </label>
-                      <div className="col-sm-9">
-                        <input
-                          type="text"
-                          autoComplete="nope"
-                          disabled
-                          className="form-control-lg"
-                          id="lastName"
-                          defaultValue={lastName}
-                        />
+                      <div className="form-group row">
+                        <label
+                          htmlFor="lastName"
+                          className="col-sm-3 col-form-label"
+                        >
+                          LastName
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="text"
+                            autoComplete="nope"
+                            disabled
+                            className="form-control-lg"
+                            id="lastName"
+                            defaultValue={lastName}
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <div className="form-group row">
-                      <label
-                        htmlFor="email"
-                        className="col-sm-3 col-form-label"
-                      >
-                        Email
-                      </label>
-                      <div className="col-sm-9">
-                        <input
-                          type="email"
-                          className="form-control-lg"
-                          id="email"
-                          defaultValue={userInfo.email}
-                          disabled
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="form-group row">
-                      <label
-                        htmlFor="phone"
-                        className="col-sm-3 col-form-label"
-                      >
-                        Mobile
-                      </label>
-                      <div className="col-sm-9">
-                        <input
-                          type="text"
-                          autoComplete="nope"
-                          required
-                          className="form-control-lg"
-                          id="phone"
-                          maxLength="10"
-                          placeholder="Example: 0400666888"
-                          value={phone}
-                          onChange={handlePhone}
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group row">
-                      <label
-                        htmlFor="profession"
-                        className="col-sm-3 col-form-label"
-                      >
-                        Profession
-                      </label>
-                      <div className="col-sm-9">
-                        <input
-                          type="text"
-                          autoComplete="nope"
-                          className="form-control-lg"
-                          id="profession"
-                          value={profession ? profession : ""}
-                          onFocus={() => {
-                            setShowProfession(true);
-                            setSeeDrivers(false);
-                          }}
-                          onChange={() => {
-                            setShowProfession(true);
-                            setSeeDrivers(false);
-                          }}
-                        />
-                        <div className="professionList">
-                          <ul>
-                            {showProfession &&
-                              noDuplicates.map((profession) => {
-                                return (
-                                  <li
-                                    key={profession._id}
-                                    onClick={(e) => {
-                                      handleSetProfession(e);
-                                      handleShowProfession();
-                                    }}
-                                    name={profession.professionName}
-                                  >
-                                    {profession.professionName}
-                                  </li>
-                                );
-                              })}
-                          </ul>
+                      <div className="form-group row">
+                        <label
+                          htmlFor="email"
+                          className="col-sm-3 col-form-label"
+                        >
+                          Email
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="email"
+                            className="form-control-lg"
+                            id="email"
+                            defaultValue={userInfo.email}
+                            disabled
+                          />
                         </div>
                       </div>
                     </div>
-                    <div className="form-group row">
-                      <label
-                        htmlFor="driverslicense"
-                        className="col-sm-3 col-form-label"
-                      >
-                        Driver's License
-                      </label>
-                      <div className="col-sm-9">
-                        <input
-                          required
-                          autoComplete="nope"
-                          type="text"
-                          readOnly
-                          className="form-control-lg"
-                          id="driverslicense"
-                          placeholder="Select Jurisdiction"
-                          value={driverslicense ? driverslicense : ""}
-                          onFocus={() => {
-                            setSeeDrivers(!seeDrivers);
-                          }}
-                          onChange={() => {
-                            setSeeDrivers(!seeDrivers);
-                          }}
-                        />
-                        {seeDrivers ? (
-                          <div className="drivers">
+                    <div className="col-md-6">
+                      <div className="form-group row">
+                        <label
+                          htmlFor="phone"
+                          className="col-sm-3 col-form-label"
+                        >
+                          Mobile
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="text"
+                            autoComplete="nope"
+                            required
+                            className="form-control-lg"
+                            id="phone"
+                            maxLength="10"
+                            placeholder="Example: 0400666888"
+                            value={phone}
+                            onChange={handlePhone}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group row">
+                        <label
+                          htmlFor="profession"
+                          className="col-sm-3 col-form-label"
+                        >
+                          Profession
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="text"
+                            autoComplete="nope"
+                            className="form-control-lg"
+                            id="profession"
+                            value={profession ? profession : ""}
+                            onFocus={() => {
+                              setShowProfession(true);
+                              setSeeDrivers(false);
+                            }}
+                            onChange={() => {
+                              setShowProfession(true);
+                              setSeeDrivers(false);
+                            }}
+                          />
+                          <div className="professionList">
                             <ul>
-                              {states.map((state) => {
-                                return (
-                                  <li
-                                    key={state.id}
-                                    onClick={(e) => {
-                                      handleSetDrivers(e);
-                                      handleShowDrivers();
-                                    }}
-                                  >
-                                    {state.title}
-                                  </li>
-                                );
-                              })}
+                              {showProfession &&
+                                noDuplicates.map((profession) => {
+                                  return (
+                                    <li
+                                      key={profession._id}
+                                      onClick={(e) => {
+                                        handleSetProfession(e);
+                                        handleShowProfession();
+                                      }}
+                                      name={profession.professionName}
+                                    >
+                                      {profession.professionName}
+                                    </li>
+                                  );
+                                })}
                             </ul>
                           </div>
-                        ) : (
-                          ""
-                        )}
+                        </div>
+                      </div>
+                      <div className="form-group row">
+                        <label
+                          htmlFor="driverslicense"
+                          className="col-sm-3 col-form-label"
+                        >
+                          Driver's License
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            required
+                            autoComplete="nope"
+                            type="text"
+                            readOnly
+                            className="form-control-lg"
+                            id="driverslicense"
+                            placeholder="Select Jurisdiction"
+                            value={driverslicense ? driverslicense : ""}
+                            onFocus={() => {
+                              setSeeDrivers(!seeDrivers);
+                            }}
+                            onChange={() => {
+                              setSeeDrivers(!seeDrivers);
+                            }}
+                          />
+                          {seeDrivers ? (
+                            <div className="drivers">
+                              <ul>
+                                {states.map((state) => {
+                                  return (
+                                    <li
+                                      key={state.id}
+                                      onClick={(e) => {
+                                        handleSetDrivers(e);
+                                        handleShowDrivers();
+                                      }}
+                                    >
+                                      {state.title}
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="form-group">
-                    <label className="link-btn">
-                      Please visit
-                      <ExternalLink
-                        href="https://www.ahpra.gov.au/"
-                        target="_blank"
-                      >
-                        {" "}
-                        AHPRA{" "}
-                      </ExternalLink>
-                      and paste your AHPRA in the space below.
-                    </label>
+                    <div className="form-group">
+                      <label className="link-btn">
+                        Please visit
+                        <ExternalLink
+                          href="https://www.ahpra.gov.au/"
+                          target="_blank"
+                        >
+                          {" "}
+                          AHPRA{" "}
+                        </ExternalLink>
+                        and paste your AHPRA in the space below.
+                      </label>
 
-                    <input
-                      type="text"
-                      id="ahpraLink"
-                      style={{ outline: "none", width: "100%" }}
-                      value={ahpra ? ahpra : ""}
-                      autoComplete="off"
-                      maxLength={13}
-                      onChange={(e) => {
-                        setAhpra(e.target.value);
-                      }}
-                    />
+                      <input
+                        type="text"
+                        id="ahpraLink"
+                        style={{ outline: "none", width: "100%" }}
+                        value={ahpra ? ahpra : ""}
+                        autoComplete="off"
+                        maxLength={13}
+                        onChange={(e) => {
+                          setAhpra(e.target.value);
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
               </section>
@@ -833,7 +836,7 @@ const Step1 = () => {
                                 id="search"
                                 placeholder="Type your address here..."
                                 onSelect={handleSelect}
-                                value={`${streetNo} ${street}`}
+                                value={`${streetNo} ${street}, ${suburb} ${state} ${postalCode}`}
                                 onInput={() => {
                                   setLatitude("");
                                   setAddress("");
@@ -846,26 +849,42 @@ const Step1 = () => {
                               <input
                                 type="text"
                                 disabled
-                                style={{ marginTop: "6px" }}
-                                value={suburb}
+                                style={{
+                                  marginTop: "12px",
+                                  border: "none",
+                                  paddingTop: "1px",
+                                  paddingBottom: "1px",
+                                  height: "24px",
+                                  fontWeight: "700",
+                                }}
+                                value={`${streetNo} ${street}`}
                               />
 
                               <input
                                 type="text"
                                 disabled
-                                style={{ marginTop: "6px" }}
-                                value={state}
+                                style={{
+                                  marginTop: "2px",
+                                  border: "none",
+                                  paddingTop: "1px",
+                                  paddingBottom: "1px",
+                                  height: "24px",
+                                  fontWeight: "700",
+                                }}
+                                value={`${suburb} ${state} ${postalCode}`}
                               />
+
                               <input
                                 type="text"
                                 disabled
-                                style={{ marginTop: "6px" }}
-                                value={postalCode}
-                              />
-                              <input
-                                type="text"
-                                disabled
-                                style={{ marginTop: "6px" }}
+                                style={{
+                                  marginTop: "2px",
+                                  border: "none",
+                                  paddingTop: "1px",
+                                  paddingBottom: "1px",
+                                  height: "24px",
+                                  fontWeight: "700",
+                                }}
                                 value={country}
                               />
                             </>
@@ -1160,7 +1179,7 @@ const Step1 = () => {
             background-color: #14a248;
             color: white;
             font-weight: 800;
-            width: 150px;
+            width: 220px;
             height: 36px;
             outline: none;
             border: none;
@@ -1176,10 +1195,13 @@ const Step1 = () => {
             outline: none;
             border: none;
           }
+          .container-fluid.regCon {
+            margin: 0;
+          }
 
-          .regCon {
-            width: 85% !important;
-            padding: 20px 0;
+          section .regCon {
+            width: 100% !important;
+            padding: 0;
           }
           .regCon .form-group {
             margin-bottom: 25px;

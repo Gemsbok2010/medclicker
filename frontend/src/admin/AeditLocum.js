@@ -1376,7 +1376,7 @@ const AeditLocum = () => {
             transform: translate(-260%, -265%);
             border-radius: 2px;
             background-color: #484848;
-            background-image: url(./../../images/bin.png);
+            background-image: url("./../../images/bin.png");
             background-position: center;
             background-size: 12px;
             background-repeat: no-repeat;
@@ -1642,7 +1642,7 @@ const AeditLocum = () => {
             background-color: #14a248;
             color: white;
             font-weight: 800;
-            width: 150px;
+            width: 220px;
             height: 36px;
             outline: none;
             border: none;

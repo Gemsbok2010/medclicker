@@ -1610,7 +1610,7 @@ const ApplicationsManager = () => {
           }
 
           #filter {
-            background-image: url(./../../images/filters-small.png);
+            background-image: url("./../../images/filters-small.png");
             height: 30px;
             width: 30px;
             background-repeat: no-repeat;
@@ -1621,7 +1621,7 @@ const ApplicationsManager = () => {
           }
 
           #arrow-up {
-            background-image: url(./../../images/arrow-up.png);
+            background-image: url("./../../images/arrow-up.png");
             height: 40px;
             width: 150px;
             line-height: 32px;
@@ -1645,7 +1645,7 @@ const ApplicationsManager = () => {
           }
 
           #arrow-down {
-            background-image: url(./../../images/arrow-down.png);
+            background-image: url("./../../images/arrow-down.png");
             height: 40px;
             width: 150px;
             line-height: 32px;
@@ -1731,7 +1731,7 @@ const ApplicationsManager = () => {
           }
 
           .paginate .next {
-            background-image: url(./../../images/arrow-down.png);
+            background-image: url("./../../images/arrow-down.png");
             background-position: center;
             background-repeat: no-repeat;
             background-size: 15px;
@@ -1739,7 +1739,7 @@ const ApplicationsManager = () => {
             transform: rotate(-90deg);
           }
           .paginate .previous {
-            background-image: url(./../../images/left.png);
+            background-image: url("./../../images/left.png");
             background-position: center;
             background-repeat: no-repeat;
             background-size: 15px;
@@ -1755,63 +1755,63 @@ const ApplicationsManager = () => {
             }
           }
           .yes {
-            background-image: url(./../../images/check.png);
+            background-image: url("./../../images/check.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
           }
 
           .forbid {
-            background-image: url(./../../images/forbid.png);
+            background-image: url("./../../images/forbid.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
           }
           .pig {
-            background-image: url(./../../images/pigmarker.png);
+            background-image: url("./../../images/pigmarker.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
           }
           .home {
-            background-image: url(./../../images/housemarker.png);
+            background-image: url("./../../images/housemarker.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
           }
           .phone {
-            background-image: url(./../../images/phone.png);
+            background-image: url("./../../images/phone.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 20px;
           }
           .aircraft {
-            background-image: url(./../../Images/aircraft.png);
+            background-image: url("./../../images/aircraft.png");
             background-repeat: no-repeat;
             background-position: -1px 0px;
             background-size: 20px;
           }
           .owner {
-            background-image: url(./../../Images/boy.png);
+            background-image: url("./../../images/boy.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 20px;
           }
           .hospital {
-            background-image: url(./../../Images/hospital.png);
+            background-image: url("./../../images/hospital.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
           }
           .applied {
-            background-image: url(./../../Images/paperairplane.png);
+            background-image: url("./../../images/paperairplane.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 20px;
           }
 
           .email {
-            background-image: url(./../../Images/email.png);
+            background-image: url("./../../images/email.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 20px;

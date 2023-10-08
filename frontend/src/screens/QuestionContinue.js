@@ -125,7 +125,6 @@ const QuestionContinue = () => {
 
           .wrap .questionCard {
             width: 340px;
-            min-height: 50vh;
             padding: 20px 10px;
             display: -webkit-box;
             display: -ms-flexbox;

@@ -222,7 +222,6 @@ const Administrator = () => {
         }
         .wrap .questionCard {
           width: 340px;
-          min-height: 80vh;
           padding: 20px 10px;
           display: -webkit-box;
           display: -ms-flexbox;
@@ -298,13 +297,13 @@ const Administrator = () => {
           transition: all 1500ms ease-in-out 0ms;
         }
         #email {
-          background-image: url(./../../images/mail.png);
+          background-image: url("./../../images/mail.png");
           background-repeat: no-repeat;
           background-size: 16px;
           background-position: 290px;
         }
         #password {
-          background-image: url(./../../images/lock.png);
+          background-image: url("./../../images/lock.png");
           background-repeat: no-repeat;
           background-size: 15px;
           background-position: 290px;
@@ -424,12 +423,12 @@ const Administrator = () => {
           }
 
           #email {
-            background-image: url(./../../images/mail.png);
+            background-image: url("./../../images/mail.png");
 
             background-position: 505px;
           }
           #password {
-            background-image: url(./../../images/lock.png);
+            background-image: url("./../../images/lock.png");
 
             background-position: 505px;
           }

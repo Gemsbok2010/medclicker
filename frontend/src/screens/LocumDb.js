@@ -1453,7 +1453,7 @@ const LocumDb = () => {
           }
 
           #arrow-up {
-            background-image: url(./../../images/arrow-up.png);
+            background-image: url("./../../images/arrow-up.png");
             height: 40px;
             width: 150px;
             line-height: 32px;
@@ -1477,7 +1477,7 @@ const LocumDb = () => {
           }
 
           #arrow-down {
-            background-image: url(./../../images/arrow-down.png);
+            background-image: url("./../../images/arrow-down.png");
             height: 40px;
             width: 150px;
             line-height: 32px;
@@ -1519,7 +1519,7 @@ const LocumDb = () => {
             line-height: 40px;
           }
           #filter {
-            background-image: url(./../../images/filters-small.png);
+            background-image: url("./../../images/filters-small.png");
             height: 30px;
             width: 30px;
             background-repeat: no-repeat;
@@ -1687,7 +1687,7 @@ const LocumDb = () => {
           }
 
           .paginate .next {
-            background-image: url(./../../images/arrow-down.png);
+            background-image: url("./../../images/arrow-down.png");
             background-position: center;
             background-repeat: no-repeat;
             background-size: 15px;
@@ -1695,7 +1695,7 @@ const LocumDb = () => {
             transform: rotate(-90deg);
           }
           .paginate .previous {
-            background-image: url(./../../images/left.png);
+            background-image: url("./../../images/left.png");
             background-position: center;
             background-repeat: no-repeat;
             background-size: 15px;

@@ -93,7 +93,7 @@ const Step4 = () => {
           .wrap .locum {
             width: 400px;
             height: 150px;
-            background-image: url(./../../images/tutors.jpg);
+            background-image: url("./../../images/tutors.jpg");
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
@@ -102,7 +102,6 @@ const Step4 = () => {
 
           .wrap .questionCard {
             width: 450px;
-            /* min-height: 80vh; */
             padding: 20px 10px;
             display: -webkit-box;
             display: -ms-flexbox;

@@ -1018,7 +1018,6 @@ const HomeNav = () => {
 
         .wrap .loginQuestionCard {
           width: 340px;
-          min-height: 80vh;
           padding: 20px 10px;
           align-items: center;
           border-radius: 0px;
@@ -1062,13 +1061,13 @@ const HomeNav = () => {
           }
         }
         .wrap .loginQuestionCard #email {
-          background-image: url(./../../images/mail.png);
+          background-image: url("./../../images/mail.png");
           background-repeat: no-repeat;
           background-size: 16px;
           background-position: 360px;
         }
         .wrap .loginQuestionCard #password {
-          background-image: url(./../../images/lock.png);
+          background-image: url("./../../images/lock.png");
           background-repeat: no-repeat;
           background-size: 15px;
           background-position: 360px;

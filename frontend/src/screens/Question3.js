@@ -1518,25 +1518,25 @@ const Question3 = () => {
           }
 
           .calstart {
-            background-image: url(./../../images/calendarblack.png);
+            background-image: url("./../../images/calendarblack.png");
             background-repeat: no-repeat;
             background-position: 330px;
             background-size: 18px;
           }
           .calstart:hover {
-            background-image: url(./../../images/calendar.png);
+            background-image: url("./../../images/calendar.png");
             background-repeat: no-repeat;
             background-position: 330px;
             background-size: 18px;
           }
           .calfinish {
-            background-image: url(./../../images/calendarblack.png);
+            background-image: url("./../../images/calendarblack.png");
             background-repeat: no-repeat;
             background-position: 330px;
             background-size: 18px;
           }
           .calfinish:hover {
-            background-image: url(./../../images/calendar.png);
+            background-image: url("./../../images/calendar.png");
             background-repeat: no-repeat;
             background-position: 330px;
             background-size: 18px;
@@ -1865,13 +1865,13 @@ const Question3 = () => {
             }
 
             .clock {
-              background-image: url(./../../images/white-clock.png);
+              background-image: url("./../../images/white-clock.png");
               background-position: 12px;
               background-size: 17px;
               background-repeat: no-repeat;
             }
             .coffee {
-              background-image: url(./../../images/coffee_cup.png);
+              background-image: url("./../../images/coffee_cup.png");
               background-position: 12px;
               background-size: 19px;
               background-repeat: no-repeat;

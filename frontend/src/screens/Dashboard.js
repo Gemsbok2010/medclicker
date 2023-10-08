@@ -1787,7 +1787,7 @@ const Dashboard = () => {
             font-weight: 600;
           }
           .forbid {
-            background-image: url(./../../images/exclamation.png);
+            background-image: url("./../../images/exclamation.png");
             background-repeat: no-repeat;
             background-position: 15px 7px;
             background-size: 18px;

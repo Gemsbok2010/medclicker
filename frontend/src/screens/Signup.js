@@ -512,7 +512,6 @@ const Signup = () => {
 
           .wrap .questionCard {
             width: 400px;
-            min-height: 80vh;
             padding: 20px 10px;
             display: -webkit-box;
             display: -ms-flexbox;

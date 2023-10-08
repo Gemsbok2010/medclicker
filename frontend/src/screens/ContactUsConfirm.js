@@ -66,7 +66,6 @@ const ContactUsConfirm = () => {
 
           .wrapper .questionCard {
             width: 450px;
-            /* min-height: 80vh; */
             padding: 20px 10px;
             display: -webkit-box;
             display: -ms-flexbox;

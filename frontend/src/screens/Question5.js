@@ -221,7 +221,6 @@ Attractive rate of $60 per hour + super on offer for the right candidate dependi
           }
           .wrap .questionCard {
             width: 475px;
-            min-height: 80vh;
             padding: 20px 10px;
             display: -webkit-box;
             display: -ms-flexbox;
@@ -375,7 +374,6 @@ Attractive rate of $60 per hour + super on offer for the right candidate dependi
             height: 50px;
             background: #fff;
             color: #2b2b2b;
-            margin-bottom: 20px;
             border: none;
             outline: none;
             border-radius: 0px;

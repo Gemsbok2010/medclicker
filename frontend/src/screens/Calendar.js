@@ -117,7 +117,8 @@ const Calendar = () => {
           top: 0,
           behavior: "smooth",
         });
-     
+        console.log(data.applications, "apply");
+        console.log(data.adPosts, "list");
         setListingInfo(data.adPosts);
         setApplications(data.applications);
       }
@@ -156,6 +157,7 @@ const Calendar = () => {
   const [sun_rate, setSun_rate] = useState("");
 
   const panelDisplay = (e, app, list) => {
+    console.log(e, app, list);
     setShowInfo(false);
     setThisId(app._id);
     setAvailable_start(app.available_start);
@@ -402,7 +404,7 @@ const Calendar = () => {
             outline: none;
             border: none;
             background-color: #fff;
-            background-image: url(./../../Images/left.png);
+            background-image: url("./../../images/left.png");
             background-position: center;
             background-repeat: no-repeat;
             background-size: 22px;
@@ -412,7 +414,7 @@ const Calendar = () => {
             display: inline-block;
           }
           .nextButton {
-            background-image: url(./../../Images/right.png);
+            background-image: url("./../../images/right.png");
           }
 
           .backButton:active,
@@ -760,49 +762,49 @@ const Calendar = () => {
           }
 
           .home {
-            background-image: url(./../../images/housemarker.png);
+            background-image: url("./../../images/housemarker.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
           }
           .pig {
-            background-image: url(./../../images/pigmarker.png);
+            background-image: url("./../../images/pigmarker.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
           }
           .phone {
-            background-image: url(./../../images/phone.png);
+            background-image: url("./../../images/phone.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 20px;
           }
           .aircraft {
-            background-image: url(./../../Images/aircraft.png);
+            background-image: url("./../../images/aircraft.png");
             background-repeat: no-repeat;
             background-position: -1px 0px;
             background-size: 20px;
           }
           .owner {
-            background-image: url(./../../Images/boy.png);
+            background-image: url("./../../images/boy.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 20px;
           }
           .email {
-            background-image: url(./../../Images/email.png);
+            background-image: url("./../../images/email.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 20px;
           }
           .hospital {
-            background-image: url(./../../Images/hospital.png);
+            background-image: url("./../../images/hospital.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;
           }
           .car {
-            background-image: url(./../../Images/busmarker.png);
+            background-image: url("./../../images/busmarker.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 16px;

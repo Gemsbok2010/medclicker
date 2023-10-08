@@ -2114,7 +2114,7 @@ const LocumCV = () => {
           }
 
           .pencil {
-            background-image: url(./../../Images/pencil.png);
+            background-image: url("./../../images/pencil.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 26px;

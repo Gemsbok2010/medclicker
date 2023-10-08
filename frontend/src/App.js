@@ -11,6 +11,7 @@ import ReactGA from "react-ga4";
 //Route Protection
 import ProtectedAdmin from "./ProtectedAdmin";
 import ProtectedRoutes from "./ProtectedRoutes";
+import ProtectedAgreements from "./ProtectedAgreements";
 import ExcludePostLogin from "./ExcludePostLogin";
 import BlockInactives from "./BlockInactives";
 import ProtectedNotLocum from "./ProtectedNotLocum";
@@ -58,6 +59,7 @@ const Question3 = lazy(() => import("./screens/Question3"));
 const Question4 = lazy(() => import("./screens/Question4"));
 const Question5 = lazy(() => import("./screens/Question5"));
 const Question6 = lazy(() => import("./screens/Question6"));
+const PersonalDetails = lazy(() => import("./screens/PersonalDetails"));
 const QuestionContinue = lazy(() => import("./screens/QuestionContinue"));
 const QuestionLocumReview = lazy(() => import("./screens/QuestionLocumReview"));
 const QuestionReview = lazy(() => import("./screens/QuestionReview"));
@@ -81,7 +83,6 @@ const Signup = lazy(() => import("./screens/Signup"));
 const Error404 = lazy(() => import("./screens/Error404"));
 const Contact = lazy(() => import("./screens/Contact"));
 const ContactUsConfirm = lazy(() => import("./screens/ContactUsConfirm"));
-const PersonalDetails = lazy(() => import("./screens/PersonalDetails"));
 const Calendar = lazy(() => import("./screens/Calendar"));
 const Agreements = lazy(() => import("./screens/LocumAgreements"));
 const Agreement = lazy(() => import("./screens/LocumAgreement"));
@@ -115,7 +116,7 @@ const CreditCardRegLoading = lazy(() =>
 const CreditCardRegular = lazy(() => import("./screens/CreditCardRegular"));
 const Logout = lazy(() => import("./screens/Logout"));
 
-ReactGA.initialize("G-9P8NEB3TMM");
+ReactGA.initialize("G-TLNDN2J382");
 
 function App() {
   useEffect(() => {
@@ -245,15 +246,18 @@ function App() {
             <Route path="/securitysettings" element={<SecuritySettings />} />
             <Route path="/invoices" element={<Invoices />} />
             <Route path="/invoice/:invoiceNumber" element={<Invoice />} />
-            <Route path="/agreements" element={<Agreements />} />
-            <Route path="/agreement/:caseId" element={<Agreement />} />
             <Route path="/personal-details" element={<PersonalDetails />} />
+            <Route path="/calendar" element={<Calendar />} />
+            {/* 3. BLOCK NON-LOCUMS TO AGREEMENTS */}
+            <Route element={<ProtectedAgreements />}>
+              <Route path="/agreements" element={<Agreements />} />
+              <Route path="/agreement/:caseId" element={<Agreement />} />
+            </Route>
 
             {/* 3. BLOCK INCOMPLETE USERS */}
             <Route element={<ProtectedAllusers />}>
               {/* 4. BLOCK BLACKLISTED USERS */}
               <Route element={<BlockInactives />}>
-                <Route path="/personal-details" element={<PersonalDetails />} />
                 <Route
                   path="/applicationsManager"
                   element={<ApplicationsManager />}
@@ -292,6 +296,7 @@ function App() {
                   path="/resume_selected/:locumId"
                   element={<ResumeSelected />}
                 />
+                <Route path="/step4" element={<Step4 />} />
                 {/* 5. BLOCK PAYMENT PAGE */}
                 <Route element={<ProtectedPayment />}>
                   <Route
@@ -343,10 +348,7 @@ function App() {
                   <Route path="/step1" element={<Step1 />} />
                   <Route path="/step2" element={<Step2 />} />
                   <Route path="/step3" element={<Step3 />} />
-                  <Route path="/step4" element={<Step4 />} />
                 </Route>
-                {/* NOT SEGMENTED */}
-                <Route path="/calendar" element={<Calendar />} />
               </Route>
             </Route>
           </Route>

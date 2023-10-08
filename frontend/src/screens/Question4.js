@@ -685,13 +685,13 @@ const Question4 = () => {
           }
 
           #vark {
-            background-image: url(./../../images/pig-black.png);
+            background-image: url("./../../images/pig-black.png");
             background-repeat: no-repeat;
             background-position: 140px;
             background-size: 40px;
           }
           #bussuit {
-            background-image: url(./../../images/airplane-black.png);
+            background-image: url("./../../images/airplane-black.png");
             background-repeat: no-repeat;
             background-position: 184px;
             background-size: 40px;

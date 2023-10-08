@@ -211,7 +211,6 @@ const Resetpassword = () => {
           }
           .wrap .questionCard {
             width: 380px;
-            min-height: 48vh;
             padding: 20px 10px;
             display: -webkit-box;
             display: -ms-flexbox;

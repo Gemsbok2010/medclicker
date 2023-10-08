@@ -1077,14 +1077,14 @@ const QuestionReview = () => {
           }
 
           .calendar {
-            background-image: url(./../../Images/calendarmarker.png);
+            background-image: url("./../../images/calendarmarker.png");
             background-repeat: no-repeat;
             background-position: 1px 2px;
             background-size: 18px;
           }
 
           .chart {
-            background-image: url(./../../Images/pencilmarker.png);
+            background-image: url("./../../images/pencilmarker.png");
             background-repeat: no-repeat;
             background-position: 0px 0px;
             background-size: 18px;

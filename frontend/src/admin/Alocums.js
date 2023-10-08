@@ -1629,7 +1629,7 @@ const Alocums = () => {
             width: 35px;
             height: 35px;
             position: absolute;
-            background-image: url(./../../images/1713679370655_picture.jpg);
+            background-image: url("./../../images/1713679370655_picture.jpg");
             background-position: center;
             background-repeat: no-repeat;
             background-size: 35px;
@@ -1640,13 +1640,13 @@ const Alocums = () => {
             z-index: 1000;
           }
           .cell div .img-2 {
-            background-image: url(./../../images/avatar-nathalieteston.jpg);
+            background-image: url("./../../images/avatar-nathalieteston.jpg");
           }
           .cell div .img-3 {
-            background-image: url(./../../images/lin.jpg);
+            background-image: url("./../../images/lin.jpg");
           }
           .cell div .img-4 {
-            background-image: url(./../../images/pic.jpg);
+            background-image: url("./../../images/pic.jpg");
           }
           @media only screen and (min-width: 768px) {
             .container-fuild {
@@ -2049,7 +2049,7 @@ const Alocums = () => {
           }
 
           .paginate .next {
-            background-image: url(./../../images/arrow-down.png);
+            background-image: url("./../../images/arrow-down.png");
             background-position: center;
             background-repeat: no-repeat;
             background-size: 15px;
@@ -2057,7 +2057,7 @@ const Alocums = () => {
             transform: rotate(-90deg);
           }
           .paginate .previous {
-            background-image: url(./../../images/left.png);
+            background-image: url("./../../images/left.png");
             background-position: center;
             background-repeat: no-repeat;
             background-size: 15px;

@@ -61,7 +61,7 @@ const Question_Thank_You = () => {
           .plane {
             width: 300px;
             height: 80px;
-            background-image: url(./../../images/paperairplane.png);
+            background-image: url("./../../images/paperairplane.png");
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;

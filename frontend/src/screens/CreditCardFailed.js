@@ -148,7 +148,7 @@ const CreditCardFailed = () => {
           <Footer />
         </div>
         <style jsx="true">{`
-          /* ============ RIGHT BOX =============== */
+        /* ============ RIGHT BOX =============== */
           .rightBox {
             position: relative;
             background-color: white;
@@ -161,6 +161,36 @@ const CreditCardFailed = () => {
             box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
               0 1px 3px rgba(0, 0, 0, 0.28);
           }
+
+           .rightBoxNoPayment {
+            position: relative;
+            background-color: white;
+            width: 380px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border-top: 5px solid #14a248;
+            -webkit-box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
+              0 1px 3px rgba(0, 0, 0, 0.28);
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
+              0 1px 3px rgba(0, 0, 0, 0.28);
+          } 
+          }
+
+           .rightBoxNoPayment h2 {
+            font-size: 1.6rem;
+            word-break: break-word;
+            letter-spacing: -0.02em;
+            margin-bottom: 10px;
+            color: #2b2b2b;
+            margin-top: 15px;
+            font-weight: 800;
+          }
+
+          .rightBoxNoPayment .insideBox {
+            height: 565px;
+          } 
+          
+
           .rightBox h2 {
             font-size: 1.6rem;
             word-break: break-word;
@@ -171,11 +201,182 @@ const CreditCardFailed = () => {
             font-weight: 800;
           }
 
-          .forbid {
-            background-image: url(./../../images/exclamation.png);
+          .container-date {
+            position: relative;
+            width: 100%;
+            top: 0%;
+            left: 0%;
+            outline: none;
+            z-index: 1000;
+          }
+
+          .container-date p {
+            margin: 6px auto;
+            color: #777;
+            width: 100%;
+            font-size: 14px;
+            font-weight: 100;
+            font-family: sans-serif;
+          }
+
+          .container-date .row {
+            display: flex;
+            justify-content: space-between;
+          }
+
+          .container-date .row p {
+            width: 100%;
+            padding-left: 22px;
+          }
+          .container-date .row {
+            margin-left: 4px;
+            width: 100%;
+          }
+          .container-date .col-xs-4 p {
+            text-align: right;
+          }
+          .container-date .col-xs-8 {
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .container-locum {
+            position: relative;
+            width: 100%;
+            top: 5%;
+            left: 0%;
+            outline: none;
+            z-index: 1000;
+          }
+          .container-locum p {
+            margin: 6px auto;
+            color: #777;
+            width: 100%;
+            font-size: 14px;
+            font-weight: 100;
+            font-family: sans-serif;
+          }
+          .container-locum .row {
+            display: flex;
+            justify-content: space-between;
+          }
+          .container-locum .row p {
+            width: 100%;
+            padding-left: 22px;
+          }
+          .container-locum .row {
+            margin-left: 4px;
+            width: 100%;
+          }
+
+          .container-details {
+            position: relative;
+            width: 100%;
+            top: 10%;
+            left: 0%;
+            outline: none;
+            z-index: 1000;
+          }
+
+          .container-details p {
+            margin: 6px auto;
+            color: #777;
+            width: 100%;
+            font-size: 14px;
+            font-weight: 100;
+            font-family: sans-serif;
+          }
+          .container-details .row {
+            display: flex;
+            justify-content: space-between;
+          }
+
+          .container-details .total {
+            color: #333;
+            font-weight: 800;
+            font-size: 18px;
+          }
+          .container-details .price {
+            color: #14a248;
+            font-weight: 800;
+            font-size: 18px;
+          }
+
+          .container-details .row p {
+            width: 100%;
+            padding-left: 22px;
+          }
+          .container-details .row {
+            border-bottom: 1px solid #ebebeb;
+            margin-left: 4px;
+            width: 100%;
+          }
+          .container-details .col-xs-4 p {
+            text-align: right;
+          }
+          .container-details .col-xs-8 {
+            padding-left: 0;
+            padding-right: 0;
+          }
+          .calendar {
+            background-image: url("./../../images/calendarmarker.png");
             background-repeat: no-repeat;
-            background-position: 15px 7px;
+            background-position: 1px 2px;
             background-size: 18px;
+          }
+          .pig {
+            background-image: url("./../../images/pigmarker.png");
+            background-repeat: no-repeat;
+            background-position: 0px 0px;
+            background-size: 20px;
+          }
+          .yes {
+            background-image: url("./../../images/check.png");
+            background-repeat: no-repeat;
+            background-position: 0px 2px;
+            background-size: 18px;
+          }
+          .forbid {
+            background-image: url("./../../images/forbid.png");
+            background-repeat: no-repeat;
+            background-position: 0px 0px;
+            background-size: 18px;
+          }
+          .aircraft {
+            background-image: url("./../../images/aircraft.png");
+            background-repeat: no-repeat;
+            background-position: 0px 0px;
+            background-size: 20px;
+          }
+          .pencil {
+            background-image: url("./../../images/pencilmarker.png");
+            background-repeat: no-repeat;
+            background-position: 0px 0px;
+            background-size: 18px;
+          }
+
+          .container-refund {
+            position: relative;
+            left: 0%;
+            width: 100%;
+            top: 11%;
+          }
+          .container-refund p {
+            margin: 6px auto;
+            color: #777;
+            width: 100%;
+            font-size: 14px;
+            font-weight: 100;
+            font-family: sans-serif;
+          }
+          .container-refund .row p {
+            width: 100%;
+            padding-left: 22px;
+          }
+          .insideBox .container-refund a {
+            color: #008489;
+            font-weight: 700;
+            display: inline;
           }
 
           /* ======== ROOT CSS VARIABLES ========== */
@@ -334,6 +535,7 @@ const CreditCardFailed = () => {
             gap: 2rem;
             width: 96%;
             margin: 1rem auto 4rem;
+            z-index: 2000;
           }
 
           main aside {
@@ -342,12 +544,17 @@ const CreditCardFailed = () => {
             justify-content: space-between;
             height: 88vh;
             transform: translateX(0%);
+            z-index: 2000;
           }
-          main aside button#close-btn:focus,
-          main aside button#close-btn:active {
-            outline: none;
+          main .moveback {
+            transform: translateX(-80%);
+            transition: all 300ms ease;
           }
-
+          main .movehere {
+            transform: translateX(0%);
+            transition: all 300ms ease;
+            z-index: 2000;
+          }
           main .sidebar .alertCircle {
             height: 20px;
             width: 20px;
@@ -364,6 +571,11 @@ const CreditCardFailed = () => {
           /* will be shown only on mobile and tablets */
           main aside button#close-btn {
             display: none;
+          }
+
+          main aside button#close-btn:focus,
+          main aside button#close-btn:active {
+            outline: none;
           }
 
           main aside .sidebar a {
@@ -429,43 +641,79 @@ const CreditCardFailed = () => {
           /* ============= MIDDLE SECTION ============= */
           .myaccountbox {
             margin-top: 30px;
-            display: block;
-
+            display: flex;
+            justify-content: space-bewtween;
             width: 880px;
+          }
+
+          .insideBox form .previousCard {
+            border: 1px solid #14a248;
+            border-radius: 4px;
+            background-color: #fff;
+            height: 30px;
+            color: #14a248;
+            margin: 12px auto 15px;
+            padding: 0 1px;
+            width: 195px;
           }
 
           .leftBox {
             position: relative;
-            background-color: #fdf4f6;
-            width: 100%;
+            background-color: white;
+            width: 430px;
             margin-right: 10px;
             border-radius: 5px;
-            padding: 5px 25px;
-            border-top: 5px solid #d52043;
+            border-top: 5px solid #14a248;
             -webkit-box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
               0 1px 3px rgba(0, 0, 0, 0.28);
             box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
               0 1px 3px rgba(0, 0, 0, 0.28);
           }
 
-          .leftBox p {
+          .leftBox h2 {
+            color: #2f383c;
+            font-size: 1.6rem;
+            word-break: break-word;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            margin-bottom: 18px;
+          }
+          .leftBox h4 {
+            color: rgba(99, 106, 109);
+            font-weight: 100;
+            font-family: "Noto Sans TC", sans-serif;
             font-size: 14px;
-            font-weight: 600;
-            margin-left: 15px;
+            margin-bottom: 16px;
+          }
+          .leftBox h3 {
+            color: #2f383c;
+            font-size: 1.6rem;
+            word-break: break-word;
+            font-weight: 400;
+            letter-spacing: -0.02em;
             margin-bottom: 0px;
           }
 
-          .leftBox a {
-            color: #d52043;
-            font-size: 14px;
+          .leftBox p {
+            font-size: 28px;
             font-weight: 600;
           }
 
           .creditcard {
-            background-image: url(./../../images/creditcard.png);
+            background-image: url("./../../images/creditcard.png");
             background-repeat: no-repeat;
             background-position: 5px 15px;
             background-size: 25px;
+          }
+
+          .myaccountbox .insideBox .input-group {
+            display: grid;
+            grid-template-columns: 50% 25% 25%;
+          }
+
+          .insideBox .input-group.first {
+            display: block;
+            margin: 35px 0;
           }
 
           main section.midde .header {
@@ -560,6 +808,127 @@ const CreditCardFailed = () => {
             gap: 2rem;
           }
 
+          .insideBox {
+            display: block;
+            margin: 0;
+            position: relative;
+            height: 100%;
+            width: 100%;
+            padding: 0 16px 25px;
+          }
+          .insideBox h2 {
+            color: #2b2b2b;
+            margin-top: 15px;
+            font-weight: 800;
+          }
+
+          .insideBox button {
+            border-radius: 4px;
+            color: #fff;
+            height: 50px;
+            width: 140px;
+            background-color: #14a248;
+            cursor: pointer;
+            position: relative;
+            right: 0px;
+          }
+
+          .insideBox button:disabled {
+            background-color: #ddd;
+            color: #888;
+            cursor: default;
+            border: #ddd;
+          }
+
+          .insideBox button:focus,
+          .insideBox button:active {
+            outline: none;
+          }
+
+          .insideBox .name_on_card {
+            background-color: rgba(234, 234, 234, 0.5);
+            opacity: 0.9;
+            height: 56px;
+            color: #222;
+            width: 100%;
+            font-weight: 400;
+            font-size: 16px;
+            position: relative;
+            padding-left: 37px;
+            padding-top: 20px;
+            height: 56px;
+            border-bottom: 2px solid #222;
+          }
+
+          .insideBox .no_on_card {
+            background-color: rgba(234, 234, 234, 0.5);
+            opacity: 0.9;
+            height: 56px;
+            color: #222;
+            width: 100%;
+            font-weight: 400;
+            font-size: 16px;
+            position: relative;
+            padding-left: 37px;
+            padding-top: 20px;
+            height: 56px;
+            border-bottom: 2px solid #222;
+          }
+
+          .insideBox .expiry {
+            background-color: rgba(234, 234, 234, 0.5);
+            opacity: 0.9;
+            height: 56px;
+            color: #222;
+            width: 100%;
+            font-weight: 400;
+            font-size: 16px;
+            position: relative;
+            padding-left: 37px;
+            padding-top: 20px;
+            height: 56px;
+            border-bottom: 2px solid #222;
+          }
+
+          .insideBox .cvv {
+            background-color: rgba(234, 234, 234, 0.5);
+            opacity: 0.9;
+            height: 56px;
+            color: #222;
+            width: 100%;
+            font-weight: 400;
+            font-size: 16px;
+            position: relative;
+            padding-left: 37px;
+            padding-top: 20px;
+            height: 56px;
+            border-bottom: 2px solid #222;
+          }
+
+          .insideBox .input-group {
+            display: block;
+            margin-right: 20px;
+            position: relative;
+            height: 56px;
+          }
+          .insideBox .input-group div {
+            position: relative;
+          }
+
+          .insideBox .input-group label {
+            position: absolute;
+            transform: translateY(-50%);
+            top: 50%;
+            left: 37px;
+            font-family: "Noto Sans TC", sans-serif;
+            font-size: 14px;
+            color: #777;
+            font-weight: 500;
+            padding: 0px 0px;
+            pointer-events: none;
+            transition: all 200ms ease-in-out 0ms;
+          }
+
           .input-group input:focus + label {
             transform: translate(-8px, -22px) scale(0.8);
             font-size: 13px;
@@ -574,16 +943,37 @@ const CreditCardFailed = () => {
             opacity: 1;
           }
 
-          .noLocumPayment {
+          .insideBox a {
+            color: white;
+            height: 100%;
+            width: 100%;
+            display: block;
+            font-size: 14px;
+          }
+
+          .gridBox {
+            background-color: transparent;
+            width: 420px;
+            border-radius: 5px;
+            display: grid;
+            grid-template-columns: 50% 50%;
+            grid-row-gap: 12px;
+            grid-column-gap: 12px;
+            margin-top: 0px;
+          }
+
+          .container-refund .noLocumPayment {
             width: 100%;
             color: white;
             background-color: #14a248;
             border-radius: 4px;
             cursor: pointer;
             height: 42px;
-            margin-top: 8px;
             position: relative;
             top: 5%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
 
           /* =========== CHECKBOX ========== */
@@ -652,11 +1042,30 @@ const CreditCardFailed = () => {
             nav .profile-area {
               gap: 2rem;
             }
+            .rightBox {
+              width: 430px;
+            }
+            .rightBox .insideBox {
+              height: 560px;
+            } 
+
+             
+             .rightBoxNoPayment {
+              width: 430px;
+            }
+            .rightBoxNoPayment .insideBox {
+              height: 565px;
+            } 
+            
 
             .myaccountbox {
-              display: block;
+              display: flex;
+              flex-direction: column;
               margin-left: 40px;
-              width: 430px;
+              width: 400px;
+            }
+            .gridBox {
+              margin-top: 20px;
             }
 
             main {
@@ -670,7 +1079,6 @@ const CreditCardFailed = () => {
             main .movehere {
               transform: translateX(0%);
               transition: all 300ms ease;
-              z-index: 2000;
             }
             main aside {
               position: fixed;

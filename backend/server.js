@@ -36,10 +36,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: [
-      "https://www.medclicker.com.au:3000",
-      "https://medclicker.com.au:3000",
-    ],
+    origin: ["https://www.medclicker.com.au"],
     credentials: true,
   })
 );
@@ -322,6 +319,18 @@ mongoose.connect(
   },
   () => console.log("Connect to database")
 );
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+  app.get('*', (req, res) =>
+    res.sendFile(
+      path.resolve(__dirname, '../', 'frontend', 'build', 'index.html')
+    )
+  );
+} else {
+  app.get('/', (req, res) => res.send('Please set to production'));
+}
 
 //Listening
 const port = 4000;
