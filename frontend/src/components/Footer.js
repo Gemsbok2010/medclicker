@@ -904,7 +904,7 @@ const Footer = ({ asx }) => {
           display: flex;
           justify-content: center;
           align-items: center;
-          z-index: 4500;
+          z-index: 1500;
           width: 100%;
           height: 100%;
           top: 0;
@@ -912,7 +912,7 @@ const Footer = ({ asx }) => {
         }
 
         .wrap .loginQuestionCard {
-          width: 340px;
+          width: 400px;
           padding: 20px 10px;
           align-items: center;
           border-radius: 0px;
@@ -1132,7 +1132,7 @@ const Footer = ({ asx }) => {
         }
 
         .container {
-          text-align: center;
+          text-align: left;
         }
 
         @media only screen and (min-width: 768px) {

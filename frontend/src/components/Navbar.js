@@ -595,7 +595,7 @@ const Navbar = () => {
       </div>
 
       <style jsx="true">{`
-        nav {
+      nav {
           background-color: #fff;
           width: 100%;
           height: 75px;
@@ -707,7 +707,7 @@ const Navbar = () => {
           padding-right: 0px;
         }
 
-        .img-fluid {
+        #navbar .img-fluid {
          transform: translateX(36%);
         }
         .mainTitle .img-fluid {

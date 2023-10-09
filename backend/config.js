@@ -1,3 +1,5 @@
+require("dotenv/config");
+
 const config = {
   JWT_SECRET: process.env.JWT_SECRET || "motdepasse",
 };
