@@ -9,9 +9,8 @@ const facebook = {
 };
 
 const google = {
-  clientID:
-    "458778111230-s5q4p0sv3eahqnej4bvo4se344jqnhlf.apps.googleusercontent.com",
-  clientSecret: "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",
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 };
 
 module.exports.google = google;
