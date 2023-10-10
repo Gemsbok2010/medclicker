@@ -732,7 +732,7 @@ const Footer = ({ asx }) => {
         </footer>
       </div>
       <style jsx="true">{`
-        .wrap .pageBottom {
+      .wrap .pageBottom {
           padding: 50px 0 25px;
           background: #eeebeb;
         }
@@ -1118,7 +1118,6 @@ const Footer = ({ asx }) => {
         input[type="email"]:focus,
         input[type="email"]:active {
           outline: 3px solid #14a248;
-          border: none;
         }
         .input-group label {
           display: block;

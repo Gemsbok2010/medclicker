@@ -24,7 +24,7 @@ const ContactUsConfirm = () => {
                 />
               </Link>
             </figure>
-            <div className="email"></div>
+            <div className="plane"></div>
             <h2>We got your message</h2>
             <p>
               Your message is important to us. We will get back to you within 2
@@ -126,6 +126,14 @@ const ContactUsConfirm = () => {
           }
           .questionCard figure {
             margin-bottom: 80px !important;
+          }
+          .plane {
+            width: 300px;
+            height: 80px;
+            background-image: url("../../../images/paperairplane.png");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
           }
 
           @media only screen and (min-width: 768px) {
