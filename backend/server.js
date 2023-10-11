@@ -120,6 +120,8 @@ app.get(
             "?id=" +
             req.user._id +
             "&isLoggedIn=true" +
+            "&token=" +
+            token +
             "&access=false"
         );
       });

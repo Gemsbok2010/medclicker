@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FiEyeOff, FiEye } from "react-icons/fi";
 import { Helmet, HelmetProvider } from "react-helmet-async";
@@ -101,6 +101,22 @@ const Login = () => {
         console.error(err);
       });
   };
+
+  function handleCallbackResponse(response) {
+    console.log(response.credential);
+  }
+
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+      callback: handleCallbackResponse,
+    });
+    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+      theme: "outline",
+      size: "large",
+    });
+  }, []);
 
   return (
     <>
@@ -249,6 +265,8 @@ const Login = () => {
                       Login with Facebook
                     </ExternalLink>
                   </button>
+                  <p>OR</p>
+                  <div id="signInDiv">New Google Login</div>
                   <p>OR</p>
                   <button id="google-login">
                     <ExternalLink href={googleUrlAddress} target="_self">

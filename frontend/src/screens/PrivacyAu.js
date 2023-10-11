@@ -134,7 +134,8 @@ const PrivacyAu = () => {
               special features of our website or any other service or products,
               which we think, may be of interest to you. If you would rather not
               receive this information, please send an email to{" "}
-              <Link to="#">info@medclicker.com.au</Link> confirming your request.
+              <Link to="#">info@medclicker.com.au</Link> confirming your
+              request.
             </p>
             <br />
             <p>
@@ -149,7 +150,7 @@ const PrivacyAu = () => {
             <h4>Contact us:</h4>
             <p>
               If you have any questions about this Privacy Policy, please
-              contact us at <Link to="#">info@medclicker.com.au</Link>.
+              contact us <Link to="/contact">here</Link>.
             </p>
           </section>
           <Footer />

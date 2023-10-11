@@ -126,6 +126,8 @@ function App() {
     });
   }, []);
 
+ 
+
   function ScrollToTop() {
     const { pathname } = useLocation();
 
@@ -140,6 +142,7 @@ function App() {
   }
   return (
     <Router>
+
       <ScrollToTop />
       <IdleTimerContainer />
       <Suspense
