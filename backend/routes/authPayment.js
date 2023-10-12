@@ -131,7 +131,9 @@ router.post("/nopayment", async (req, res) => {
   const country = post.country;
   const professions = post.professions;
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   const page = await browser.newPage();
 
   pdfContent(
@@ -200,6 +202,7 @@ router.post("/nopayment", async (req, res) => {
   ];
 
   sendEmail(to, from, subject, output, attachments);
+  await browser.close();
 
   // Listings => Paused
   let set = {};
@@ -302,7 +305,9 @@ router.put("/finalise", async (req, res) => {
   const country = post.country;
   const professions = post.professions;
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   const page = await browser.newPage();
 
   pdfContent(
@@ -371,6 +376,7 @@ router.put("/finalise", async (req, res) => {
   ];
 
   sendEmail(to, from, subject, output, attachments);
+  await browser.close();
 
   // Listings => Paused
   let set = {};
@@ -452,7 +458,9 @@ router.put("/emailToLocum", async (req, res) => {
   const professions = post.professions;
   const caseId = post.caseId;
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   const page = await browser.newPage();
 
   pdfContract(
@@ -800,7 +808,9 @@ router.put("/regFinalise", async (req, res) => {
   const country = payment.country;
   const professions = payment.professions;
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   const page = await browser.newPage();
 
   pdfContent(
@@ -869,7 +879,8 @@ router.put("/regFinalise", async (req, res) => {
   ];
 
   sendEmail(to, from, subject, output, attachments);
-
+  await browser.close();
+  
   try {
     const storePayment = await payment.save();
     res.send(storePayment);
@@ -989,7 +1000,9 @@ router.post("/free", async (req, res) => {
   const country = payment.country;
   const professions = payment.professions;
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   const page = await browser.newPage();
 
   pdfContent(
@@ -1059,6 +1072,8 @@ router.post("/free", async (req, res) => {
   ];
 
   sendEmail(to, from, subject, output, attachments);
+
+  await browser.close();
 
   try {
     const storePayment = await payment.save();
