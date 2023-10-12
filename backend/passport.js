@@ -28,7 +28,7 @@ passport.use(
     {
       clientID: google.clientID,
       clientSecret: google.clientSecret,
-      callbackURL: "/auth/google/callback",
+      callbackURL: "https://medclicker.com.au/auth/google/callback",
       // passReqToCallback   : true
     },
     (accessToken, refreshToken, profile, done) => {
@@ -72,7 +72,7 @@ passport.use(
     {
       clientID: facebook.clientID,
       clientSecret: facebook.clientSecret,
-      callbackURL: "/auth/facebook/callback",
+      callbackURL: "https://medclicker.com.au/auth/facebook/callback",
       profileFields: ["id", "gender", "email", "name", "picture.type(large)"],
     },
     (accessToken, refreshToken, profile, done) => {

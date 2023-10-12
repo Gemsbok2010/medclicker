@@ -102,22 +102,6 @@ const Login = () => {
       });
   };
 
-  function handleCallbackResponse(response) {
-    console.log(response.credential);
-  }
-
-  useEffect(() => {
-    /* global google */
-    google.accounts.id.initialize({
-      client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-      callback: handleCallbackResponse,
-    });
-    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      theme: "outline",
-      size: "large",
-    });
-  }, []);
-
   return (
     <>
       <HelmetProvider>
@@ -265,8 +249,6 @@ const Login = () => {
                       Login with Facebook
                     </ExternalLink>
                   </button>
-                  <p>OR</p>
-                  <div id="signInDiv">New Google Login</div>
                   <p>OR</p>
                   <button id="google-login">
                     <ExternalLink href={googleUrlAddress} target="_self">
