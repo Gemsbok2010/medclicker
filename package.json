@@ -42,7 +42,7 @@
     "passport-google-oauth": "^2.0.0",
     "passport-google-oauth2": "^0.2.0",
     "patch-package": "^7.0.0",
-    "puppeteer": "^8.0.0",
+    "puppeteer": "^21.3.8",
     "react-client-session": "^0.0.8",
     "react-cookie": "^4.1.1",
     "react-csv": "^2.2.2",
