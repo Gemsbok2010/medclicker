@@ -732,7 +732,7 @@ const Footer = ({ asx }) => {
         </footer>
       </div>
       <style jsx="true">{`
-      .wrap .pageBottom {
+        .wrap .pageBottom {
           padding: 50px 0 25px;
           background: #eeebeb;
         }
@@ -741,7 +741,7 @@ const Footer = ({ asx }) => {
           color: #777;
           padding: 5px 10px;
           margin-right: 15px;
-          font-family: 13px;
+          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
         .wrap .pageBottom a:hover {
           color: #14a248;

@@ -1294,6 +1294,11 @@ const HomeNav = () => {
           font-size: 14px;
         }
 
+        nav .navbar-nav.ml-auto a {
+          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+          font-weight: 600;
+        }
+
         nav .nav-item1::after,
         nav .nav-item2::after,
         nav .nav-item3::after,

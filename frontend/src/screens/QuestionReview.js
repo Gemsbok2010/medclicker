@@ -449,7 +449,7 @@ const QuestionReview = () => {
           }
 
           .top-container {
-            height: 100%;
+            min-height: 480px;
             width: 100%;
             display: block;
             padding-bottom: 60px;

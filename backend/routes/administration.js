@@ -1070,7 +1070,10 @@ router.post("/sendinvoice", async (req, res) => {
   const gst = payment.gst;
   const fee = total - gst;
 
-  const browser = await puppeteer.launch();
+ 
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   const page = await browser.newPage();
 
   pdfContent(
@@ -1245,7 +1248,10 @@ router.post("/sendagreement", async (req, res) => {
   const caseId = post.caseId;
   const dateIssued = payment.dateIssued;
 
-  const browser = await puppeteer.launch();
+
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   const page = await browser.newPage();
 
   pdfContract(
