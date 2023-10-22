@@ -2413,6 +2413,7 @@ const ListingEdit = () => {
         input[type="checkbox"] {
           opacity: 0;
           float: left;
+          display: block;
         }
 
         .align-days {

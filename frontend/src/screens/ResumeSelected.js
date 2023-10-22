@@ -507,7 +507,7 @@ const ResumeSelected = () => {
             position: relative;
             display: inline;
             width: 190px;
-            background-color: #14a248;
+            background-color: #193659;
             padding-bottom: 60px;
           }
           .sidebarlogo {
@@ -583,7 +583,7 @@ const ResumeSelected = () => {
           }
 
           .candidate-dl h2 {
-            color: darkgreen;
+            color: #6382a5;
             font-size: 12px;
           }
 
@@ -616,7 +616,7 @@ const ResumeSelected = () => {
             margin-top: 4px;
             height: 6px;
             width: 100%;
-            background-color: darkgreen;
+            background-color: #6382a5;
           }
           .sidebar .level-deb {
             position: relative;

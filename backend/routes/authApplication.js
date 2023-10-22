@@ -779,7 +779,7 @@ router.get("/nothired", async (req, res, next) => {
   }
 });
 
-//========= GET LCOUMAGREEMENTS.JS (from LocumAgreements.js) ============
+//======= GET LCOUMAGREEMENTS.JS (from LocumAgreements.js) ======
 router.get("/agreements", async (req, res) => {
   Pub.paginate({}, {}).then(async (result) => {
     const email = req.query.email;
