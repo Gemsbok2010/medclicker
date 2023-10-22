@@ -344,8 +344,8 @@ const AlistingsEdit = () => {
         sat_rate,
         sun_rate,
         ph_rate,
-        roadtravel,
-        airtravel,
+        roadtravel: roadtravel,
+        airtravel: airtravel,
         airport,
         accommodation,
         about,
@@ -471,6 +471,8 @@ const AlistingsEdit = () => {
           setSatRate(response.data.listing.sat_rate);
           setSunRate(response.data.listing.sun_rate);
           setPhRate(response.data.listing.ph_rate);
+          setRoadtravel(response.data.listing.roadtravel);
+          setAccommodation(response.data.listing.accommodation);
           setAirtravel(response.data.listing.airtravel);
           setAirport(response.data.listing.airport);
           setAbout(response.data.listing.about);

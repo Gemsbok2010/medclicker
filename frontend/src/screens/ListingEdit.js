@@ -216,12 +216,13 @@ const ListingEdit = () => {
   const [professions, setProfessions] = useState("");
   const [airtravel, setAirtravel] = useState(false);
   const [roadtravel, setRoadtravel] = useState(false);
+
   const [accommodation, setAccommodation] = useState(false);
   const [normal_rate, setNormalRate] = useState("");
   const [sat_rate, setSatRate] = useState("");
   const [sun_rate, setSunRate] = useState("");
   const [ph_rate, setPhRate] = useState("");
-  const [payout, setPayout] = useState(0);
+  const [, setPayout] = useState(0);
   const [monHr, setMonHr] = useState(0);
   const [tueHr, setTueHr] = useState(0);
   const [wedHr, setWedHr] = useState(0);
@@ -324,8 +325,8 @@ const ListingEdit = () => {
         sat_rate,
         sun_rate,
         ph_rate,
-        roadtravel,
-        airtravel,
+        roadtravel: roadtravel,
+        airtravel: airtravel,
         airport,
         accommodation,
         about,
@@ -451,6 +452,8 @@ const ListingEdit = () => {
           setSatRate(response.data.listing.sat_rate);
           setSunRate(response.data.listing.sun_rate);
           setPhRate(response.data.listing.ph_rate);
+          setRoadtravel(response.data.listing.roadtravel);
+          setAccommodation(response.data.listing.accommodation);
           setAirtravel(response.data.listing.airtravel);
           setAirport(response.data.listing.airport);
           setAbout(response.data.listing.about);
