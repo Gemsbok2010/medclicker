@@ -21,6 +21,11 @@ const Pub = require("../models/applicationModel");
 const User = require("../models/userModel");
 const Locum = require("../models/locumModel");
 
+// Save to AWS
+const { uploadInvoice } = require("../../s3");
+const util = require("util");
+const unlinkFile = util.promisify(fs.unlink);
+
 const {
   paymentConfirmation,
   sendEmail,
@@ -184,6 +189,10 @@ router.post("/nopayment", async (req, res) => {
 
   const pathToAttachment = `./public/uploads/${invoice}.pdf`;
   const attachment = fs.readFileSync(pathToAttachment).toString("base64");
+
+  // Save to AWS S3 Bucket
+  const result = await uploadInvoice(invoice, pathToAttachment);
+  await unlinkFile(pathToAttachment);
 
   const subject = `Payment Invoice ${invoice}`;
   const to = `${email}`;
@@ -358,6 +367,10 @@ router.put("/finalise", async (req, res) => {
 
   const pathToAttachment = `./public/uploads/${invoice}.pdf`;
   const attachment = fs.readFileSync(pathToAttachment).toString("base64");
+
+  // Save to AWS S3 Bucket
+  const result = await uploadInvoice(invoice, pathToAttachment);
+  await unlinkFile(pathToAttachment);
 
   const subject = `Payment Invoice ${invoice}`;
   const to = `${email}`;
@@ -862,6 +875,10 @@ router.put("/regFinalise", async (req, res) => {
   const pathToAttachment = `./public/uploads/${invoice}.pdf`;
   const attachment = fs.readFileSync(pathToAttachment).toString("base64");
 
+  // Save to AWS S3 Bucket
+  const result = await uploadInvoice(invoice, pathToAttachment);
+  await unlinkFile(pathToAttachment);
+
   const subject = `Payment Invoice ${invoice}`;
   const to = `${email}`;
   const from = {
@@ -880,7 +897,7 @@ router.put("/regFinalise", async (req, res) => {
 
   sendEmail(to, from, subject, output, attachments);
   await browser.close();
-  
+
   try {
     const storePayment = await payment.save();
     res.send(storePayment);
@@ -1054,6 +1071,10 @@ router.post("/free", async (req, res) => {
 
   const pathToAttachment = `./public/uploads/${invoice}.pdf`;
   const attachment = fs.readFileSync(pathToAttachment).toString("base64");
+
+  // Save to AWS S3 Bucket
+  const result = await uploadInvoice(invoice, pathToAttachment);
+  await unlinkFile(pathToAttachment);
 
   const subject = `Payment Invoice ${invoice}`;
   const to = `${email}`;

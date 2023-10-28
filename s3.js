@@ -57,3 +57,18 @@ function uploadCover(file) {
   return s3.upload(uploadParams).promise();
 }
 exports.uploadCover = uploadCover;
+
+// uploads an Invoice to S3
+function uploadInvoice(invoice, pathToAttachment) {
+  const fileStream = fs.createReadStream(pathToAttachment);
+
+  const uploadParams = {
+    Bucket: bucketName,
+    Body: fileStream,
+    Key: `${invoice}.pdf`,
+    contentType: "application.pdf",
+  };
+
+  return s3.upload(uploadParams).promise();
+}
+exports.uploadInvoice = uploadInvoice;
