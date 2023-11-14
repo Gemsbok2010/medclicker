@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { ReactSession } from "react-client-session";
 import { useSelector } from "react-redux";
 import ReactGA from "react-ga4";
+import axios from "axios";
 
 const QuestionLocumReview = () => {
   const navigate = useNavigate();
@@ -62,6 +63,7 @@ const QuestionLocumReview = () => {
   const [roadtravel, setRoadtravel] = useState(false);
   const [accommodation, setAccommodation] = useState(false);
   const [expiryDate, setExpiryDate] = useState("");
+  const [customerId, setCustomerId] = useState("");
 
   // ================= MANAGE RIGHT PANEL ================
   var media = window.matchMedia("(min-width:768px)");
@@ -87,6 +89,7 @@ const QuestionLocumReview = () => {
 
   // ============= POPULATE SESSION DATA =================
   useEffect(() => {
+    setCustomerId(ReactSession.get("customerId"));
     setContractType(ReactSession.get("contractType"));
     setProfessions(ReactSession.get("professions"));
     setAbout(ReactSession.get("about"));
@@ -185,6 +188,20 @@ const QuestionLocumReview = () => {
     setExpiryDate(ReactSession.get("expiryDate"));
   }, []);
 
+  // ============ CUSTOMER DATA ===========
+  const [customerInfo, setCustomerInfo] = useState({});
+  const [userId, setUserId] = useState(ReactSession.get("customerId"));
+
+  useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_BACKEND_URL + "api/users/allusers/" + userId)
+      .then((response) => {
+        if (response.status === 200) {
+          setCustomerInfo(response.data);
+        }
+      });
+  }, []);
+
   // ============= POST ==============
   const onSubmit = (e) => {
     e.preventDefault();
@@ -243,10 +260,10 @@ const QuestionLocumReview = () => {
           satFinish,
           sunFinish,
           todaysDate,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          filename: user.filename,
+          email: customerId ? customerInfo.email : user.email,
+          firstName: customerId ? customerInfo.firstName : user.firstName,
+          lastName: customerId ? customerInfo.lastName : user.lastName,
+          filename: customerId ? customerInfo.filename : user.filename,
           payout: payout,
           monHr,
           tueHr,
@@ -336,7 +353,7 @@ const QuestionLocumReview = () => {
     <>
       <HelmetProvider>
         <Helmet>
-          <title>Q. Locum Ad Review | MedClicker</title>
+          <title>Locum Ad Review | MedClicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>
@@ -394,9 +411,12 @@ const QuestionLocumReview = () => {
                   marginBottom: "10px",
                 }}
               >
-                Posted by {user.firstName}
+                Posted by {customerId ? customerInfo.firstName : user.firstName}
                 <figure className="smallPhoto">
-                  <img src={user.filename} alt="" />
+                  <img
+                    src={customerId ? customerInfo.filename : user.filename}
+                    alt=""
+                  />
                 </figure>
               </div>
               <h2 className="mt-3 mb-4">

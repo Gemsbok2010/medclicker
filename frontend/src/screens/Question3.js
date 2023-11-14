@@ -12,6 +12,7 @@ const Question3 = () => {
   const navigate = useNavigate();
   ReactSession.setStoreType("sessionStorage");
 
+  const [customerId, setCustomerId] = useState("");
   const [monday, setMonday] = useState(false);
   const [tuesday, setTuesday] = useState(false);
   const [wednesday, setWednesday] = useState(false);
@@ -36,6 +37,7 @@ const Question3 = () => {
 
   // ============= POPULATE SESSION DATA =================
   useEffect(() => {
+    setCustomerId(ReactSession.get("customerId"));
     if (localStorage.getItem("contractType")) {
       ReactSession.set("contractType", localStorage.getItem("contractType"));
     }
@@ -737,11 +739,17 @@ const Question3 = () => {
     setSunHr(hr + min);
   };
 
+  // ============= CLEAR CUSTOMER ID ================
+  const clearId = () => {
+    sessionStorage.clear();
+    navigate("/admin/users");
+  };
+
   return (
     <>
       <HelmetProvider>
         <Helmet>
-          <title>Q. Locum Schedule | MedClicker</title>
+          <title>Locum Schedule | MedClicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>
@@ -750,11 +758,12 @@ const Question3 = () => {
           <form action="" id="formEight" onSubmit={onSubmit}>
             <section className="questionCard container">
               <figure>
-                <Link to="/dashboard">
+                <Link to={customerId ? "/admin/users" : "/dashboard"}>
                   <img
                     src="/images/medclicker.png"
                     alt="LOGO"
                     className="img-fluid"
+                    onClick={customerId ? clearId : "#"}
                   />
                 </Link>
               </figure>

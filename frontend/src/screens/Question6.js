@@ -119,6 +119,7 @@ function Map({ address, latitude, longitude, geoLocate }) {
 const Question6 = () => {
   const navigate = useNavigate();
   ReactSession.setStoreType("sessionStorage");
+  const [customerId, setCustomerId] = useState("");
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");
   const [postalCode, setPostalCode] = useState("");
@@ -143,6 +144,7 @@ const Question6 = () => {
 
   // ============= POPULATE SESSION DATA =================
   useEffect(() => {
+    setCustomerId(ReactSession.get("customerId"));
     setCountry(ReactSession.get("country"));
     setState(ReactSession.get("state"));
     setPostalCode(ReactSession.get("postalCode"));
@@ -355,12 +357,18 @@ const Question6 = () => {
     libraries: libraries,
   });
 
+  // ============= CLEAR CUSTOMER ID ================
+  const clearId = () => {
+    sessionStorage.clear();
+    navigate("/admin/users");
+  };
+
   if (!isLoaded) return <div>Loading...</div>;
   return (
     <>
       <HelmetProvider>
         <Helmet>
-          <title>Q. Location | MedClicker</title>
+          <title>Location | MedClicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>
@@ -368,11 +376,12 @@ const Question6 = () => {
           <form action="" id="formNine" onSubmit={onSubmit}>
             <section className="questionCard container">
               <figure>
-                <Link to="/dashboard">
+                <Link to={customerId ? "/admin/users" : "/dashboard"}>
                   <img
                     src="/images/medclicker.png"
                     alt="LOGO"
                     className="img-fluid"
+                    onClick={customerId ? clearId : "#"}
                   />
                 </Link>
               </figure>

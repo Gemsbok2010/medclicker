@@ -758,7 +758,6 @@ router.put("/regFinalise", async (req, res) => {
     longitude: req.body.longitude,
     latitude: req.body.latitude,
     // standard
-    nanoId: user.nanoId,
     filename: user.filename,
     firstName: user.firstName,
     lastName: user.lastName,
@@ -805,21 +804,21 @@ router.put("/regFinalise", async (req, res) => {
   const mc = "https://i.ibb.co/TrWvXBB/mc.png";
   const visa = "https://i.ibb.co/zSDYxhX/visa.png";
   const amex = "https://i.ibb.co/7j3gRNH/amex.png";
-  const firstName = payment.firstName;
-  const lastName = payment.lastName;
+  const firstName = user.firstName;
+  const lastName = user.lastName;
   const phone = user.phone;
   const email = req.body.email;
   const invoice = req.body.invoiceNumber;
-  const caseId = payment.caseId;
+  const caseId = list.caseId;
   const status = "PAID";
   const product = "Standard Service";
-  const streetNo = payment.streetNo;
-  const street = payment.street;
-  const suburb = payment.suburb;
-  const postalCode = payment.postalCode;
-  const state = payment.state;
-  const country = payment.country;
-  const professions = payment.professions;
+  const streetNo = user.streetNo;
+  const street = user.street;
+  const suburb = user.suburb;
+  const postalCode = user.postalCode;
+  const state = user.state;
+  const country = user.country;
+  const professions = req.body.professions;
 
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -851,6 +850,7 @@ router.put("/regFinalise", async (req, res) => {
     thisyear,
     status
   );
+
   await page.setContent(pdfOutput);
 
   await page.pdf({
@@ -897,7 +897,6 @@ router.put("/regFinalise", async (req, res) => {
 
   sendEmail(to, from, subject, output, attachments);
   await browser.close();
-
   try {
     const storePayment = await payment.save();
     res.send(storePayment);
@@ -908,7 +907,7 @@ router.put("/regFinalise", async (req, res) => {
 
 // ====== PAYMENT REGISTER (from QuestionReview.js) =====
 router.post("/free", async (req, res) => {
-  const user = await User.findOne({ nanoId: req.body.nanoId });
+  const user = await User.findOne({ email: req.body.email });
 
   const total = 0;
 
@@ -954,7 +953,6 @@ router.post("/free", async (req, res) => {
     longitude: req.body.longitude,
     latitude: req.body.latitude,
     // standard
-    nanoId: user.nanoId,
     filename: user.filename,
     firstName: user.firstName,
     lastName: user.lastName,

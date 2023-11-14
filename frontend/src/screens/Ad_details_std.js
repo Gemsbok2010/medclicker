@@ -156,7 +156,7 @@ const Ad_details_std = () => {
     <>
       <HelmetProvider>
         <Helmet>
-          <title>Std Ad | Medclicker</title>
+          <title>Standard Ad | Medclicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>

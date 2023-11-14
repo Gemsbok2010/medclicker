@@ -16,7 +16,7 @@ const CreditCardRegular = () => {
   // const [startDate, setStartDate] = useState("");
   // const [finishDate, setFinishDate] = useState("");
   const [accessCode, setAccessCode] = useState("");
-
+  const [customerId, setCustomerId] = useState(ReactSession.get("customerId"));
   const [close, setClose] = useState(false);
   const [regFee1, setRegFee1] = useState("");
   const [regFee2, setRegFee2] = useState("");
@@ -36,6 +36,20 @@ const CreditCardRegular = () => {
   const [newsletter1, setNewsletter1] = useState(false);
   const [newsletter2, setNewsletter2] = useState(false);
   const [newsletter3, setNewsletter3] = useState(false);
+
+  // ============ CUSTOMER DATA ===========
+  const [customerInfo, setCustomerInfo] = useState({});
+  const [userId, setUserId] = useState(ReactSession.get("customerId"));
+
+  useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_BACKEND_URL + "api/users/allusers/" + userId)
+      .then((response) => {
+        if (response.status === 200) {
+          setCustomerInfo(response.data);
+        }
+      });
+  }, []);
 
   // ============ EXISTING CARD DATA ===========
   const [existingCard, setExistingCard] = useState({});
@@ -296,11 +310,10 @@ const CreditCardRegular = () => {
   const [selectOne, setSelectOne] = useState(false);
   const [selectTwo, setSelectTwo] = useState(false);
   const [selectThree, setSelectThree] = useState(false);
-  const [expireIn, setExpireIn] = useState("");
 
   const getAccessCode = async (e, regTotal, expireIn) => {
     e.preventDefault();
-    const email = user.email;
+
     const { name } = e.target;
     if (name === "One") {
       setSelectOne(true);
@@ -320,7 +333,7 @@ const CreditCardRegular = () => {
       credentials: "include",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
-        email: email,
+        email: customerId ? customerInfo.email : user.email,
         total: regTotal,
       }),
     })
@@ -340,7 +353,7 @@ const CreditCardRegular = () => {
     <>
       <HelmetProvider>
         <Helmet>
-          <title>Std Ad Payment | Medclicker</title>
+          <title>Standard Ad Payment | Medclicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -665,32 +678,49 @@ const CreditCardRegular = () => {
                           <label htmlFor="cvv">CVV</label>
                         </div>
                       </div>
-                      {show ? (
+                      {!customerId ? (
+                        show ? (
+                          <>
+                            <input
+                              type="checkbox"
+                              id="saveCard"
+                              checked={show ? true : false}
+                              onChange={(e) => {
+                                storeCard(e, user.email);
+                              }}
+                            />
+                            <label htmlFor="saveCard">
+                              Save this card for future payments
+                            </label>
+                          </>
+                        ) : (
+                          <>
+                            <input
+                              type="checkbox"
+                              id="saveCardB"
+                              v
+                              checked={show ? true : false}
+                              onChange={(e) => {
+                                storeCard(e, user.email);
+                              }}
+                            />
+                            <label htmlFor="saveCardB">
+                              Save this card for future payments
+                            </label>
+                          </>
+                        )
+                      ) : (
                         <>
                           <input
                             type="checkbox"
                             id="saveCard"
-                            checked={show ? true : false}
+                            disabled="disabled"
+                            checked={false}
                             onChange={(e) => {
                               storeCard(e, user.email);
                             }}
                           />
                           <label htmlFor="saveCard">
-                            Save this card for future payments
-                          </label>
-                        </>
-                      ) : (
-                        <>
-                          <input
-                            type="checkbox"
-                            id="saveCardB"
-                            v
-                            checked={show ? true : false}
-                            onChange={(e) => {
-                              storeCard(e, user.email);
-                            }}
-                          />
-                          <label htmlFor="saveCardB">
                             Save this card for future payments
                           </label>
                         </>

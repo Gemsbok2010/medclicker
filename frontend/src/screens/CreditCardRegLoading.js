@@ -98,7 +98,7 @@ const CreditCardRegLoading = () => {
     <>
       <HelmetProvider>
         <Helmet>
-          <title>Std Payment Loading... | Medclicker</title>
+          <title>Standard Payment Loading... | Medclicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>

@@ -11,6 +11,7 @@ const Question1 = () => {
 
   // ============= POPULATE SESSION DATA =================
   useEffect(() => {
+    setCustomerId(ReactSession.get("customerId"));
     setContractType(ReactSession.get("contractType"));
   }, []);
 
@@ -18,6 +19,7 @@ const Question1 = () => {
     sessionStorage.clear();
   }
 
+  const [customerId, setCustomerId] = useState("");
   const [contractType, setContractType] = useState("");
   const [, setActive] = useState("");
 
@@ -36,11 +38,17 @@ const Question1 = () => {
     navigate("/question2");
   };
 
+  // ============= CLEAR CUSTOMER ID ================
+  const clearId = () => {
+    sessionStorage.clear();
+    navigate("/admin/users");
+  };
+
   return (
     <>
       <HelmetProvider>
         <Helmet>
-          <title>Q. Contract Type | MedClicker</title>
+          <title>Contract Type | MedClicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>
@@ -49,11 +57,12 @@ const Question1 = () => {
           <form id="formOne" action="" onSubmit={onSubmit}>
             <section className="questionCard">
               <figure>
-                <Link to="/dashboard">
+                <Link to={customerId ? "/admin/users" : "/dashboard"}>
                   <img
                     src="/images/medclicker.png"
                     alt="LOGO"
                     className="img-fluid"
+                    onClick={customerId ? clearId : "#"}
                   />
                 </Link>
               </figure>

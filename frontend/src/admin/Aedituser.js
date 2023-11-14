@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import $ from "jquery";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import LoggedInNavbarByAdmin from "../components/LoggedInNavbarByAdmin";
 import { ThreeDots } from "react-loader-spinner";
 
 import {
@@ -514,6 +515,7 @@ const Aedituser = () => {
             content="Medclicker Personal Details for editing"
           />
         </Helmet>
+        <LoggedInNavbarByAdmin />
         <div className="personal_details">
           <h2>Personal information</h2>
         </div>

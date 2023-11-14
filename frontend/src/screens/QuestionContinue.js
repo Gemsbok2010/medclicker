@@ -38,7 +38,7 @@ const QuestionContinue = () => {
     <>
       <HelmetProvider>
         <Helmet>
-          <title>Q. Continue | Medclicker</title>
+          <title>Continue | Medclicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>

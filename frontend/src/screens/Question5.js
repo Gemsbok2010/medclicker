@@ -8,7 +8,7 @@ import ReactGA from "react-ga4";
 const Question5 = () => {
   const navigate = useNavigate();
   ReactSession.setStoreType("sessionStorage");
-
+  const [customerId, setCustomerId] = useState("");
   const [about, setAbout] = useState("");
   const [contractType, setContractType] = useState("");
   const [professions, setProfessions] = useState("");
@@ -29,6 +29,7 @@ const Question5 = () => {
 
   // ============= POPULATE SESSION DATA =================
   useEffect(() => {
+    setCustomerId(ReactSession.get("customerId"));
     setAbout(ReactSession.get("about"));
     setProfessions(ReactSession.get("professions"));
     setContractType(ReactSession.get("contractType"));
@@ -82,11 +83,17 @@ const Question5 = () => {
       });
   };
 
+  // ============= CLEAR CUSTOMER ID ================
+  const clearId = () => {
+    sessionStorage.clear();
+    navigate("/admin/users");
+  };
+
   return (
     <>
       <HelmetProvider>
         <Helmet>
-          <title>Q. About the Role | MedClicker</title>
+          <title>About the Role | MedClicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>
@@ -94,11 +101,12 @@ const Question5 = () => {
           <form action="" id="formSeven" onSubmit={onSubmit}>
             <section className="questionCard container">
               <figure>
-                <Link to="/dashboard">
+                <Link to={customerId ? "/admin/users" : "/dashboard"}>
                   <img
                     src="/images/medclicker.png"
                     alt="LOGO"
                     className="img-fluid"
+                    onClick={customerId ? clearId : "#"}
                   />
                 </Link>
               </figure>

@@ -8,6 +8,7 @@ const Question4 = () => {
   const navigate = useNavigate();
   ReactSession.setStoreType("sessionStorage");
 
+  const [customerId, setCustomerId] = useState("");
   const [normal_rate, setNormalRate] = useState("");
   const [sat_rate, setSatRate] = useState("");
   const [sun_rate, setSunRate] = useState("");
@@ -18,6 +19,7 @@ const Question4 = () => {
 
   // ============= POPULATE SESSION DATA =================
   useEffect(() => {
+    setCustomerId(ReactSession.get("customerId"));
     if (!ReactSession.get("normal_rate")) {
       setNormalRate("");
     } else {
@@ -168,11 +170,17 @@ const Question4 = () => {
         }
       });
   };
+
+  // ============= CLEAR CUSTOMER ID ================
+  const clearId = () => {
+    sessionStorage.clear();
+    navigate("/admin/users");
+  };
   return (
     <>
       <HelmetProvider>
         <Helmet>
-          <title>Q. Locum on Offer | MedClicker</title>
+          <title>Locum on Offer | MedClicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>
@@ -180,11 +188,12 @@ const Question4 = () => {
           <form action="" onSubmit={onSubmit}>
             <section className="questionCard container">
               <figure>
-                <Link to="/dashboard">
+                <Link to={customerId ? "/admin/users" : "/dashboard"}>
                   <img
                     src="/images/medclicker.png"
                     alt="LOGO"
                     className="img-fluid"
+                    onClick={customerId ? clearId : "#"}
                   />
                 </Link>
               </figure>

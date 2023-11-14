@@ -11,6 +11,7 @@ const Question2 = () => {
   const [listOfProfessions, setListOfProfessions] = useState([]);
   const [page, setPage] = useState([]);
   const [maxPage, setMaxPage] = useState([]);
+  const [customerId, setCustomerId] = useState("");
 
   // =============== PAGE BUTTONS ================
 
@@ -76,7 +77,7 @@ const Question2 = () => {
 
   useEffect(() => {
     let isCancelled = false;
-
+    setCustomerId(ReactSession.get("customerId"));
     if (!ReactSession.get("professions")) {
       setProfession("");
     } else {
@@ -148,11 +149,17 @@ const Question2 = () => {
     }
   };
 
+  // ============= CLEAR CUSTOMER ID ================
+  const clearId = () => {
+    sessionStorage.clear();
+    navigate("/admin/users");
+  };
+
   return (
     <>
       <HelmetProvider>
         <Helmet>
-          <title>Q. Select Profession | MedClicker</title>
+          <title>Select Profession | MedClicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>
@@ -161,11 +168,12 @@ const Question2 = () => {
           <form action="" id="formThree" onSubmit={onSubmit}>
             <section className="questionCard">
               <figure>
-                <Link to="/dashboard">
+                <Link to={customerId ? "/admin/users" : "/dashboard"}>
                   <img
                     src="/images/medclicker.png"
                     alt="LOGO"
                     className="img-fluid"
+                    onClick={customerId ? clearId : "#"}
                   />
                 </Link>
               </figure>

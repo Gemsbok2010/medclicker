@@ -172,7 +172,6 @@ router.post("/locumList", async (req, res, next) => {
     satHr: req.body.satHr,
     sunHr: req.body.sunHr,
     // standard
-    nanoId: user.nanoId,
     filename: req.body.filename,
     firstName: req.body.firstName,
     lastName: req.body.lastName,

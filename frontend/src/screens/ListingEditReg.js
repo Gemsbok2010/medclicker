@@ -349,7 +349,7 @@ const ListingEditReg = () => {
     <>
       <HelmetProvider>
         <Helmet>
-          <title>Edit Std Ad | Medclicker</title>
+          <title>Edit Standard Ad | Medclicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>
