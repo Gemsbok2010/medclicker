@@ -19,8 +19,8 @@ const Footer = ({ asx }) => {
   const googleUrlAddress =
     process.env.REACT_APP_BACKEND_URL + `auth/google?dd=${location.pathname}`;
 
-  const facebookUrlAddress =
-    process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
+  // const facebookUrlAddress =
+  //   process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
 
   // ============ GET CURRENT YEAR ===============
   useEffect(() => {
@@ -271,13 +271,13 @@ const Footer = ({ asx }) => {
                 </button>
               )}
 
-              <p>OR</p>
+              {/* <p>OR</p>
               <button id="facebook-login">
                 <ExternalLink href={facebookUrlAddress} target="_self">
                   <img src="/images/fb.png" alt="" style={{ width: "28px" }} />
                   Login with Facebook
                 </ExternalLink>
-              </button>
+              </button> */}
               <p>OR</p>
               <button id="google-login">
                 <ExternalLink href={googleUrlAddress} target="_self">

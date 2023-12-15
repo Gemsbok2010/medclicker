@@ -71,8 +71,8 @@ const Navbar = () => {
   const urlAddress =
     process.env.REACT_APP_BACKEND_URL + `auth/google?dd=${location.pathname}`;
 
-  const facebookUrlAddress =
-    process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
+  // const facebookUrlAddress =
+  //   process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
 
   const [openDropDown, setOpenDropDown] = useState(false);
   const [openHamburger, setOpenHamburger] = useState(false);
@@ -328,7 +328,7 @@ const Navbar = () => {
                               )}
                             </div>
                             <div className="input-group">
-                              <button className="nonselect" id="facebook-login">
+                              {/* <button className="nonselect" id="facebook-login">
                                 <img
                                   src="/images/fb.png"
                                   alt=""
@@ -341,7 +341,7 @@ const Navbar = () => {
                                   Facebook Login
                                 </ExternalLink>
                               </button>
-                              <p className="nonselect">OR</p>
+                              <p className="nonselect">OR</p> */}
                               <button className="nonselect" id="google-login">
                                 <img
                                   src="/images/googlelogin.png"

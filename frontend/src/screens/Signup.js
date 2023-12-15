@@ -26,8 +26,8 @@ const Signup = () => {
   const googleUrlAddress =
     process.env.REACT_APP_BACKEND_URL + `auth/google?dd=${location.pathname}`;
 
-  const facebookUrlAddress =
-    process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
+  // const facebookUrlAddress =
+  //   process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
 
   const [tickBox, setTickBox] = useState(false);
   const [vanishfirst, setVanishfirst] = useState(true);
@@ -386,7 +386,7 @@ const Signup = () => {
                   )}
 
                   <hr />
-                  <p>OR</p>
+                  {/* <p>OR</p>
                   <button id="facebook-login">
                     <ExternalLink href={facebookUrlAddress} target="_self">
                       <img
@@ -397,7 +397,7 @@ const Signup = () => {
                       />
                       Sign up with Facebook
                     </ExternalLink>
-                  </button>
+                  </button> */}
                   <p>OR</p>
                   <button id="google-login">
                     <ExternalLink href={googleUrlAddress} target="_self">

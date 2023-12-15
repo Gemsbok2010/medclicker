@@ -220,8 +220,8 @@ const HomeNav = () => {
   const googleUrlAddress =
     process.env.REACT_APP_BACKEND_URL + `auth/google?dd=${location.pathname}`;
 
-  const facebookUrlAddress =
-    process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
+  // const facebookUrlAddress =
+  //   process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
 
   // ================ POST ===================
   const [, setFirstName] = useState("");
@@ -430,7 +430,7 @@ const HomeNav = () => {
                             )}
                           </div>
                           <div className="input-group">
-                            <button className="nonselect" id="facebook-login">
+                            {/* <button className="nonselect" id="facebook-login">
                               <img
                                 src="/images/fb.png"
                                 alt=""
@@ -443,7 +443,7 @@ const HomeNav = () => {
                                 Facebook Login
                               </ExternalLink>
                             </button>
-                            <p className="nonselect">or</p>
+                            <p className="nonselect">or</p> */}
                             <button className="nonselect" id="google-login">
                               <img
                                 src="/images/googlelogin.png"
@@ -901,7 +901,7 @@ const HomeNav = () => {
                   </button>
                 )}
 
-                <p>OR</p>
+                {/* <p>OR</p>
                 <button id="facebook-login">
                   <ExternalLink href={facebookUrlAddress} target="_self">
                     <img
@@ -911,7 +911,7 @@ const HomeNav = () => {
                     />
                     Login with Facebook
                   </ExternalLink>
-                </button>
+                </button> */}
                 <p>OR</p>
                 <button id="google-login">
                   <ExternalLink href={googleUrlAddress} target="_self">
