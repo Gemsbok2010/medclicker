@@ -276,7 +276,7 @@ const Adashboard = () => {
                   <div className="topBox">
                     <div>
                       <h2>Admin</h2>
-                      <h4>User ID: {userInfo.nanoId}</h4>
+                      <h4>User ID: {user.nanoId}</h4>
                       <h3>Name</h3>
 
                       <p>

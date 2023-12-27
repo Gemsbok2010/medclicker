@@ -215,8 +215,16 @@ const Step1 = () => {
     setStreet(ReactSession.get("locum_street"));
     setStreetNo(ReactSession.get("locum_streetNo"));
     setPostalCode(ReactSession.get("locum_postalCode"));
-    setLatitude(ReactSession.get("locum_latitude"));
-    setLongitude(ReactSession.get("locum_longitude"));
+    if (!ReactSession.get("locum_latitude")) {
+      setLatitude("");
+    } else {
+      setLatitude(ReactSession.get("locum_latitude"));
+    }
+    if (!ReactSession.get("locum_longitude")) {
+      setLongitude("");
+    } else {
+      setLongitude(ReactSession.get("locum_longitude"));
+    }
     setResume(ReactSession.get("resume"));
     // ============ PROFILE DATA ===========
     axios
@@ -465,11 +473,6 @@ const Step1 = () => {
     });
   };
 
-  useEffect(() => {
-    setAddress(`${streetNo} ${street} ${suburb} ${state} ${postalCode}`);
-    setUserInfo({ ...userInfo, country: country });
-  }, []);
-
   // ================= LOAD GOOGLE MAP ==================
   const [libraries] = useState(["drawing", "places"]);
 
@@ -582,27 +585,24 @@ const Step1 = () => {
               </li>
             </ul>
           </div>
-
+          <div className="errorMessageHere">
+            {alert ? (
+              <div className="alert">
+                <img
+                  src="/images/cross-black.png"
+                  style={{ width: "12px" }}
+                  alt=""
+                />
+                <span dangerouslySetInnerHTML={{ __html: alertMsg }}></span>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
           <form id="formOne" onSubmit={onSubmit}>
             <div className="personContent">
               <section className="middlequestionCard">
                 <h2>My Details</h2>
-                <div className="errorMessageHere">
-                  {alert ? (
-                    <div className="alert">
-                      <img
-                        src="/images/cross-black.png"
-                        style={{ width: "12px" }}
-                        alt=""
-                      />
-                      <span
-                        dangerouslySetInnerHTML={{ __html: alertMsg }}
-                      ></span>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
 
                 <div className="container-fluid regCon">
                   <div className="row">

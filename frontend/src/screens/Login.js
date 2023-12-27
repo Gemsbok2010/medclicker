@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { FiEyeOff, FiEye } from "react-icons/fi";
 import { Helmet, HelmetProvider } from "react-helmet-async";

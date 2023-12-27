@@ -164,13 +164,41 @@ const PersonalDetails = () => {
           localStorage.setItem("userId", response.data._id);
           setUserInfo(response.data);
           setCountry(response.data.country);
-          setPostalCode(response.data.postalCode);
-          setState(response.data.state);
-          setSuburb(response.data.suburb);
-          setStreet(response.data.street);
-          setStreetNo(response.data.streetNo);
-          setLatitude(response.data.latitude);
-          setLongitude(response.data.longitude);
+          if (!response.data.postalCode) {
+            setPostalCode("");
+          } else {
+            setPostalCode(response.data.postalCode);
+          }
+          if (!response.data.state) {
+            setState("");
+          } else {
+            setState(response.data.state);
+          }
+          if (!response.data.suburb) {
+            setSuburb("");
+          } else {
+            setSuburb(response.data.suburb);
+          }
+          if (!response.data.street) {
+            setStreet("");
+          } else {
+            setStreet(response.data.street);
+          }
+          if (!response.data.streetNo) {
+            setStreetNo("");
+          } else {
+            setStreetNo(response.data.streetNo);
+          }
+          if (!response.data.longitude) {
+            setLongitude("");
+          } else {
+            setLongitude(response.data.longitude);
+          }
+          if (!response.data.latitude) {
+            setLatitude("");
+          } else {
+            setLatitude(response.data.latitude);
+          }
           setIdPhoto(response.data.filename);
           dispatch(
             login({
@@ -518,11 +546,6 @@ const PersonalDetails = () => {
       getAddressObject(places);
     });
   };
-
-  useEffect(() => {
-    setAddress(`${streetNo} ${street} ${suburb} ${state} ${postalCode}`);
-    setUserInfo({ ...userInfo, country: country });
-  }, []);
 
   // ================= LOAD GOOGLE MAP ==================
   const [libraries] = useState(["drawing", "places"]);

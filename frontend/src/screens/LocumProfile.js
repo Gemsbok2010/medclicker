@@ -643,11 +643,6 @@ const LocumProfile = () => {
     });
   };
 
-  useEffect(() => {
-    setAddress(`${streetNo} ${street} ${suburb} ${state} ${postalCode}`);
-    setUserInfo({ ...userInfo, country: country });
-  }, []);
-
   // ================= LOAD GOOGLE MAP ==================
   const [libraries] = useState(["drawing", "places"]);
 
@@ -849,216 +844,216 @@ const LocumProfile = () => {
                 <div className="sectionHeadings">
                   <h2>My Details</h2>
                 </div>
-                <div className="errorMessageHere">
-                  {alert ? (
-                    <div className="alert">
-                      <img
-                        src="/images/cross-black.png"
-                        style={{ width: "12px" }}
-                        alt=""
-                      />
-                      <span
-                        dangerouslySetInnerHTML={{ __html: alertMsg }}
-                      ></span>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-                <section className="middleQuestionCard">
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="form-group row">
-                        <label
-                          htmlFor="firstName"
-                          className="col-sm-3 col-form-label"
-                        >
-                          First Name
-                        </label>
-                        <div className="col-sm-9">
-                          <input
-                            type="text"
-                            autoComplete="nope"
-                            disabled
-                            className="form-control-lg"
-                            id="firstName"
-                            defaultValue={firstName}
-                          />
-                        </div>
+                <div className="regCon">
+                  <div className="errorMessageHere">
+                    {alert ? (
+                      <div className="alert">
+                        <img
+                          src="/images/cross-black.png"
+                          style={{ width: "12px" }}
+                          alt=""
+                        />
+                        <span
+                          dangerouslySetInnerHTML={{ __html: alertMsg }}
+                        ></span>
                       </div>
-                      <div className="form-group row">
-                        <label
-                          htmlFor="lastName"
-                          className="col-sm-3 col-form-label"
-                        >
-                          LastName
-                        </label>
-                        <div className="col-sm-9">
-                          <input
-                            type="text"
-                            autoComplete="nope"
-                            disabled
-                            className="form-control-lg"
-                            id="lastName"
-                            defaultValue={lastName}
-                          />
-                        </div>
-                      </div>
-                      <div className="form-group row">
-                        <label
-                          htmlFor="email"
-                          className="col-sm-3 col-form-label"
-                        >
-                          Email
-                        </label>
-                        <div className="col-sm-9">
-                          <input
-                            type="email"
-                            className="form-control-lg"
-                            id="email"
-                            defaultValue={userInfo.email}
-                            disabled
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div className="form-group row">
-                        <label
-                          htmlFor="phone"
-                          className="col-sm-3 col-form-label"
-                        >
-                          Mobile
-                        </label>
-                        <div className="col-sm-9">
-                          <input
-                            type="text"
-                            autoComplete="nope"
-                            required
-                            className="form-control-lg"
-                            id="phone"
-                            maxLength="10"
-                            placeholder="Example: 0400666888"
-                            value={phone}
-                            onChange={handlePhone}
-                          />
-                        </div>
-                      </div>
-                      <div className="form-group row">
-                        <label
-                          htmlFor="profession"
-                          className="col-sm-3 col-form-label"
-                        >
-                          Profession
-                        </label>
-                        <div className="col-sm-9">
-                          <input
-                            type="text"
-                            autoComplete="nope"
-                            className="form-control-lg"
-                            id="profession"
-                            value={profession ? profession : ""}
-                            onFocus={() => {
-                              setShowProfession(true);
-                              setSeeDrivers(false);
-                            }}
-                            onChange={() => {
-                              setShowProfession(true);
-                              setSeeDrivers(false);
-                            }}
-                          />
+                    ) : (
+                      ""
+                    )}
+                  </div>
 
-                          <div className="professionList">
-                            <ul>
-                              {showProfession &&
-                                noDuplicates.map((profession) => {
-                                  return (
-                                    <li
-                                      key={profession._id}
-                                      onClick={(e) => {
-                                        handleSetProfession(e);
-                                        handleShowProfession();
-                                      }}
-                                      name={profession.professionName}
-                                    >
-                                      {profession.professionName}
-                                    </li>
-                                  );
-                                })}
-                            </ul>
+                  <section className="middleQuestionCard">
+                    <div className="row">
+                      <div className="col-md-6">
+                        <div className="form-group row">
+                          <label
+                            htmlFor="firstName"
+                            className="col-sm-3 col-form-label"
+                          >
+                            First Name
+                          </label>
+                          <div className="col-sm-9">
+                            <input
+                              type="text"
+                              disabled
+                              className="form-control-lg"
+                              id="firstName"
+                              defaultValue={firstName}
+                            />
+                          </div>
+                        </div>
+                        <div className="form-group row">
+                          <label
+                            htmlFor="lastName"
+                            className="col-sm-3 col-form-label"
+                          >
+                            LastName
+                          </label>
+                          <div className="col-sm-9">
+                            <input
+                              type="text"
+                              disabled
+                              className="form-control-lg"
+                              id="lastName"
+                              defaultValue={lastName}
+                            />
+                          </div>
+                        </div>
+                        <div className="form-group row">
+                          <label
+                            htmlFor="email"
+                            className="col-sm-3 col-form-label"
+                          >
+                            Email
+                          </label>
+                          <div className="col-sm-9">
+                            <input
+                              type="email"
+                              className="form-control-lg"
+                              id="email"
+                              defaultValue={userInfo.email}
+                              disabled
+                            />
                           </div>
                         </div>
                       </div>
-                      <div className="form-group row">
-                        <label
-                          htmlFor="driverslicense"
-                          className="col-sm-3 col-form-label"
-                        >
-                          Driver's License
-                        </label>
-                        <div className="col-sm-9">
-                          <input
-                            required
-                            autoComplete="nope"
-                            type="text"
-                            readOnly
-                            className="form-control-lg"
-                            id="driverslicense"
-                            placeholder="Select Jurisdiction"
-                            value={driverslicense ? driverslicense : ""}
-                            onFocus={() => {
-                              setSeeDrivers(!seeDrivers);
-                            }}
-                            onChange={() => {
-                              setSeeDrivers(!seeDrivers);
-                            }}
-                          />
-                          {seeDrivers ? (
-                            <div className="drivers">
+                      <div className="col-md-6">
+                        <div className="form-group row">
+                          <label
+                            htmlFor="phone"
+                            className="col-sm-3 col-form-label"
+                          >
+                            Mobile
+                          </label>
+                          <div className="col-sm-9">
+                            <input
+                              type="text"
+                              autoComplete="nope"
+                              required
+                              className="form-control-lg"
+                              id="phone"
+                              maxLength="10"
+                              placeholder="Example: 0400666888"
+                              value={phone}
+                              onChange={handlePhone}
+                            />
+                          </div>
+                        </div>
+                        <div className="form-group row">
+                          <label
+                            htmlFor="profession"
+                            className="col-sm-3 col-form-label"
+                          >
+                            Profession
+                          </label>
+                          <div className="col-sm-9">
+                            <input
+                              type="text"
+                              autoComplete="nope"
+                              className="form-control-lg"
+                              id="profession"
+                              value={profession ? profession : ""}
+                              onFocus={() => {
+                                setShowProfession(true);
+                                setSeeDrivers(false);
+                              }}
+                              onChange={() => {
+                                setShowProfession(true);
+                                setSeeDrivers(false);
+                              }}
+                            />
+
+                            <div className="professionList">
                               <ul>
-                                {states.map((state) => {
-                                  return (
-                                    <li
-                                      key={state.id}
-                                      onClick={(e) => {
-                                        handleSetDrivers(e);
-                                        handleShowDrivers();
-                                      }}
-                                    >
-                                      {state.title}
-                                    </li>
-                                  );
-                                })}
+                                {showProfession &&
+                                  noDuplicates.map((profession) => {
+                                    return (
+                                      <li
+                                        key={profession._id}
+                                        onClick={(e) => {
+                                          handleSetProfession(e);
+                                          handleShowProfession();
+                                        }}
+                                        name={profession.professionName}
+                                      >
+                                        {profession.professionName}
+                                      </li>
+                                    );
+                                  })}
                               </ul>
                             </div>
-                          ) : (
-                            ""
-                          )}
+                          </div>
+                        </div>
+                        <div className="form-group row">
+                          <label
+                            htmlFor="driverslicense"
+                            className="col-sm-3 col-form-label"
+                          >
+                            Driver's License
+                          </label>
+                          <div className="col-sm-9">
+                            <input
+                              required
+                              autoComplete="nope"
+                              type="text"
+                              readOnly
+                              className="form-control-lg"
+                              id="driverslicense"
+                              placeholder="Select Jurisdiction"
+                              value={driverslicense ? driverslicense : ""}
+                              onFocus={() => {
+                                setSeeDrivers(!seeDrivers);
+                              }}
+                              onChange={() => {
+                                setSeeDrivers(!seeDrivers);
+                              }}
+                            />
+                            {seeDrivers ? (
+                              <div className="drivers">
+                                <ul>
+                                  {states.map((state) => {
+                                    return (
+                                      <li
+                                        key={state.id}
+                                        onClick={(e) => {
+                                          handleSetDrivers(e);
+                                          handleShowDrivers();
+                                        }}
+                                      >
+                                        {state.title}
+                                      </li>
+                                    );
+                                  })}
+                                </ul>
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="form-group">
-                      <label className="link-btn">
-                        Please contact Medclicker Customer services team if you
-                        wish to amend your AHPRA details.
-                      </label>
+                      <div className="form-group">
+                        <label className="link-btn">
+                          Please contact Medclicker Customer services team if
+                          you wish to amend your AHPRA details.
+                        </label>
 
-                      <input
-                        type="text"
-                        id="ahpra"
-                        disabled
-                        style={{ outline: "none", width: "100%" }}
-                        value={ahpra ? ahpra : ""}
-                        autoComplete="off"
-                        maxLength={13}
-                        onChange={(e) => {
-                          setAhpra(e.target.value);
-                        }}
-                      />
+                        <input
+                          type="text"
+                          id="ahpra"
+                          disabled
+                          style={{ outline: "none", width: "40%" }}
+                          value={ahpra ? ahpra : ""}
+                          autoComplete="off"
+                          maxLength={13}
+                          onChange={(e) => {
+                            setAhpra(e.target.value);
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                </section>
-
+                  </section>
+                </div>
                 <div className="sectionHeadings">
                   <h2>My Location</h2>
                 </div>
@@ -1338,7 +1333,7 @@ const LocumProfile = () => {
               text-align: center;
             }
             .wrap {
-              padding: 0;
+              padding: 10px;
             }
             .wrap .divider {
               display: block;
@@ -1441,11 +1436,12 @@ const LocumProfile = () => {
             padding: 0px 20px;
           }
           .wrap .sectionHeadings h2 {
-            font-weight: 500;
+            font-weight: 800;
             font-size: 24px;
-            color: #323232;
+            color: #2b2b2b;
             margin-top: 35px;
             margin-bottom: 10px;
+            margin-left: 30px;
             width: 100%;
           }
           .regCon {
@@ -1529,7 +1525,7 @@ const LocumProfile = () => {
             height: 40px;
             margin: 0px auto;
             width: 130px;
-            margin-left: 5px;
+            margin-left: 6px;
           }
           .bigHead #savePhoto:active,
           .bigHead #savePhoto:focus {
@@ -1653,6 +1649,9 @@ const LocumProfile = () => {
               width: 450px;
               margin: 0px 30px;
               display: block;
+            }
+            .bigHead #savePhoto {
+              margin-left: 0px;
             }
           }
 

@@ -317,10 +317,10 @@ const Footer = ({ asx }) => {
                 {user.isLoggedIn ? (
                   user.isActive === true && user.completeAccess === true ? (
                     <>
+                      <Link to="/searchlist">Search positions</Link>
                       <ExternalLink href="/logout" target="_self">
                         Log out
                       </ExternalLink>
-                      <Link to="/searchlist">Search positions</Link>
                       <Link to="/dashboard">Hi, {user.firstName}</Link>
                     </>
                   ) : (

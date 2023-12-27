@@ -180,10 +180,7 @@ const Signup = () => {
           <meta name="description" content="Medclicker" />
         </Helmet>
         <div className="wrap">
-          <div
-            className="wrapposter"
-            style={{ display: "flex", justifyContent: "space-evenly" }}
-          >
+          <div className="wrapposter">
             <section className="passwordCard container">
               <h4>Password Checker</h4>
               <p>
@@ -192,13 +189,13 @@ const Signup = () => {
               </p>
               <div id="reasons" className="reasons">
                 <input type="checkbox" readOnly id="aa" />
-                <label>Password needs to have minimum 8 characters.</label>
+                <label>Password needs to have minimum 8 characters</label>
                 <input type="checkbox" readOnly id="bb" />
-                <label>Password needs to have at least 1 lower case.</label>
+                <label>Password needs to have at least 1 lower case</label>
                 <input type="checkbox" readOnly id="cc" />
-                <label>Password needs to have at least 1 upper case.</label>
+                <label>Password needs to have at least 1 upper case</label>
                 <input type="checkbox" readOnly id="dd" />
-                <label>Password needs to have at least 1 number.</label>
+                <label>Password needs to have at least 1 number</label>
               </div>
             </section>
             <section className="questionCard container">
@@ -437,9 +434,27 @@ const Signup = () => {
             background-size: cover;
             padding-bottom: 60px;
             padding-top: 60px;
+            display: flex;
+            justifycontent: space-evenly;
           }
+
+          @media screen and (max-width: 768px) {
+            .wrapposter {
+              display: block;
+            }
+          }
+
+          /* ============ PASSWORD CHECKER ========== */
           .wrap .passwordCard {
-            display: none;
+            display: block;
+            margin-bottom: 20px;
+            background: #fcebcd;
+            height: 310px;
+            padding: 20px 10px;
+            width: 400px;
+            -webkit-box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
+            box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
+            display: block;
           }
 
           .wrap .passwordCard h4 {
@@ -467,8 +482,9 @@ const Signup = () => {
             font-size: 15px;
             font-family: "Noto Sans TC", sans-serif;
             font-weight: 500;
-            margin: 0px 0px 0px 50px;
-            width: 100%;
+            margin: 0px 0px 0px 30px;
+            width: 360px;
+            height: 42px;
             display: block;
             color: #2b2b2b;
           }
@@ -799,6 +815,10 @@ const Signup = () => {
             }
             .input-group input.springbok + label {
               transform: translate(-8px, -32px) scale(0.9);
+            }
+            .wrap .passwordCard input[type="checkbox"] + label {
+              margin: 0px 0px 0px 40px;
+              height: 42px;
             }
             .wrap #firstname,
             .wrap #lastname,

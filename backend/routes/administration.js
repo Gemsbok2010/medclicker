@@ -101,6 +101,16 @@ router.post("/profession", async (req, res) => {
       sort = -1;
     }
 
+    // Check profession if already exist in database
+    const profExist = await Profession.findOne({
+      contractType: req.body.contractType,
+      professionName: req.body.professionName,
+    });
+    if (profExist)
+      return res.status(400).json({
+        prompt: "Contract Type of this Profession exists already.",
+      });
+
     const profession = new Profession({
       contractType: req.body.contractType,
       professionName: req.body.professionName,
@@ -327,8 +337,19 @@ router.put("/hideProf/:id", async (req, res) => {
 router.delete("/deleteProfession/:id", async (req, res) => {
   const deleted = await Profession.deleteOne({ _id: req.params.id });
   const professions = await Profession.find();
+  const num = await Profession.find().countDocuments();
+  let perPage = 25;
+  let maxPage = Math.ceil(num / perPage);
 
-  res.json({ deleted: deleted, professions: professions });
+  const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
+
+  res.json({
+    deleted: deleted,
+    professions: professions,
+    num: num,
+    page: page,
+    maxPage: maxPage,
+  });
 });
 
 // ============= BLACLIST AN USER (From Ausers.js) =============
@@ -1070,7 +1091,6 @@ router.post("/sendinvoice", async (req, res) => {
   const gst = payment.gst;
   const fee = total - gst;
 
- 
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
@@ -1247,7 +1267,6 @@ router.post("/sendagreement", async (req, res) => {
   const professions = post.professions;
   const caseId = post.caseId;
   const dateIssued = payment.dateIssued;
-
 
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -2402,7 +2421,7 @@ router.get("/sortlocum_applications", async (req, res) => {
 });
 
 //============ GET HOMEPAGE DATA ==============
-//from homepage
+//from homepage and Dashboard
 router.get("/homepage", async (req, res) => {
   try {
     const noOfCases = await Listing.find({

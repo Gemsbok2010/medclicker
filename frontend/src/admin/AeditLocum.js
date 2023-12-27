@@ -495,10 +495,7 @@ const AeditLocum = () => {
     });
   };
 
-  useEffect(() => {
-    setAddress(`${streetNo} ${street} ${suburb} ${state} ${postalCode}`);
-    setUserInfo({ ...userInfo, country: country });
-  }, []);
+
 
   // ================= LOAD GOOGLE MAP ==================
   const [libraries] = useState(["drawing", "places"]);

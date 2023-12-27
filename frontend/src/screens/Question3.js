@@ -1558,7 +1558,7 @@ const Question3 = () => {
             height: 30px;
             line-height: 30px;
             text-align: center;
-            width: 60px;
+            width: 75px;
             font-size: 10px;
           }
 
@@ -1573,7 +1573,7 @@ const Question3 = () => {
           .time_flex .form-control {
             margin: 23px 5px;
             display: block;
-            width: 60px;
+            width: 75px;
             height: 28px;
             padding: 6px 12px;
             font-size: 10px;

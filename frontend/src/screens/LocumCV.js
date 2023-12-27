@@ -704,6 +704,7 @@ const LocumCV = () => {
                               id="start1"
                               type="text"
                               placeholder="From"
+                              maxLength={4}
                               value={start1}
                               onChange={(e) => setStart1(e.target.value)}
                             />
@@ -714,6 +715,7 @@ const LocumCV = () => {
                               id="finish1"
                               type="text"
                               placeholder="To Year"
+                              maxLength={4}
                               value={finish1}
                               onChange={(e) => setFinish1(e.target.value)}
                             />
@@ -751,6 +753,7 @@ const LocumCV = () => {
                               id="start2"
                               type="text"
                               placeholder="From"
+                              maxLength={4}
                               value={start2}
                               onChange={(e) => setStart2(e.target.value)}
                             />
@@ -761,6 +764,7 @@ const LocumCV = () => {
                               id="finish2"
                               type="text"
                               placeholder="To Year"
+                              maxLength={4}
                               value={finish2}
                               onChange={(e) => setFinish2(e.target.value)}
                             />
@@ -798,6 +802,7 @@ const LocumCV = () => {
                               id="start3"
                               type="text"
                               placeholder="From"
+                              maxLength={4}
                               value={start3}
                               onChange={(e) => setStart3(e.target.value)}
                             />
@@ -808,6 +813,7 @@ const LocumCV = () => {
                               id="finish3"
                               type="text"
                               placeholder="To Year"
+                              maxLength={4}
                               value={finish3}
                               onChange={(e) => setFinish3(e.target.value)}
                             />
@@ -1669,7 +1675,9 @@ const LocumCV = () => {
                                             taal.title !==
                                               linguistics["whichlanguage0"] &&
                                             taal.title !==
-                                              linguistics["whichlanguage1"] && (
+                                              linguistics["whichlanguage1"] &&
+                                            taal.title !==
+                                              linguistics["whichlanguage2"] && (
                                               <li
                                                 key={taal.id}
                                                 onClick={(e) => {
@@ -1816,16 +1824,20 @@ const LocumCV = () => {
                 </div>
               </section>
               {resume && workhistory ? (
-                <button type="submit" className="btn-save">
-                  Update
-                </button>
+                <section className="buttonCard">
+                  <button type="submit" className="btn-save">
+                    Update
+                  </button>
+                </section>
               ) : (
-                <input
-                  type="button"
-                  disabled
-                  className="btn-save"
-                  defaultValue="Update"
-                />
+                <section className="buttonCard">
+                  <input
+                    type="button"
+                    disabled
+                    className="btn-save"
+                    defaultValue="Update"
+                  />
+                </section>
               )}
             </form>
           </div>
@@ -1870,10 +1882,14 @@ const LocumCV = () => {
 
           @media screen and (max-width: 768px) {
             .wrap {
-              padding: 0;
+              padding: 10px;
             }
             .wrap .divider {
               display: block;
+            }
+            .wrap .buttonCard {
+              width: 450px;
+              margin: 25px 15px;
             }
           }
 
@@ -2428,8 +2444,7 @@ const LocumCV = () => {
             }
 
             form .btn-save {
-              width: 450px;
-              margin: 25px;
+              width: 100%;
             }
           }
         `}</style>

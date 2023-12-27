@@ -425,6 +425,20 @@ const Aprofessions = () => {
     }
   };
 
+  // ========== ALERT MESSAGE ===============
+
+  const [alert, setAlert] = useState(false);
+  const [alertMsg, setAlertMsg] = useState("");
+
+  function outPutErrorMessage(errorMessage) {
+    setAlert(true);
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+    setAlertMsg(errorMessage);
+  }
+
   // ============== CREATE NEW PROFESSION ============== //
   const [professionTitle, setProfessionTitle] = useState("");
   const [showTypes, setShowTypes] = useState(false);
@@ -461,13 +475,20 @@ const Aprofessions = () => {
         }
       );
       const data = await res.json();
-
-      setProfessionTitle("");
-      setTypes({});
-      setNoOfProfessions(data.numOfProfessions);
-      setProfessions(data.professions);
-      setSort(data.sort);
-      setBackdrop(false);
+      if (data.prompt) {
+        setProfessionTitle("");
+        setTypes({});
+        outPutErrorMessage(data.prompt);
+        setBackdrop(false);
+      } else {
+        setProfessionTitle("");
+        setTypes({});
+        setNoOfProfessions(data.numOfProfessions);
+        setProfessions(data.professions);
+        setSort(data.sort);
+        setBackdrop(false);
+        setAlert(false);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -487,6 +508,9 @@ const Aprofessions = () => {
 
     if (data) {
       setProfessions(data.professions);
+      setNoOfProfessions(data.num);
+      setPage(data.page);
+      setMaxPage(data.maxPage);
       setBackdrop(false);
     }
   };
@@ -644,6 +668,20 @@ const Aprofessions = () => {
           ""
         )}
         <div className="wrap">
+          <div className="errorMessageHere">
+            {alert ? (
+              <div className="alert">
+                <img
+                  src="/images/cross-black.png"
+                  style={{ width: "12px" }}
+                  alt=""
+                />
+                <span dangerouslySetInnerHTML={{ __html: alertMsg }}></span>
+              </div>
+            ) : (
+              ""
+            )}
+          </div>
           <form onSubmit={newProfession}>
             <div className="container-fuild">
               <div className="box box-primary">
@@ -1103,6 +1141,12 @@ const Aprofessions = () => {
               rgba(0, 131, 123, 0.5)
             );
             background-color: #00a1e4;
+          }
+          .wrap .alert {
+            background-color: #fcebcd;
+            margin: 5px auto 12px;
+            padding: 7px;
+            width: 80%;
           }
           /* ============== NAV BAR ============= */
 

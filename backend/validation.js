@@ -88,7 +88,6 @@ const signUpValidation = (data) => {
       "passwordComplexity.numeric":
         "<b>Password</b> must contain at least 1 numeric number.",
     }),
-   
   });
   return schema.validate(data);
 };
@@ -109,13 +108,13 @@ const loginValidation = (data) => {
       "string.empty":
         "<b>Invalid sign up details</b>. </br>Please note Password must contain: </br>at least <b>8 characters in length</b>,</br>at least <b>1 lower case character</b>,</br>at least <b>1 upper case character</b> and</br>at least <b>1 numeric number</b>.",
       "passwordComplexity.tooShort":
-        "<b>Password</b> field contain at least 8 characters in length.",
+        "<b>Email</b> or <b>Password</b> incorrect. Please check your inputs and try again.",
       "passwordComplexity.lowercase":
-        "<b>Password</b> must contain at least 1 lower case character.",
+        "<b>Email</b> or <b>Password</b> incorrect. Please check your inputs and try again.",
       "passwordComplexity.uppercase":
-        "<b>Password</b> must contain at least 1 upper case character.",
+        "<b>Email</b> or <b>Password</b> incorrect. Please check your inputs and try again.",
       "passwordComplexity.numeric":
-        "<b>Password</b> must contain at least 1 numeric number.",
+        "<b>Email</b> or <b>Password</b> incorrect. Please check your inputs and try again.",
     }),
     remember: Joi.boolean(),
   });
