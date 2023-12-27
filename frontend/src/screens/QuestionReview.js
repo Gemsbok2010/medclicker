@@ -128,7 +128,6 @@ const QuestionReview = () => {
   // =========== STANDARD PAYMENT DISABLED (FREE) ===========
   const onSubmit = (e) => {
     e.preventDefault();
-    const nanoId = user.nanoId;
     setIsloaded(true);
     try {
       fetch(process.env.REACT_APP_BACKEND_URL + "api/payment/free", {
@@ -136,7 +135,7 @@ const QuestionReview = () => {
         credentials: "include",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({
-          nanoId: nanoId,
+          nanoId: user.nanoId,
           isPaid: true,
           isActiveJob: true,
           freeDays: freeDays,
@@ -172,6 +171,7 @@ const QuestionReview = () => {
               category: "Post Std Ad",
               action: "Std Ad No Charge",
             });
+
             navigate("/payment_success");
             setIsloaded(false);
           }
@@ -410,7 +410,7 @@ const QuestionReview = () => {
               </div>
 
               <input
-                type="submit"
+                type="button"
                 disabled="disabled"
                 className="btn-med"
                 value="Request to Apply"

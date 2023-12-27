@@ -547,7 +547,7 @@ function checkFileType(file, cb) {
 router.post("/singleUpload", async (req, res) => {
   const email = req.query.email;
   const candidate = await User.findOne({ email: email });
-
+  console.log(req.query, "here");
   const caseId = req.query.caseId;
   const list = await Listing.findOne({ caseId: caseId });
 
@@ -595,7 +595,7 @@ router.post("/singleUpload", async (req, res) => {
           dateApplied: moment().format("DD MMM YYYY"),
         });
         const storedApplication = await application.save();
-        console.log(storedApplication);
+
         res.redirect(process.env.FRONTEND_URL + "applicationSent");
       }
     });
@@ -608,7 +608,7 @@ router.post("/singleUpload", async (req, res) => {
 router.post("/upload", async (req, res) => {
   const email = req.query.email;
   const candidate = await User.findOne({ email: email });
-
+  console.log(req.query, "here multi");
   const caseId = req.query.caseId;
   const list = await Listing.findOne({ caseId: caseId });
 
@@ -659,7 +659,7 @@ router.post("/upload", async (req, res) => {
           dateApplied: moment().format("DD MMM YYYY"),
         });
         const storedApplication = await application.save();
-        console.log(storedApplication);
+
         res.redirect(process.env.FRONTEND_URL + "applicationSent");
       }
     });
