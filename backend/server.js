@@ -12,6 +12,7 @@ const passport = require("passport");
 const path = require("path");
 const server = http.createServer(app);
 const cors = require("cors");
+const { WebSocketServer } = require("ws");
 
 app.use(
   session({
@@ -344,6 +345,16 @@ if (process.env.NODE_ENV === "production") {
 
 //Listening
 const port = 4000;
+const wss = new WebSocketServer({ server });
+wss.on("connection", function connection(ws) {
+  ws.on("error", console.error);
+
+  ws.on("message", function message(data) {
+    console.log("received: %s", data);
+  });
+
+  ws.send("something");
+});
 
 server.listen(process.env.PORT || 4000, function () {
   console.log(`server up and running ${port}`);
