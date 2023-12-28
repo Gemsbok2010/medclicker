@@ -108,7 +108,7 @@ const HomeNav = () => {
   const onLoginForm = async (e) => {
     e.preventDefault();
     setIsloaded(true);
-    fetch(`${process.env.REACT_APP_BACKEND_URL}api/auth/login`, {
+    fetch("https://medclicker.com.au/api/auth/login", {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },
@@ -237,7 +237,7 @@ const HomeNav = () => {
       ReactSession.remove("email");
     }
     setTimeout(() => {
-      fetch(`${process.env.REACT_APP_BACKEND_URL}api/auth/login`, {
+      fetch("https://medclicker.com.au/api/auth/login", {
         method: "POST",
         credentials: "include",
         headers: { "Content-type": "application/json" },
