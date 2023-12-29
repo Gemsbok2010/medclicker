@@ -229,7 +229,8 @@ router.post("/upload", async (req, res) => {
       }).then(function () {
         Locum.findOne({ email: req.query.email }).then(function (storedLocum) {
           storedLocum.save(() => {
-            res.json({ newImage: result.Location });
+            res.send(storedLocum);
+            // res.json({ newImage: result.Location });
           });
         });
       });
