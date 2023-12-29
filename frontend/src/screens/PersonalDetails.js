@@ -317,6 +317,8 @@ const PersonalDetails = () => {
   const [imageFacebook, setImageFacebook] = useState(false);
   const [imageHere, setImageHere] = useState("");
 
+  const [file, setFile] = useState("");
+
   const imageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -785,6 +787,7 @@ const PersonalDetails = () => {
                           onChange={(event) => {
                             imageUpload(event);
                             imageUploadActivateButton();
+                            setFile(event.target.files[0]);
                           }}
                           name="gameFile"
                         />
