@@ -185,7 +185,7 @@ const Question4 = () => {
           <meta name="description" content="Medclicker" />
         </Helmet>
         <div className="wrap">
-          <form action="" onSubmit={onSubmit}>
+          <form onSubmit={onSubmit}>
             <section className="questionCard container">
               <figure>
                 <Link to={customerId ? "/admin/users" : "/dashboard"}>

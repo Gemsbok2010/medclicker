@@ -547,7 +547,7 @@ function checkFileType(file, cb) {
 router.post("/singleUpload", async (req, res) => {
   const email = req.query.email;
   const candidate = await User.findOne({ email: email });
-  console.log(req.query, "here");
+
   const caseId = req.query.caseId;
   const list = await Listing.findOne({ caseId: caseId });
 
@@ -558,7 +558,7 @@ router.post("/singleUpload", async (req, res) => {
   try {
     uploadSingle(req, res, async (err) => {
       if (req.file === undefined) {
-        res.redirect(process.env.FRONTEND_URL + "Ad_details_std/" + list.slug);
+        res.json({ invalid: "No files or file not accepted." });
       } else {
         const result = await uploadResume(req.file);
         await unlinkFile(req.file.path);
@@ -595,8 +595,7 @@ router.post("/singleUpload", async (req, res) => {
           dateApplied: moment().format("DD MMM YYYY"),
         });
         const storedApplication = await application.save();
-
-        res.redirect(process.env.FRONTEND_URL + "applicationSent");
+        res.json({ storedApplication });
       }
     });
   } catch (err) {
@@ -608,7 +607,7 @@ router.post("/singleUpload", async (req, res) => {
 router.post("/upload", async (req, res) => {
   const email = req.query.email;
   const candidate = await User.findOne({ email: email });
-  console.log(req.query, "here multi");
+
   const caseId = req.query.caseId;
   const list = await Listing.findOne({ caseId: caseId });
 
@@ -619,7 +618,7 @@ router.post("/upload", async (req, res) => {
   try {
     upload(req, res, async (err) => {
       if (req.files === undefined) {
-        res.redirect(process.env.FRONTEND_URL + "Ad_details_std/" + list.slug);
+        res.json({ invalid: "No files or file not accepted." });
       } else {
         const result = await uploadResume(req.files[0]);
         await unlinkFile(req.files[0].path);
@@ -659,8 +658,7 @@ router.post("/upload", async (req, res) => {
           dateApplied: moment().format("DD MMM YYYY"),
         });
         const storedApplication = await application.save();
-
-        res.redirect(process.env.FRONTEND_URL + "applicationSent");
+        res.json({ storedApplication });
       }
     });
   } catch (err) {

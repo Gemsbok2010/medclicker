@@ -360,6 +360,54 @@ const PersonalDetails = () => {
     });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    console.log(...formData);
+
+    fetch(
+      process.env.REACT_APP_BACKEND_URL +
+        "api/users/upload?email=" +
+        userInfo.email,
+      {
+        method: "POST",
+        body: formData,
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.invalid) {
+          outPutErrorMessagesInAllusers(data.invalid);
+        } else {
+          setUpdateNote(true);
+          setIdPhoto(data.newImage);
+          dispatch(
+            login({
+              firstName: data.storedUser.firstName,
+              lastName: data.storedUser.lastName,
+              isLoggedIn: true,
+              email: data.storedUser.email,
+              filename: data.newImage,
+              isLocum: data.storedUser.isLocum,
+              isActive: data.storedUser.isActive,
+              nanoId: data.storedUser.nanoId,
+              isAdmin: data.storedUser.isAdmin,
+              completeAccess: true,
+            })
+          );
+          setTimeout(function () {
+            setUpdateNote(false);
+          }, 2000);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   // ======= PUT REQUEST TO UPDATE TO AUTHUSERS.JS ======
   const onSubmit = (e) => {
     e.preventDefault();
@@ -683,15 +731,7 @@ const PersonalDetails = () => {
             ) : null}
           </div>
 
-          <form
-            id="formZero"
-            action={
-              process.env.REACT_APP_BACKEND_URL +
-              `api/users/upload?email=${userInfo.email}`
-            }
-            method="POST"
-            encType="multipart/form-data"
-          >
+          <form id="formZero" onSubmit={handleSubmit}>
             <div className="personContent">
               <section className="questionCard container-fluid">
                 <h2>Photo</h2>

@@ -1,5 +1,5 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useLocation } from "react-router-dom";
@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 
 const Ad_details_std = () => {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const slug = pathname.split("/")[2];
   const [list, setList] = useState({});
 
@@ -107,6 +108,8 @@ const Ad_details_std = () => {
   const [, setLongitude] = useState("");
   const [, setLatitude] = useState("");
   const [todaysDate, setTodaysDate] = useState("");
+  const [file, setFile] = useState("");
+  const [files, setFiles] = useState([]);
 
   // ============= FACEBOOK & GOOGLE LOGIN DATA ==============
   useEffect(() => {
@@ -130,7 +133,7 @@ const Ad_details_std = () => {
           setApplied(response.data.applied);
         }
       });
-  }, []);
+  }, [files]);
 
   // ============ UPLOAD FILE ===========
   const [selectedFile, setSelectedFile] = useState(false);
@@ -138,6 +141,8 @@ const Ad_details_std = () => {
 
   const resumeUpload = (event) => {
     const file = event.target.files[0];
+
+    setFiles([...files, file]);
 
     if (file) {
       setSelectedFile(true);
@@ -147,9 +152,64 @@ const Ad_details_std = () => {
   const coverUpload = (event) => {
     const file = event.target.files[0];
 
+    setFiles([...files, file]);
+
     if (file) {
       setSelectedCover(true);
     }
+  };
+
+  const fileSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("resumeFile", file);
+
+    fetch(
+      process.env.REACT_APP_BACKEND_URL +
+        `api/applications/singleUpload?email=${user.email}&caseId=${list.caseId}&ahpra=${ahpra}&status=${status}`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.storedApplication) {
+          navigate("/applicationSent");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const filesSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+
+    for (let i = 0; i < files.length; i++) {
+      formData.append("resumeFile", files[i]);
+    }
+
+    fetch(
+      process.env.REACT_APP_BACKEND_URL +
+        `api/applications/upload?email=${user.email}&caseId=${list.caseId}&ahpra=${ahpra}&status=${status}`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.storedApplication) {
+          navigate("/applicationSent");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
@@ -211,15 +271,9 @@ const Ad_details_std = () => {
 
             <form
               id="selectdate"
-              action={
-                selectedFile && selectedCover
-                  ? process.env.REACT_APP_BACKEND_URL +
-                    `api/applications/upload?email=${user.email}&caseId=${list.caseId}&ahpra=${ahpra}&status=${status}`
-                  : process.env.REACT_APP_BACKEND_URL +
-                    `api/applications/singleUpload?email=${user.email}&caseId=${list.caseId}&ahpra=${ahpra}&status=${status}`
+              onSubmit={
+                selectedFile && selectedCover ? filesSubmit : fileSubmit
               }
-              method="POST"
-              encType="multipart/form-data"
             >
               <div className="container-price">
                 <h2>
@@ -332,6 +386,9 @@ const Ad_details_std = () => {
                   accept=".doc,.docx, application/pdf"
                   onChange={(e) => {
                     resumeUpload(e);
+                    selectedFile && selectedCover
+                      ? setFile(e)
+                      : setFile(e.target.files[0]);
                   }}
                 />
                 <label htmlFor="resume">
@@ -348,6 +405,9 @@ const Ad_details_std = () => {
                   accept=".doc,.docx, application/pdf"
                   onChange={(e) => {
                     coverUpload(e);
+                    selectedFile && selectedCover
+                      ? setFile(e)
+                      : setFile(e.target.files[0]);
                   }}
                 />
                 <label htmlFor="cover-letter">

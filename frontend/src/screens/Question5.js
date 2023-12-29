@@ -98,7 +98,7 @@ const Question5 = () => {
           <meta name="description" content="Medclicker" />
         </Helmet>
         <div className="wrap">
-          <form action="" id="formSeven" onSubmit={onSubmit}>
+          <form id="formSeven" onSubmit={onSubmit}>
             <section className="questionCard container">
               <figure>
                 <Link to={customerId ? "/admin/users" : "/dashboard"}>

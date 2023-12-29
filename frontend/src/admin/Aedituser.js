@@ -253,6 +253,8 @@ const Aedituser = () => {
   const [imageFacebook, setImageFacebook] = useState(false);
   const [imageHere, setImageHere] = useState("");
 
+  const [file, setFile] = useState("");
+
   const imageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -280,6 +282,43 @@ const Aedituser = () => {
         setImageHere("");
       }
     });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    console.log(...formData);
+
+    fetch(
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/upload?email=${userInfo.email}`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.invalid) {
+          outPutErrorMessagesInAllusers(data.invalid);
+        } else {
+          setUpdateNote(true);
+          setIdPhoto(data.newImage);
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+          setTimeout(function () {
+            setUpdateNote(false);
+          }, 2000);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   // ======= PUT REQUEST TO UPDATE TO AUTHUSERS.JS ======
@@ -530,15 +569,7 @@ const Aedituser = () => {
             ) : null}
           </div>
 
-          <form
-            id="formZero"
-            action={
-              process.env.REACT_APP_BACKEND_URL +
-              `api/admin/upload?email=${userInfo.email}`
-            }
-            method="POST"
-            encType="multipart/form-data"
-          >
+          <form id="formZero" onSubmit={handleSubmit}>
             <div className="personContent">
               <section className="questionCard container-fluid">
                 <h2>Photo</h2>
@@ -594,6 +625,7 @@ const Aedituser = () => {
                           onChange={(event) => {
                             imageUpload(event);
                             imageUploadActivateButton();
+                            setFile(event.target.files[0]);
                           }}
                           name="gameFile"
                         />

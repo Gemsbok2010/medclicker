@@ -54,7 +54,7 @@ const Question1 = () => {
         </Helmet>
 
         <div className="wrap">
-          <form id="formOne" action="" onSubmit={onSubmit}>
+          <form id="formOne" onSubmit={onSubmit}>
             <section className="questionCard">
               <figure>
                 <Link to={customerId ? "/admin/users" : "/dashboard"}>

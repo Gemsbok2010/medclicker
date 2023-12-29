@@ -347,6 +347,8 @@ const AeditLocum = () => {
   const [imageFacebook, setImageFacebook] = useState(false);
   const [imageHere, setImageHere] = useState("");
 
+  const [file, setFile] = useState("");
+
   const imageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -374,6 +376,44 @@ const AeditLocum = () => {
         setImageHere("");
       }
     });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    console.log(...formData);
+
+    fetch(
+      process.env.REACT_APP_BACKEND_URL +
+        `api/admin/upload-locum?email=${userInfo.email}`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.invalid) {
+          outPutErrorMessagesInAllusers(data.invalid);
+        } else {
+          setUpdateNote(true);
+          setIdPhoto(data.newImage);
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+
+          setTimeout(function () {
+            setUpdateNote(false);
+          }, 2000);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   // ================= GEOLOCATION ==================
@@ -495,8 +535,6 @@ const AeditLocum = () => {
     });
   };
 
-
-
   // ================= LOAD GOOGLE MAP ==================
   const [libraries] = useState(["drawing", "places"]);
 
@@ -592,15 +630,7 @@ const AeditLocum = () => {
               </div>
             </div>
             <div className="allQuestionCards">
-              <form
-                id="formZero"
-                action={
-                  process.env.REACT_APP_BACKEND_URL +
-                  `api/admin/upload-locum?email=${userInfo.email}`
-                }
-                method="POST"
-                encType="multipart/form-data"
-              >
+              <form id="formZero" onSubmit={handleSubmit}>
                 <div className="sectionHeadings">
                   <h2>Photo</h2>
                 </div>
@@ -664,6 +694,7 @@ const AeditLocum = () => {
                             onChange={(event) => {
                               imageUpload(event);
                               imageUploadActivateButton();
+                              setFile(event.target.files[0]);
                             }}
                             name="gameFile"
                           />

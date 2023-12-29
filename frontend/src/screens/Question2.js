@@ -165,7 +165,7 @@ const Question2 = () => {
         </Helmet>
 
         <div className="wrap">
-          <form action="" id="formThree" onSubmit={onSubmit}>
+          <form id="formThree" onSubmit={onSubmit}>
             <section className="questionCard">
               <figure>
                 <Link to={customerId ? "/admin/users" : "/dashboard"}>

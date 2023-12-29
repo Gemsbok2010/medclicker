@@ -462,7 +462,7 @@ const upload = multer({
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   },
-}).single("gameFile");
+}).single("file");
 
 function checkFileType(file, cb) {
   //allowed ext
@@ -486,7 +486,7 @@ router.post("/upload", async (req, res) => {
       const user = await User.findOne({ email });
 
       if (req.file === undefined) {
-        res.redirect(process.env.FRONTEND_URL + "adminusers/" + user._id);
+        res.json({ invalid: "No files or file not accepted." });
       } else {
         const result = await uploadFile(req.file);
         await unlinkFile(req.file.path);
@@ -500,7 +500,7 @@ router.post("/upload", async (req, res) => {
         }).then(function () {
           User.findOne({ email: req.query.email }).then(function (storedUser) {
             storedUser.save(() => {
-              res.redirect(process.env.FRONTEND_URL + "adminusers/" + user._id);
+              res.json({ newImage: result.Location });
             });
           });
         });
@@ -517,7 +517,7 @@ router.post("/upload-locum", async (req, res) => {
     const locum = await Locum.findOne({ email });
 
     if (req.file === undefined) {
-      res.redirect(process.env.FRONTEND_URL + "adminlocum/" + locum.locumId);
+      res.json({ invalid: "No files or file not accepted." });
     } else {
       const result = await uploadFile(req.file);
       await unlinkFile(req.file.path);
@@ -532,9 +532,7 @@ router.post("/upload-locum", async (req, res) => {
       }).then(function () {
         Locum.findOne({ email: req.query.email }).then(function (storedLocum) {
           storedLocum.save(() => {
-            res.redirect(
-              process.env.FRONTEND_URL + "adminlocum/" + locum.locumId
-            );
+            res.json({ newImage: result.Location });
           });
         });
       });

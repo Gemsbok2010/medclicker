@@ -937,7 +937,7 @@ const AlistingsEdit = () => {
                 Posted: {list.todaysDate}
               </h3>
             </div>
-            <form action="" onSubmit={onSubmit}>
+            <form onSubmit={onSubmit}>
               <div className="flexwrap">
                 <div className="groupThree">
                   <div className="checkBoxGroup">
