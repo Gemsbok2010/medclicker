@@ -477,7 +477,7 @@ const locumValidation = (data) => {
     isLocum: Joi.boolean(),
     newsletter: Joi.boolean(),
     SMStext: Joi.boolean(),
-    photo: Joi.string(),
+    photo: Joi.string().allow(""),
   });
   return schema.validate(data);
 };

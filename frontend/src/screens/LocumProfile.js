@@ -292,7 +292,7 @@ const LocumProfile = () => {
 
     const formData = new FormData();
     formData.append("file", file);
-    console.log("hereXXX");
+    console.log(formData, process.env.REACT_APP_BACKEND_URL);
     fetch(
       `https://medclicker.com.au/api/locums/upload?email=${userInfo.email}`,
       {
