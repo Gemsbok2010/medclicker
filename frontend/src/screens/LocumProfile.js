@@ -292,10 +292,9 @@ const LocumProfile = () => {
 
     const formData = new FormData();
     formData.append("file", file);
-
+    console.log("hereXXX");
     fetch(
-      process.env.REACT_APP_BACKEND_URL +
-        `api/locums/upload?email=${userInfo.email}`,
+      `https://medclicker.com.au/api/locums/upload?email=${userInfo.email}`,
       {
         method: "POST",
         body: formData,
@@ -308,6 +307,7 @@ const LocumProfile = () => {
         } else {
           setUpdateNote(true);
           setIdPhoto(data.newImage);
+          console.log("photo");
           window.scrollTo({
             top: 0,
             behavior: "smooth",
@@ -860,7 +860,7 @@ const LocumProfile = () => {
                               Save Photo
                             </button>
                           ) : (
-                            <button type="submit" disabled id="savePhoto">
+                            <button type="button" disabled id="savePhoto">
                               Save Photo
                             </button>
                           )}
