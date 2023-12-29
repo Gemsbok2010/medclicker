@@ -625,7 +625,7 @@ const applicationValidation = (data) => {
     phone: Joi.string(),
     locum_startDate: Joi.string(),
     locum_finishDate: Joi.string(),
-    photo: Joi.string(),
+    photo: Joi.string().allow(""),
     isLocum: Joi.boolean(),
     streetNo: Joi.string().trim().min(1).max(10).allow(""),
     street: Joi.string().trim().min(1).max(50),
