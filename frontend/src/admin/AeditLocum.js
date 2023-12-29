@@ -384,7 +384,7 @@ const AeditLocum = () => {
     const formData = new FormData();
     formData.append("file", file);
 
-    console.log(...formData);
+  
 
     fetch(
       process.env.REACT_APP_BACKEND_URL +
