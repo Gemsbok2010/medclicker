@@ -12,7 +12,6 @@ const passport = require("passport");
 const path = require("path");
 const server = http.createServer(app);
 const cors = require("cors");
-const { WebSocketServer } = require("ws");
 
 app.use(
   session({
