@@ -502,7 +502,7 @@ router.get("/candidate/:nanoslug", async (req, res) => {
 
 //Set Storage Engine
 const storage = multer.diskStorage({
-  destination: "./frontend/public/resumes/",
+  // destination: "./frontend/public/resumes/",
   filename: function (req, file, cb) {
     cb(
       null,

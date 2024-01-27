@@ -139,9 +139,9 @@ router.post("/upload", async (req, res) => {
       if (req.file === undefined) {
         res.json({ invalid: "No files or file not accepted." });
       } else {
-        // const result = await uploadFile(req.file);
+        const result = await uploadFile(req.file);
 
-        // await unlinkFile(req.file.path);
+        await unlinkFile(req.file.path);
 
         let set = {};
         set["filename"] = result.Location;
@@ -166,5 +166,7 @@ router.post("/upload", async (req, res) => {
     res.status(400).json({ err });
   }
 });
+
+
 
 module.exports = router;
