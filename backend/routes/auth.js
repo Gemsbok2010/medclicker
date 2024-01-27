@@ -12,7 +12,7 @@ router.post("/signup", async (req, res) => {
   try {
     //LETS VALIDATE THE DATA BEFORE
     const { error } = signUpValidation(req.body);
-    console.log(error);
+
     if (error)
       return res.status(400).json({ invalid: error.details[0].message });
 

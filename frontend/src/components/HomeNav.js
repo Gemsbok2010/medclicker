@@ -5,14 +5,16 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { ReactSession } from "react-client-session";
 import axios from "axios";
 import { FiEyeOff, FiEye } from "react-icons/fi";
-
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { login } from "../redux/userInfo";
-
+import { Cookies } from "react-cookie";
 // Three dots
 import { ThreeDots } from "react-loader-spinner";
 import { HiOutlineXCircle } from "react-icons/hi";
+
+// set up cookies
+const cookies = new Cookies();
 
 const HomeNav = () => {
   const location = useLocation();
@@ -22,7 +24,7 @@ const HomeNav = () => {
   const [openDropDown, setOpenDropDown] = useState(false);
   const [openHamburger, setOpenHamburger] = useState(false);
   const user = useSelector((state) => state.userInfo.value);
-
+  console.log(user, "user");
   ReactSession.setStoreType("localStorage");
   const [listOfProfessions, setListOfProfessions] = useState([]);
   const [showemp, setShowEmp] = useState(false);
@@ -32,6 +34,7 @@ const HomeNav = () => {
 
   const onNext = (e) => {
     e.preventDefault();
+
     localStorage.setItem("professions", profession);
     localStorage.setItem("contractType", contractType);
     if (localStorage.getItem("contractType") === "Locum") {
@@ -108,7 +111,7 @@ const HomeNav = () => {
   const onLoginForm = async (e) => {
     e.preventDefault();
     setIsloaded(true);
-    fetch("https://medclicker.com.au/api/auth/login", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/auth/login", {
       method: "POST",
       credentials: "include",
       headers: { "Content-type": "application/json" },
@@ -188,6 +191,7 @@ const HomeNav = () => {
     }
 
     // ============ PROFILE DATA ===========
+
     if (id) {
       axios
         .get(
@@ -237,7 +241,7 @@ const HomeNav = () => {
       ReactSession.remove("email");
     }
     setTimeout(() => {
-      fetch("https://medclicker.com.au/api/auth/login", {
+      fetch(process.env.REACT_APP_BACKEND_URL + "api/auth/login", {
         method: "POST",
         credentials: "include",
         headers: { "Content-type": "application/json" },
@@ -442,8 +446,8 @@ const HomeNav = () => {
                               >
                                 Facebook Login
                               </ExternalLink>
-                            </button>
-                            <p className="nonselect">or</p> */}
+                            </button> 
+                             <p className="nonselect">or</p> */}
                             <button className="nonselect" id="google-login">
                               <img
                                 src="/images/googlelogin.png"

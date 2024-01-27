@@ -6,7 +6,9 @@ const url = require("url");
 const fs = require("fs-extra");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
-require("dotenv/config");
+// const app = express();
+// const fileUpload = require("express-fileupload");
+// app.use(fileUpload());
 
 // Imports
 const User = require("../models/userModel");
@@ -29,15 +31,13 @@ router.get("/allusers/:id", async (req, res) => {
   }
 });
 
-//==================== UPDATE IN ALLUSERS =================
+//==================== UPDATE IN PERSONAL DETAILS =================
 router.put("/allusers", async (req, res, next) => {
   try {
     const { error } = detailsValidation(req.body);
 
     if (error)
       return res.status(400).json({ invalid: error.details[0].message });
-
-    const streetNo = req.body.streetNo;
 
     const email = req.body.email;
 
@@ -107,6 +107,14 @@ const upload = multer({
   },
 }).single("file");
 
+// const storage = multer.diskStorage({
+//   destination: "./frontend/public/uploads/",
+// });
+
+// const opload = multer({
+//   dest: "./frontend/public/uploads/",
+// });
+
 function checkFileType(file, cb) {
   //allowed ext
   const filetypes = /jpeg|jpg|png|gif/;
@@ -131,9 +139,9 @@ router.post("/upload", async (req, res) => {
       if (req.file === undefined) {
         res.json({ invalid: "No files or file not accepted." });
       } else {
-        const result = await uploadFile(req.file);
+        // const result = await uploadFile(req.file);
 
-        await unlinkFile(req.file.path);
+        // await unlinkFile(req.file.path);
 
         let set = {};
         set["filename"] = result.Location;
@@ -141,13 +149,17 @@ router.post("/upload", async (req, res) => {
 
         User.findByIdAndUpdate(user._id, {
           filename: result.Location,
-        }).then(function () {
-          User.findOne({ email: req.query.email }).then(function (storedUser) {
-            storedUser.save(() => {
-              res.json({ storedUser: storedUser, newImage: result.Location });
+        })
+          .then(function () {
+            User.findOne({ email: req.query.email }).then(function (
+              storedUser
+            ) {
+              storedUser.save(() => {
+                res.json({ storedUser: storedUser, newImage: result.Location });
+              });
             });
-          });
-        });
+          })
+          .catch((err) => res.json({ err }));
       }
     });
   } catch (err) {
