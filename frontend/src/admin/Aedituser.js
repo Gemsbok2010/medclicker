@@ -290,8 +290,6 @@ const Aedituser = () => {
     const formData = new FormData();
     formData.append("file", file);
 
-    
-
     fetch(
       process.env.REACT_APP_BACKEND_URL +
         `api/admin/upload?email=${userInfo.email}`,
@@ -304,8 +302,10 @@ const Aedituser = () => {
       .then((data) => {
         if (data.invalid) {
           outPutErrorMessagesInAllusers(data.invalid);
+          setAlert(false);
         } else {
           setUpdateNote(true);
+          setAlert(false);
           setIdPhoto(data.newImage);
           window.scrollTo({
             top: 0,
@@ -549,7 +549,7 @@ const Aedituser = () => {
             content="Medclicker Personal Details for editing"
           />
         </Helmet>
-        <LoggedInNavbarByAdmin />
+        <LoggedInNavbarByAdmin photo={idPhoto} />
         <div className="personal_details">
           <h2>Personal information</h2>
         </div>

@@ -226,14 +226,17 @@ router.post("/upload", async (req, res) => {
 
       Locum.findByIdAndUpdate(user._id, {
         filename: result.Location,
-      }).then(function () {
-        Locum.findOne({ email: req.query.email }).then(function (storedLocum) {
-          storedLocum.save(() => {
-            res.send(storedLocum);
-            // res.json({ newImage: result.Location });
+      })
+        .then(function () {
+          Locum.findOne({ email: req.query.email }).then(function (
+            storedLocum
+          ) {
+            storedLocum.save(() => {
+              res.json({ newImage: result.Location });
+            });
           });
-        });
-      });
+        })
+       ;
     }
   });
 });

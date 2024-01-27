@@ -7,12 +7,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
+// Three dots
+import { ThreeDots } from "react-loader-spinner";
+
 const Ad_details_std = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const slug = pathname.split("/")[2];
   const [list, setList] = useState({});
-
+  const [isloaded, setIsloaded] = useState(false);
   const user = useSelector((state) => state.userInfo.value);
 
   // ============ AHPRA =============
@@ -161,7 +164,7 @@ const Ad_details_std = () => {
 
   const fileSubmit = (e) => {
     e.preventDefault();
-
+    setIsloaded(true);
     const formData = new FormData();
     formData.append("resumeFile", file);
 
@@ -176,6 +179,7 @@ const Ad_details_std = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.storedApplication) {
+          setIsloaded(false);
           navigate("/applicationSent");
         }
       })
@@ -186,7 +190,7 @@ const Ad_details_std = () => {
 
   const filesSubmit = (e) => {
     e.preventDefault();
-
+    setIsloaded(true);
     const formData = new FormData();
 
     for (let i = 0; i < files.length; i++) {
@@ -204,6 +208,7 @@ const Ad_details_std = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.storedApplication) {
+          setIsloaded(false);
           navigate("/applicationSent");
         }
       })
@@ -429,7 +434,22 @@ const Ad_details_std = () => {
                 user.isLoggedIn ? (
                   verifyEmail !== user.email ? (
                     status && ahpra && selectedFile ? (
-                      <input type="submit" className="btn-med" value="Apply" />
+                      !isloaded ? (
+                        <input
+                          type="submit"
+                          className="btn-med"
+                          value="Apply"
+                        />
+                      ) : (
+                        <button className="btn-dots">
+                          <ThreeDots
+                            type="ThreeDots"
+                            height={40}
+                            width={80}
+                            color={"white"}
+                          />
+                        </button>
+                      )
                     ) : (
                       <input
                         type="button"
@@ -916,6 +936,24 @@ const Ad_details_std = () => {
             border: none;
           }
 
+          .wrap .btn-dots {
+            position: relative;
+            width: 100%;
+            top: 6%;
+            outline: none;
+            height: 48px;
+            border-radius: 4px;
+            background-color: #14a248;
+            color: #fff;
+            border: 1px solid #14a248;
+            position: relative;
+            width: 100%;
+            top: 6%;
+            outline: none;
+            display: flex;
+            justify-content: center;
+          }
+
           .btn-inactiveLoggedIn,
           .appliedbefore {
             height: 48px;
@@ -973,7 +1011,7 @@ const Ad_details_std = () => {
           @media only screen and (min-width: 768px) {
             .btn-med {
               width: 100%;
-              top: 5%;
+              top: 6%;
             }
 
             .bottomBtn {

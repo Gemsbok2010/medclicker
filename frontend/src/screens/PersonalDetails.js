@@ -381,8 +381,10 @@ const PersonalDetails = () => {
       .then((data) => {
         if (data.invalid) {
           outPutErrorMessagesInAllusers(data.invalid);
+          setAlert(false);
         } else {
           setUpdateNote(true);
+          setAlert(false);
           setIdPhoto(data.newImage);
           dispatch(
             login({

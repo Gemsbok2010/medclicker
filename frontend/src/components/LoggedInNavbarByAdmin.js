@@ -4,14 +4,13 @@ import { ReactSession } from "react-client-session";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 
-const LoggedInNavbar = () => {
+const LoggedInNavbar = ({ photo }) => {
   ReactSession.setStoreType("sessionStorage");
 
   const [dropDown, setDropDown] = useState(false);
   const [contractType, setContractType] = useState("");
   const { pathname } = useLocation();
   const userid = pathname.split("/")[2];
-  const [idPhoto, setIdPhoto] = useState("");
   const [customerId, setCustomerId] = useState(pathname.split("/")[2]);
 
   useEffect(() => {
@@ -25,7 +24,6 @@ const LoggedInNavbar = () => {
       .get(process.env.REACT_APP_BACKEND_URL + "api/users/allusers/" + userid)
       .then((response) => {
         if (response.status === 200) {
-          setIdPhoto(response.data.filename);
           ReactSession.set("customerId", customerId);
         }
       });
@@ -50,7 +48,7 @@ const LoggedInNavbar = () => {
           }}
         >
           <figure className="smallPhoto">
-            <img src={idPhoto} alt="" />
+            <img src={photo} alt="" />
           </figure>
 
           {dropDown ? (
