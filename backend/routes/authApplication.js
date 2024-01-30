@@ -502,7 +502,7 @@ router.get("/candidate/:nanoslug", async (req, res) => {
 
 //Set Storage Engine
 const storage = multer.diskStorage({
-  // destination: "./frontend/public/resumes/",
+  destination: "./frontend/public/resumes/",
   filename: function (req, file, cb) {
     cb(
       null,
@@ -514,7 +514,7 @@ const storage = multer.diskStorage({
 // Init upload SINGLE FILE
 const uploadSingle = multer({
   storage: storage,
-  limits: { fileSize: 10000000 },
+  limits: { fileSize: 1000000 },
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   },
@@ -523,7 +523,7 @@ const uploadSingle = multer({
 // Init upload MULTIPLE FILES
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 10000000 },
+  limits: { fileSize: 3000000 },
   fileFilter: function (req, file, cb) {
     checkFileType(file, cb);
   },
@@ -558,7 +558,10 @@ router.post("/singleUpload", async (req, res) => {
   try {
     uploadSingle(req, res, async (err) => {
       if (req.file === undefined) {
-        res.json({ invalid: "No files or file not accepted." });
+        res.json({
+          invalid:
+            "Error: Attached file exceeded size limit or file not accepted. Please enclose an alternative file. ",
+        });
       } else {
         const result = await uploadResume(req.file);
         await unlinkFile(req.file.path);
@@ -618,7 +621,10 @@ router.post("/upload", async (req, res) => {
   try {
     upload(req, res, async (err) => {
       if (req.files === undefined) {
-        res.json({ invalid: "No files or file not accepted." });
+        res.json({
+          invalid:
+            "Error: Attached file exceeded size limit or file not accepted. Please enclose an alternative file. ",
+        });
       } else {
         const result = await uploadResume(req.files[0]);
         await unlinkFile(req.files[0].path);

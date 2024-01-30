@@ -1126,10 +1126,6 @@ const Footer = ({ asx }) => {
           margin: 0px;
         }
 
-        input[type="checkbox"] {
-          display: none;
-        }
-
         .container {
           text-align: left;
         }

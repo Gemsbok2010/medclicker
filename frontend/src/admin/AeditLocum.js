@@ -384,8 +384,6 @@ const AeditLocum = () => {
     const formData = new FormData();
     formData.append("file", file);
 
-  
-
     fetch(
       process.env.REACT_APP_BACKEND_URL +
         `api/admin/upload-locum?email=${userInfo.email}`,

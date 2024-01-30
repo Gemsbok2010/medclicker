@@ -138,6 +138,16 @@ const Ad_details_std = () => {
       });
   }, [files]);
 
+  // ========== ERROR MESSAGE ===============
+
+  const [updateNote, setUpdateNote] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  function outPutErrorMessage(errorMessage) {
+    setUpdateNote(true);
+    setErrorMsg(errorMessage);
+  }
+
   // ============ UPLOAD FILE ===========
   const [selectedFile, setSelectedFile] = useState(false);
   const [selectedCover, setSelectedCover] = useState(false);
@@ -178,6 +188,10 @@ const Ad_details_std = () => {
     )
       .then((res) => res.json())
       .then((data) => {
+        if (data.invalid) {
+          outPutErrorMessage(data.invalid);
+          setIsloaded(false);
+        }
         if (data.storedApplication) {
           setIsloaded(false);
           navigate("/applicationSent");
@@ -207,6 +221,10 @@ const Ad_details_std = () => {
     )
       .then((res) => res.json())
       .then((data) => {
+        if (data.invalid) {
+          outPutErrorMessage(data.invalid);
+          setIsloaded(false);
+        }
         if (data.storedApplication) {
           setIsloaded(false);
           navigate("/applicationSent");
@@ -275,11 +293,30 @@ const Ad_details_std = () => {
             </div>
 
             <form
-              id="selectdate"
+              id={!updateNote ? "selectdate" : "selectdateError"}
               onSubmit={
                 selectedFile && selectedCover ? filesSubmit : fileSubmit
               }
             >
+              {updateNote ? (
+                <div className="updateNote">
+                  <img
+                    src="/images/cross-black.png"
+                    alt=""
+                    style={{
+                      width: "14px",
+                      cursor: "pointer",
+                      marginRight: "2px",
+                    }}
+                    onClick={() => {
+                      setUpdateNote(false);
+                    }}
+                  />
+                  <span dangerouslySetInnerHTML={{ __html: errorMsg }}></span>
+                </div>
+              ) : (
+                ""
+              )}
               <div className="container-price">
                 <h2>
                   Application
@@ -675,6 +712,18 @@ const Ad_details_std = () => {
             box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
           }
 
+          #selectdateError {
+            width: 470px;
+            height: 535px;
+            background-color: white;
+            position: relative;
+            margin: 30px auto 0px;
+            border: 1px solid #ebebeb;
+            padding: 5px 20px 15px;
+            -webkit-box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
+            box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
+          }
+
           .container-price {
             position: relative;
             width: 100%;
@@ -689,6 +738,16 @@ const Ad_details_std = () => {
           }
 
           /* ============== COVER LETTER & CV =============== */
+
+          .wrap .updateNote {
+            background-color: #fcebcd;
+            margin: 5px auto;
+            padding: 7px;
+          }
+          .wrap .updateNote a {
+            font-weight: 700;
+            color: #14a248;
+          }
 
           #cover-letter,
           #resume {
@@ -1100,6 +1159,15 @@ const Ad_details_std = () => {
             #selectdate {
               width: 400px;
               height: 485px;
+              display: inline-block;
+              margin-top: 0px;
+              position: fixed;
+              margin-left: 700px;
+              padding: 5px 20px 15px;
+            }
+            #selectdateError {
+              width: 400px;
+              height: 535px;
               display: inline-block;
               margin-top: 0px;
               position: fixed;

@@ -107,13 +107,7 @@ const upload = multer({
   },
 }).single("file");
 
-// const storage = multer.diskStorage({
-//   destination: "./frontend/public/uploads/",
-// });
 
-// const opload = multer({
-//   dest: "./frontend/public/uploads/",
-// });
 
 function checkFileType(file, cb) {
   //allowed ext
