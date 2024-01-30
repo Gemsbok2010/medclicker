@@ -131,7 +131,7 @@ router.post("/upload", async (req, res) => {
       const user = await User.findOne({ email });
 
       if (req.file === undefined) {
-        res.json({ invalid: "No files or file not accepted." });
+        res.json({ invalid: "File not accepted." });
       } else {
         const result = await uploadFile(req.file);
 
