@@ -562,6 +562,11 @@ router.post("/singleUpload", async (req, res) => {
           invalid:
             "Error: Attached file exceeded size limit or file not accepted. Please enclose an alternative file. ",
         });
+      } else if (err) {
+        res.status(413).json({
+          invalid:
+            "Error: Attached file exceeded size limit or file not accepted. Please enclose an alternative file. ",
+        });
       } else {
         const result = await uploadResume(req.file);
         await unlinkFile(req.file.path);
@@ -606,14 +611,14 @@ router.post("/singleUpload", async (req, res) => {
   }
 });
 
-// =========== MUTILPLE RESUME AND COVER LETTER UPLOAD ===============
+// ========= MUTILPLE RESUME AND COVER LETTER UPLOAD ===========
 router.post("/upload", async (req, res) => {
   const email = req.query.email;
   const candidate = await User.findOne({ email: email });
 
   const caseId = req.query.caseId;
   const list = await Listing.findOne({ caseId: caseId });
-
+  console.log(req.files);
   // Generate local timezone for MongoDB
   let dt = new Date();
   dt = dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
@@ -622,6 +627,11 @@ router.post("/upload", async (req, res) => {
     upload(req, res, async (err) => {
       if (req.files === undefined) {
         res.json({
+          invalid:
+            "Error: Attached file exceeded size limit or file not accepted. Please enclose an alternative file. ",
+        });
+      } else if (err) {
+        res.status(413).json({
           invalid:
             "Error: Attached file exceeded size limit or file not accepted. Please enclose an alternative file. ",
         });
