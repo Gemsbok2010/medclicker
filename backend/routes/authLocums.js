@@ -13,7 +13,7 @@ const rapid = require("eway-rapid");
 
 const apiKey = process.env.API_KEY,
   password = process.env.API_PASSWORD,
-  rapidEndpoint = "Sandbox"; // Use 'Production' when you go live
+  rapidEndpoint = "Production"; // Use 'Production' when you go live
 
 const generateInvoice = generate.numbers(6);
 
