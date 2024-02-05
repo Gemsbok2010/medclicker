@@ -24,7 +24,7 @@ const HomeNav = () => {
   const [openDropDown, setOpenDropDown] = useState(false);
   const [openHamburger, setOpenHamburger] = useState(false);
   const user = useSelector((state) => state.userInfo.value);
-  console.log(user, "user");
+
   ReactSession.setStoreType("localStorage");
   const [listOfProfessions, setListOfProfessions] = useState([]);
   const [showemp, setShowEmp] = useState(false);

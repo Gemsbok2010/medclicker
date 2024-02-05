@@ -257,7 +257,7 @@ router.get("/search", async (req, res) => {
     let maxPage = Math.ceil(num / perPage);
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
     try {
       const adPosts = await Listing.find(match)
         .sort({ createdAt: sort })
@@ -460,7 +460,7 @@ router.get("/listingmanager", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
     try {
       const adPosts = await Listing.find(match)
         .sort({ createdAt: sort })

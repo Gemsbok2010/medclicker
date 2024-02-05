@@ -117,8 +117,7 @@ const Calendar = () => {
           top: 0,
           behavior: "smooth",
         });
-        console.log(data.applications, "apply");
-        console.log(data.adPosts, "list");
+
         setListingInfo(data.adPosts);
         setApplications(data.applications);
       }
@@ -157,7 +156,6 @@ const Calendar = () => {
   const [sun_rate, setSun_rate] = useState("");
 
   const panelDisplay = (e, app, list) => {
-    console.log(e, app, list);
     setShowInfo(false);
     setThisId(app._id);
     setAvailable_start(app.available_start);

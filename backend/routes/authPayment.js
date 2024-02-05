@@ -112,7 +112,7 @@ router.post("/nopayment", async (req, res) => {
     jobSeekerEmail: candidate.email,
   });
 
-  console.log(payment, "payment");
+
 
   const logo = "https://i.ibb.co/1KgVNwJ/medclicker.png";
   const mc = "https://i.ibb.co/TrWvXBB/mc.png";
@@ -290,7 +290,7 @@ router.put("/finalise", async (req, res) => {
     jobSeekerEmail: candidate.email,
   });
 
-  console.log(payment, "payment");
+
 
   const logo = "https://i.ibb.co/1KgVNwJ/medclicker.png";
   const thisyear = moment().format("YYYY");
@@ -769,8 +769,6 @@ router.put("/regFinalise", async (req, res) => {
 
   const storedList = await list.save();
 
-  console.log(storedList);
-
   const payment = new Payment({
     isPaid: req.body.isPaid,
     invoiceNumber: req.body.invoiceNumber,
@@ -795,8 +793,6 @@ router.put("/regFinalise", async (req, res) => {
     latitude: user.latitude,
     longitude: user.longitude,
   });
-
-  console.log(payment, "payment");
 
   const logo = "https://i.ibb.co/1KgVNwJ/medclicker.png";
   const thisyear = moment().format("YYYY");
@@ -964,8 +960,6 @@ router.post("/free", async (req, res) => {
 
   const storedList = await list.save();
 
-  console.log(storedList);
-
   const payment = new Payment({
     isPaid: req.body.isPaid,
     invoiceNumber: "INV" + generateInvoice + list.state,
@@ -990,8 +984,6 @@ router.post("/free", async (req, res) => {
     latitude: user.latitude,
     longitude: user.longitude,
   });
-
-  console.log(payment, "payment");
 
   const logo = "https://i.ibb.co/1KgVNwJ/medclicker.png";
   const thisyear = moment().format("YYYY");
@@ -1147,7 +1139,7 @@ router.get("/invoices", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+  
     try {
       const invoices = await Payment.find(match)
         .sort({ createdAt: sort })
@@ -1228,7 +1220,6 @@ router.get("/sortinvoices", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
 
     try {
       const invoices = await Payment.find(match)

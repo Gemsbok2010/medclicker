@@ -11,7 +11,7 @@ router.put("/plans", async (req, res, next) => {
       req.body.freeDays === null || req.body.freeDays === ""
         ? (req.body.freeDays = 30)
         : req.body.freeDays;
-      console.log(req.body.freeDays);
+
       PaymentPlans.findByIdAndUpdate(req.body._id, req.body).then(function () {
         PaymentPlans.findById(req.body._id).then(function (savedPlan) {
           savedPlan.save();
@@ -85,7 +85,6 @@ router.put("/plans", async (req, res, next) => {
         locumPayment: req.body.locumPayment,
       });
       const savedPlan = await payment.save();
-      console.log(savedPlan);
       res.send(savedPlan);
     }
   } catch (err) {

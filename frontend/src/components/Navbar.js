@@ -645,7 +645,7 @@ const Navbar = () => {
           position: absolute;
           width: 100%;
           top: 50%;
-          left: 35%;
+          left: 50%;
           height: 100%;
           transform: translate(0%, -50%);
           display: none;

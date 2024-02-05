@@ -30,7 +30,7 @@ router.post("/fireSMS", async (req, res) => {
   const subscribers = await Locum.find(match);
   const noOfSubscribers = await Locum.find(match).countDocuments();
 
-  console.log(match, "match", noOfSubscribers, subscribers);
+
 
   if (noOfSubscribers === 0) {
     res.json({ noOfSubscribers });

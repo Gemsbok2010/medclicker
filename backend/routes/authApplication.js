@@ -248,7 +248,7 @@ router.get("/applicationsmanager", async (req, res) => {
         slugId: req.query.slug,
       }).sort({ createdAt: "desc" });
 
-      console.log(match, "match");
+
 
       const professions = await Profession.find({ showProfession: true });
 
@@ -338,7 +338,7 @@ router.get("/getList", async (req, res) => {
       }
       match["slug"] = slugArr;
 
-      console.log(match, "match");
+
       const professions = await Profession.find({ showProfession: true });
       const num = await Listing.find(match).countDocuments();
       let perPage = 10;
@@ -426,7 +426,7 @@ router.get("/myapplications/:slug", async (req, res) => {
       }
       match["slug"] = slugArr;
 
-      console.log(match, "match");
+
 
       const num = await Listing.find(match).countDocuments();
       let perPage = 10;
@@ -618,7 +618,7 @@ router.post("/upload", async (req, res) => {
 
   const caseId = req.query.caseId;
   const list = await Listing.findOne({ caseId: caseId });
-  console.log(req.files);
+
   // Generate local timezone for MongoDB
   let dt = new Date();
   dt = dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
@@ -727,7 +727,7 @@ router.get("/noresponse", async (req, res, next) => {
     }
     match["slugId"] = array;
 
-    console.log(match, "match");
+   
 
     const thisAd = await Pub.find(match);
 
@@ -755,7 +755,7 @@ router.get("/hired", async (req, res, next) => {
     }
     match["slugId"] = array;
 
-    console.log(match, "match");
+  
 
     const thisAd = await Pub.find(match);
 
@@ -783,7 +783,7 @@ router.get("/nothired", async (req, res, next) => {
     }
     match["slugId"] = array;
 
-    console.log(match, "match");
+
 
     const thisAd = await Pub.find(match);
 
@@ -826,7 +826,7 @@ router.get("/agreements", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
     try {
       const contracts = await Pub.find(match)
         .sort({ createdAt: sort })
@@ -863,7 +863,7 @@ router.get("/thisAd", async (req, res, next) => {
     }
     match["slug"] = array;
 
-    console.log(match, "match");
+
 
     const thisAd = await Listing.find(match);
 
@@ -931,7 +931,7 @@ router.get("/sortagreements", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
 
     try {
       const contracts = await Pub.find(match)
@@ -1046,7 +1046,7 @@ router.get("/calendar", async (req, res) => {
     }
     match["slug"] = slugArr;
 
-    console.log(match, "match");
+
     const adPosts = await Listing.find(match);
 
     res.status(200).json({

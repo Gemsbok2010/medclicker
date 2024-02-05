@@ -376,8 +376,6 @@ router.get("/database", async (req, res) => {
       match["state"] = stateArr;
     }
 
-    console.log(match, "match");
-
     const num = await Locum.find(match).countDocuments();
 
     const professions = await Profession.find({
@@ -389,7 +387,7 @@ router.get("/database", async (req, res) => {
     let maxPage = Math.ceil(num / perPage);
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
     try {
       const locums = await Locum.find(match)
         .sort({ createdAt: sort })

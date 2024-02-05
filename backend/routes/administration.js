@@ -165,7 +165,6 @@ router.get("/contractType", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
     try {
       const professions = await Profession.find(match)
         .sort({ contractType: sort })
@@ -214,7 +213,6 @@ router.get("/sortnames", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
     try {
       const professions = await Profession.find(match)
         .sort({ professionName: sort })
@@ -274,7 +272,7 @@ router.get("/professions", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
     try {
       const professions = await Profession.find(match)
         .sort({ createdAt: sort })
@@ -570,7 +568,7 @@ router.get("/allusers", async (req, res) => {
     let maxPage = Math.ceil(total / perPage);
     const page =
       req.query.page && total > perPage ? parseInt(req.query.page) : 1;
-    console.log(match, "match");
+
 
     const blacklisted = await User.find({ isActive: false }).countDocuments();
 
@@ -658,7 +656,7 @@ router.get("/sortusers", async (req, res) => {
     const page =
       req.query.page && total > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
 
     const blacklisted = await User.find({ isActive: false }).countDocuments();
 
@@ -712,7 +710,7 @@ router.get("/alllocums", async (req, res) => {
     let maxPage = Math.ceil(total / perPage);
     const page =
       req.query.page && total > perPage ? parseInt(req.query.page) : 1;
-    console.log(match, "match");
+
     try {
       const locums = await Locum.find(match)
         .sort({ createdAt: sort })
@@ -802,7 +800,7 @@ router.get("/sortlocums", async (req, res) => {
     const page =
       req.query.page && total > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
 
     try {
       const locums = await Locum.find(match)
@@ -943,7 +941,7 @@ router.get("/payments", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
     try {
       const payments = await Payment.find(match)
         .sort({ createdAt: sort })
@@ -1037,7 +1035,7 @@ router.get("/sortpayments", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
     try {
       const payments = await Payment.find(match)
         .sort(thisSort)
@@ -1197,7 +1195,7 @@ router.get("/sortinvoices", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
     try {
       const payments = await Payment.find(match)
         .sort({ invoiceNumber: sort })
@@ -1431,7 +1429,7 @@ router.get("/listings", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
     try {
       const adPosts = await Listing.find(match)
         .sort({ createdAt: sort })
@@ -1633,7 +1631,7 @@ router.get("/sortcase", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
     try {
       const adPosts = await Listing.find(match)
         .sort(thisSort)
@@ -1703,7 +1701,6 @@ router.get("/locumsonly", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
     try {
       const adPosts = await Listing.find(match)
         .sort({ createdAt: sort })
@@ -1817,7 +1814,7 @@ router.get("/sortlocumcase", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
     try {
       const adPosts = await Listing.find(match)
         .sort(thisSort)
@@ -2156,7 +2153,6 @@ router.get("/applications", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
     try {
       const adPosts = await Pub.find(match)
         .sort({ createdAt: sort })
@@ -2260,7 +2256,6 @@ router.get("/sortapplications", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
 
     try {
       const adPosts = await Pub.find(match)
@@ -2315,7 +2310,7 @@ router.get("/locum_applications", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
     try {
       const adPosts = await Pub.find(match)
         .sort({ createdAt: sort })
@@ -2397,7 +2392,7 @@ router.get("/sortlocum_applications", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
 
     try {
       const adPosts = await Pub.find(match)
@@ -2469,7 +2464,7 @@ router.put("/homepage", async (req, res, next) => {
         commentator4: req.body.commentator4,
       });
       const savedPlan = await homepage.save();
-      console.log(savedPlan);
+
       res.send(savedPlan);
     }
   } catch (err) {
@@ -2503,7 +2498,7 @@ router.get("/footer", async (req, res) => {
 //=========== GET LOCATION FILTERS (from Asms.js) ===========
 router.get("/smslocums", async (req, res) => {
   Locum.paginate({}, {}).then(async (result) => {
-    console.log(req.query);
+
 
     let match = { SMStext: true, country: "Australia", isLocum: true };
 
@@ -2524,7 +2519,7 @@ router.get("/smslocums", async (req, res) => {
 
     // const professions = await Locum.find(match)
 
-    console.log(match, "match");
+   
     try {
       res.status(200).json({
         noOfSubscribers: noOfSubscribers,
@@ -2632,7 +2627,7 @@ router.get("/hired", async (req, res, next) => {
       isRejected: false,
     });
 
-    console.log(candidat);
+
 
     let array = [];
     for (var i = 0; i < candidat.length; i++) {
@@ -2640,8 +2635,6 @@ router.get("/hired", async (req, res, next) => {
       array.push(results);
     }
     match["slugId"] = array;
-
-    console.log(match, "match");
 
     const thisAd = await Pub.find(match);
 
@@ -2668,7 +2661,7 @@ router.get("/thisAd", async (req, res, next) => {
     }
     match["slug"] = array;
 
-    console.log(match, "match");
+
 
     const thisAd = await Listing.find(match);
 

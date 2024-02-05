@@ -776,7 +776,7 @@ function sendEmail(to, from, subject, text, attachments) {
   const msg = { to, from, subject, html: text, attachments };
   sgMail.send(msg, (err) => {
     if (err) {
-      console.log(err);
+
       console.log("Email not sent");
     } else {
       console.log(`Email sent to ${to} successfully`);
