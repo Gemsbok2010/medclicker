@@ -7,11 +7,13 @@ import { useSelector } from "react-redux";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import en from "date-fns/locale/en-AU";
+import { ReactSession } from "react-client-session";
 
 // Three dots
 import { ThreeDots } from "react-loader-spinner";
 
 const Ausers = () => {
+  ReactSession.setStoreType("sessionStorage");
   const user = useSelector((state) => state.userInfo.value);
   const [users, setUsers] = useState([]);
   const [total, setTotal] = useState([]);
@@ -512,6 +514,11 @@ const Ausers = () => {
     return () => {
       isCancelled = true;
     };
+  };
+
+  // ============= CLEAR CUSTOMER ID ================
+  const clearId = () => {
+    sessionStorage.clear();
   };
 
   // =========== CUSTOMISED CSV FILE ============
@@ -1150,7 +1157,8 @@ const Ausers = () => {
                                 process.env.REACT_APP_BACKEND_URL +
                                 `api/admin/users/${user._id}`
                               }
-                              target="_blank"
+                              target="_self"
+                              onClick={clearId}
                             >
                               <input type="button" value="Edit" />
                             </ExternalLink>

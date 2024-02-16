@@ -51,6 +51,10 @@ const Alistings = lazy(() => import("./admin/Alistings"));
 const AlistingsEdit = lazy(() => import("./admin/AlistingsEdit"));
 const AlistingsEditReg = lazy(() => import("./admin/AlistingsEditReg"));
 const Alocumlistings = lazy(() => import("./admin/Alocumlistings"));
+const Asearchlist = lazy(() => import("./admin/AsearchList"));
+const Aad_details = lazy(() => import("./admin/Aad_details"));
+const Aad_details_std = lazy(() => import("./admin/Aad_details_std"));
+const AapplicationSent = lazy(() => import("./admin/AapplicationSent"));
 
 //Screens
 const Question1 = lazy(() => import("./screens/Question1"));
@@ -126,8 +130,6 @@ function App() {
     });
   }, []);
 
- 
-
   function ScrollToTop() {
     const { pathname } = useLocation();
 
@@ -142,7 +144,6 @@ function App() {
   }
   return (
     <Router>
-
       <ScrollToTop />
       <IdleTimerContainer />
       <Suspense
@@ -212,6 +213,10 @@ function App() {
               element={<AlistingsEditReg />}
             />
           </Route>
+          <Route path="/admin/searchlist" element={<Asearchlist />} />
+          <Route path="/admin_post_locum/:slug" element={<Aad_details />} />
+          <Route path="/admin_post_std/:slug" element={<Aad_details_std />} />
+          <Route path="/admin_applicationsent" element={<AapplicationSent />} />
 
           {/* 2. BLOCKED WHEN ADMIN LOGGED IN */}
           <Route element={<ExcludePostLogin />}>

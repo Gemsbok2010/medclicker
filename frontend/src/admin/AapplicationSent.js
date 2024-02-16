@@ -1,11 +1,36 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Footer from "../components/Footer";
-import LoggedInNavbar from "../components/LoggedInNavbar";
-import { useSelector } from "react-redux";
+import LoggedInNavbarByAdmin from "../components/LoggedInNavbarByAdmin";
+import { ReactSession } from "react-client-session";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const ApplicationSent = () => {
-  const user = useSelector((state) => state.userInfo.value);
+const AapplicationSent = () => {
+  const navigate = useNavigate();
+  ReactSession.setStoreType("sessionStorage");
+  const [idPhoto, setIdPhoto] = useState("");
+  const [userid, setUserId] = useState("");
+
+  // ============ PROFILE DATA ===========
+  useEffect(() => {
+    setUserId(ReactSession.get("customerId"));
+    axios
+      .get(process.env.REACT_APP_BACKEND_URL + "api/users/allusers/" + userid)
+      .then((response) => {
+        if (response.status === 200) {
+          setIdPhoto(response.data.filename);
+        }
+      });
+  }, [userid]);
+
+  // ============= CLEAR CUSTOMER ID ================
+  const clearId = () => {
+    sessionStorage.clear();
+    navigate("/admin/users");
+  };
+
   return (
     <>
       <HelmetProvider>
@@ -14,15 +39,16 @@ const ApplicationSent = () => {
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>
-        <LoggedInNavbar />
+        <LoggedInNavbarByAdmin photo={idPhoto} />
         <div className="wrap">
           <section className="questionCard container">
             <figure>
-              <Link to="/">
+              <Link to="/admin/users">
                 <img
                   src="/images/medclicker.png"
                   alt="LOGO"
                   className="img-fluid"
+                  onClick={clearId}
                 />
               </Link>
             </figure>
@@ -30,17 +56,14 @@ const ApplicationSent = () => {
 
             <h2 className="mt-5 mb-4">Application Sent Successfully!</h2>
             <p>
-              <b>
-                Thank you, {user.firstName}. The employer has received your
-                application.
-              </b>
+              <b>The employer has received the application.</b>
             </p>
             <p>
-              <b>Good luck!</b>
+              <b>This was sent on behalf of the customer.</b>
             </p>
 
             <button className="btn-med">
-              <Link to="/applicationsmanager">Go to Application Manager</Link>
+              <Link to="/admin/users">Return to User Management</Link>
             </button>
           </section>
           <Footer />
@@ -236,4 +259,4 @@ const ApplicationSent = () => {
   );
 };
 
-export default ApplicationSent;
+export default AapplicationSent;

@@ -4,6 +4,7 @@ import $ from "jquery";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import LoggedInNavbarByAdmin from "../components/LoggedInNavbarByAdmin";
+import { ReactSession } from "react-client-session";
 import { ThreeDots } from "react-loader-spinner";
 
 import {
@@ -120,6 +121,7 @@ function Plan({ address, latitude, longitude, geoLocate }) {
 }
 
 const Aedituser = () => {
+  ReactSession.setStoreType("sessionStorage");
   const { pathname } = useLocation();
 
   const userid = pathname.split("/")[2];
@@ -136,8 +138,9 @@ const Aedituser = () => {
   const [idPhoto, setIdPhoto] = useState("");
   const [isloading, setIsloading] = useState(false);
 
+  // ============ PROFILE DATA ===========
   useEffect(() => {
-    // ============ PROFILE DATA ===========
+    ReactSession.set("customerId", userid);
     axios
       .get(process.env.REACT_APP_BACKEND_URL + "api/users/allusers/" + userid)
       .then((response) => {

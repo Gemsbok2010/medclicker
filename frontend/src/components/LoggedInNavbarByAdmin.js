@@ -1,43 +1,31 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ReactSession } from "react-client-session";
-import { useLocation } from "react-router-dom";
-import axios from "axios";
+
+import { useNavigate } from "react-router-dom";
+import { ExternalLink } from "react-external-link";
 
 const LoggedInNavbar = ({ photo }) => {
   ReactSession.setStoreType("sessionStorage");
-
+  const navigate = useNavigate();
   const [dropDown, setDropDown] = useState(false);
-  const [contractType, setContractType] = useState("");
-  const { pathname } = useLocation();
-  const userid = pathname.split("/")[2];
-  const [customerId, setCustomerId] = useState(pathname.split("/")[2]);
 
-  useEffect(() => {
-    setContractType(ReactSession.get("contractType"));
-    setCustomerId(ReactSession.get("customerId"));
-  }, []);
-
-  // ============ CUSTOMER DATA ===========
-  useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_BACKEND_URL + "api/users/allusers/" + userid)
-      .then((response) => {
-        if (response.status === 200) {
-          ReactSession.set("customerId", customerId);
-        }
-      });
-  }, []);
+  // ============= CLEAR CUSTOMER ID ================
+  const clearId = () => {
+    sessionStorage.clear();
+    navigate("/admin/users");
+  };
 
   return (
     <>
       <nav>
         <figure>
-          <Link to="/">
+          <Link to={"/admin/users"}>
             <img
               src="/images/medclicker.png"
               alt="Medclicker LOGO"
               className="img-fluid"
+              onClick={clearId}
             />
           </Link>
         </figure>
@@ -55,11 +43,15 @@ const LoggedInNavbar = ({ photo }) => {
             <div id="dropItem">
               <div className="dropwrap">
                 <div>
-                  {!contractType ? (
-                    <Link to={"/question1"}>Create Listing</Link>
-                  ) : (
-                    <Link to={"/question_continue"}>Create Listing</Link>
-                  )}
+                  <Link to={"/question1"}>Create Listing</Link>
+                </div>
+                <div>
+                  <Link to={"/admin/searchlist"}>Search Positions</Link>
+                </div>
+                <div>
+                  <ExternalLink href="/signout" target="_self">
+                    Log Out
+                  </ExternalLink>
                 </div>
               </div>
             </div>

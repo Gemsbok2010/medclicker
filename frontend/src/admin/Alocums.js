@@ -1072,7 +1072,7 @@ const Alocums = () => {
                           <td className="cell edit">
                             <div>
                               <ExternalLink
-                                target="_blank"
+                                target="_self"
                                 href={
                                   process.env.REACT_APP_BACKEND_URL +
                                   `api/admin/locumProfile/${locum.locumId}`

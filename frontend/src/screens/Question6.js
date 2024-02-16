@@ -381,7 +381,7 @@ const Question6 = () => {
                     src="/images/medclicker.png"
                     alt="LOGO"
                     className="img-fluid"
-                    onClick={customerId ? clearId : "#"}
+                    onClick={clearId}
                   />
                 </Link>
               </figure>

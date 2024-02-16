@@ -272,7 +272,6 @@ router.get("/professions", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-
     try {
       const professions = await Profession.find(match)
         .sort({ createdAt: sort })
@@ -569,7 +568,6 @@ router.get("/allusers", async (req, res) => {
     const page =
       req.query.page && total > perPage ? parseInt(req.query.page) : 1;
 
-
     const blacklisted = await User.find({ isActive: false }).countDocuments();
 
     try {
@@ -655,8 +653,6 @@ router.get("/sortusers", async (req, res) => {
 
     const page =
       req.query.page && total > perPage ? parseInt(req.query.page) : 1;
-
-
 
     const blacklisted = await User.find({ isActive: false }).countDocuments();
 
@@ -800,8 +796,6 @@ router.get("/sortlocums", async (req, res) => {
     const page =
       req.query.page && total > perPage ? parseInt(req.query.page) : 1;
 
-
-
     try {
       const locums = await Locum.find(match)
         .sort(thisSort)
@@ -941,7 +935,6 @@ router.get("/payments", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-
     try {
       const payments = await Payment.find(match)
         .sort({ createdAt: sort })
@@ -1034,7 +1027,6 @@ router.get("/sortpayments", async (req, res) => {
     let maxPage = Math.ceil(num / perPage);
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
-
 
     try {
       const payments = await Payment.find(match)
@@ -1194,7 +1186,6 @@ router.get("/sortinvoices", async (req, res) => {
     let maxPage = Math.ceil(num / perPage);
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
-
 
     try {
       const payments = await Payment.find(match)
@@ -1429,7 +1420,6 @@ router.get("/listings", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-
     try {
       const adPosts = await Listing.find(match)
         .sort({ createdAt: sort })
@@ -1631,7 +1621,6 @@ router.get("/sortcase", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-
     try {
       const adPosts = await Listing.find(match)
         .sort(thisSort)
@@ -1813,7 +1802,6 @@ router.get("/sortlocumcase", async (req, res) => {
     let maxPage = Math.ceil(num / perPage);
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
-
 
     try {
       const adPosts = await Listing.find(match)
@@ -2256,7 +2244,6 @@ router.get("/sortapplications", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-
     try {
       const adPosts = await Pub.find(match)
         .sort(thisSort)
@@ -2309,7 +2296,6 @@ router.get("/locum_applications", async (req, res) => {
     let maxPage = Math.ceil(num / perPage);
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
-
 
     try {
       const adPosts = await Pub.find(match)
@@ -2391,8 +2377,6 @@ router.get("/sortlocum_applications", async (req, res) => {
     let maxPage = Math.ceil(num / perPage);
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
-
-
 
     try {
       const adPosts = await Pub.find(match)
@@ -2498,8 +2482,6 @@ router.get("/footer", async (req, res) => {
 //=========== GET LOCATION FILTERS (from Asms.js) ===========
 router.get("/smslocums", async (req, res) => {
   Locum.paginate({}, {}).then(async (result) => {
-
-
     let match = { SMStext: true, country: "Australia", isLocum: true };
 
     // Location (STATE ONLY)
@@ -2519,7 +2501,6 @@ router.get("/smslocums", async (req, res) => {
 
     // const professions = await Locum.find(match)
 
-   
     try {
       res.status(200).json({
         noOfSubscribers: noOfSubscribers,
@@ -2627,8 +2608,6 @@ router.get("/hired", async (req, res, next) => {
       isRejected: false,
     });
 
-
-
     let array = [];
     for (var i = 0; i < candidat.length; i++) {
       var results = candidat[i].slugId;
@@ -2661,13 +2640,28 @@ router.get("/thisAd", async (req, res, next) => {
     }
     match["slug"] = array;
 
-
-
     const thisAd = await Listing.find(match);
 
     res.status(200).json({ thisAd: thisAd });
   } catch (err) {
     res.status(500).json(err);
+  }
+});
+
+//=========== VIEW OR REDIRECT TO AD DETAILS ============
+// (from Asearchlist.js)
+//View by Slug Number page
+router.get("/adPosts/:slug", async (req, res) => {
+  const post = await Listing.findOne({ slug: req.params.slug });
+
+  if (post.contractType === "Locum") {
+    res.redirect(
+      process.env.FRONTEND_URL + "admin_post_locum/" + req.params.slug
+    );
+  } else {
+    res.redirect(
+      process.env.FRONTEND_URL + "admin_post_std/" + req.params.slug
+    );
   }
 });
 
