@@ -33,7 +33,6 @@ const Ahomepage = lazy(() => import("./admin/Ahomepage"));
 const Adashboard = lazy(() => import("./admin/Adashboard"));
 const Alogout = lazy(() => import("./admin/Alogout"));
 const Aforgotpwd = lazy(() => import("./admin/Aforgotpassword"));
-const AemailMessage = lazy(() => import("./admin/AemailMessage"));
 const Asecurity = lazy(() => import("./admin/Asecurity"));
 const Apayments = lazy(() => import("./admin/Apayments"));
 const Asms = lazy(() => import("./admin/Asms"));
@@ -108,7 +107,6 @@ const Invoice = lazy(() => import("./screens/Invoice"));
 const LocumDb = lazy(() => import("./screens/LocumDb"));
 const ResetPwd = lazy(() => import("./screens/Resetpassword"));
 const ForgotPwd = lazy(() => import("./screens/ForgotPassword"));
-const EmailMessage = lazy(() => import("./screens/EmailMessage"));
 const ListingManager = lazy(() => import("./screens/ListingManager"));
 const CreditCardSuccess = lazy(() => import("./screens/CreditCardSuccess"));
 const CreditCardFailed = lazy(() => import("./screens/CreditCardFailed"));
@@ -221,7 +219,6 @@ function App() {
           {/* 2. BLOCKED WHEN ADMIN LOGGED IN */}
           <Route element={<ExcludePostLogin />}>
             <Route path="/admin/forgotpassword" element={<Aforgotpwd />} />
-            <Route path="/admin/emailMessage" element={<AemailMessage />} />
           </Route>
 
           {/* 1. USER NOT LOGGED IN */}
@@ -245,7 +242,6 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/forgotpassword" element={<ForgotPwd />} />
-            <Route path="/emailMessage" element={<EmailMessage />} />
           </Route>
 
           {/* 2. USERS LOGGED IN */}

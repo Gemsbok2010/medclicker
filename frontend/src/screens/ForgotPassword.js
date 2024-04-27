@@ -2,12 +2,11 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
-  const navigate = useNavigate();
   const [emailValue, setEmail] = useState("");
   const [vanishemail, setVanishemail] = useState(false);
+  const [updateNote, setUpdateNote] = useState(false);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -20,8 +19,12 @@ const ForgotPassword = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data) {
-          navigate("/emailMessage");
+          setUpdateNote(true);
+          setEmail("");
         }
+        setTimeout(function () {
+          setUpdateNote(false);
+        }, 6000);
       })
       .catch((err) => {
         console.error(err);
@@ -49,6 +52,23 @@ const ForgotPassword = () => {
               </Link>
             </figure>
             <div className="container regCon">
+              {updateNote ? (
+                <section className="updateNote container-fluid">
+                  <div className="container-fluid ">
+                    <img
+                      src="/images/tick.png"
+                      style={{ width: "12px" }}
+                      alt=""
+                    />{" "}
+                    <span>
+                      {" "}
+                      A password reset link would be sent to the email if the
+                      email you entered is registered with us. Please also check
+                      your Spam mail. Return to <Link to="/">Login</Link>.
+                    </span>
+                  </div>
+                </section>
+              ) : null}
               <h2 className="mt-5 mb-4">Forgot Password</h2>
               <p>
                 Please enter your email you registered with Medclicker. We would
@@ -110,6 +130,20 @@ const ForgotPassword = () => {
             background-repeat: no-repeat;
             background-position: center;
             background-size: cover;
+          }
+
+          .wrap .questionCard .updateNote {
+            background-color: #bff4f2;
+            padding: 2px 8px;
+            display: block;
+          }
+          .wrap .questionCard .updateNote span {
+            margin-left: 5px;
+          }
+
+          .wrap .questionCard .updateNote a {
+            color: #14a248;
+            font-weight: 700;
           }
 
           .wrap .questionCard {

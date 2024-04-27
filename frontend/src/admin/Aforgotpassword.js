@@ -1,16 +1,15 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 // Three dots
 import { ThreeDots } from "react-loader-spinner";
 
 const ForgotPassword = () => {
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [vanishemail, setVanishemail] = useState(false);
   const [isloaded, setIsloaded] = useState(false);
+  const [updateNote, setUpdateNote] = useState(false);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -24,9 +23,13 @@ const ForgotPassword = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data) {
+          setUpdateNote(true);
+          setEmail("");
           setIsloaded(false);
-          navigate("/admin/emailMessage");
         }
+        setTimeout(function () {
+          setUpdateNote(false);
+        }, 6000);
       })
       .catch((err) => {
         console.error(err);
@@ -54,6 +57,23 @@ const ForgotPassword = () => {
               </Link>
             </figure>
             <div className="container regCon">
+              {updateNote ? (
+                <section className="updateNote container-fluid">
+                  <div className="container-fluid ">
+                    <img
+                      src="/images/tick.png"
+                      style={{ width: "12px" }}
+                      alt=""
+                    />{" "}
+                    <span>
+                      {" "}
+                      A password reset link would be sent to the email if the
+                      email you entered is registered with us. Please also check
+                      your Spam mail. Return to <Link to="/">Login</Link>.
+                    </span>
+                  </div>
+                </section>
+              ) : null}
               <h2 className="mt-5 mb-4">Forgot Password</h2>
 
               <form id="forgetPasswordForm" onSubmit={onSubmit}>
@@ -120,9 +140,22 @@ const ForgotPassword = () => {
             background: #333;
           }
 
-          .wrap .questionCard {
-            width: 340px;
+          .wrap .questionCard .updateNote {
+            background-color: #bff4f2;
+            padding: 2px 8px;
+            display: block;
+          }
+          .wrap .questionCard .updateNote span {
+            margin-left: 5px;
+          }
 
+          .wrap .questionCard .updateNote a {
+            color: #14a248;
+            font-weight: 700;
+          }
+
+          .wrap .questionCard {
+            width: 440px;
             padding: 20px 10px;
             display: -webkit-box;
             display: -ms-flexbox;
