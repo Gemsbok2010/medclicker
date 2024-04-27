@@ -483,7 +483,9 @@ router.post("/upload", async (req, res) => {
       const user = await User.findOne({ email });
 
       if (req.file === undefined) {
-        res.json({ invalid: "No files or file not accepted." });
+        res.json({
+          invalid: "No files or file not accepted or file size exceeds limit.",
+        });
       } else {
         const result = await uploadFile(req.file);
         await unlinkFile(req.file.path);
@@ -514,7 +516,9 @@ router.post("/upload-locum", async (req, res) => {
     const locum = await Locum.findOne({ email });
 
     if (req.file === undefined) {
-      res.json({ invalid: "No files or file not accepted." });
+      res.json({
+        invalid: "No files or file not accepted or file size exceeds limit.",
+      });
     } else {
       const result = await uploadFile(req.file);
       await unlinkFile(req.file.path);

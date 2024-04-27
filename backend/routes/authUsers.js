@@ -107,8 +107,6 @@ const upload = multer({
   },
 }).single("file");
 
-
-
 function checkFileType(file, cb) {
   //allowed ext
   const filetypes = /jpeg|jpg|png|gif/;
@@ -131,7 +129,9 @@ router.post("/upload", async (req, res) => {
       const user = await User.findOne({ email });
 
       if (req.file === undefined) {
-        res.json({ invalid: "File not accepted." });
+        res.json({
+          invalid: "No files or file not accepted or file size exceeds limit.",
+        });
       } else {
         const result = await uploadFile(req.file);
 
@@ -160,7 +160,5 @@ router.post("/upload", async (req, res) => {
     res.status(400).json({ err });
   }
 });
-
-
 
 module.exports = router;

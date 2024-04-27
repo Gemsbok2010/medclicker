@@ -214,7 +214,9 @@ router.post("/upload", async (req, res) => {
     const user = await Locum.findOne({ email });
 
     if (req.file === undefined) {
-      res.json({ invalid: "No files or file not accepted." });
+      res.json({
+        invalid: "No files or file not accepted or file size exceeds limit.",
+      });
     } else {
       const result = await uploadFile(req.file);
       await unlinkFile(req.file.path);
@@ -226,17 +228,13 @@ router.post("/upload", async (req, res) => {
 
       Locum.findByIdAndUpdate(user._id, {
         filename: result.Location,
-      })
-        .then(function () {
-          Locum.findOne({ email: req.query.email }).then(function (
-            storedLocum
-          ) {
-            storedLocum.save(() => {
-              res.json({ newImage: result.Location });
-            });
+      }).then(function () {
+        Locum.findOne({ email: req.query.email }).then(function (storedLocum) {
+          storedLocum.save(() => {
+            res.json({ newImage: result.Location });
           });
-        })
-       ;
+        });
+      });
     }
   });
 });
@@ -386,7 +384,6 @@ router.get("/database", async (req, res) => {
     let perPage = 12;
     let maxPage = Math.ceil(num / perPage);
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
-
 
     try {
       const locums = await Locum.find(match)

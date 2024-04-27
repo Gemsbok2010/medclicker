@@ -164,6 +164,7 @@ const PersonalDetails = () => {
           localStorage.setItem("userId", response.data._id);
           setUserInfo(response.data);
           setCountry(response.data.country);
+
           if (!response.data.postalCode) {
             setPostalCode("");
           } else {
@@ -179,16 +180,19 @@ const PersonalDetails = () => {
           } else {
             setSuburb(response.data.suburb);
           }
+
           if (!response.data.street) {
             setStreet("");
           } else {
             setStreet(response.data.street);
           }
+
           if (!response.data.streetNo) {
             setStreetNo("");
           } else {
             setStreetNo(response.data.streetNo);
           }
+
           if (!response.data.longitude) {
             setLongitude("");
           } else {
@@ -214,7 +218,6 @@ const PersonalDetails = () => {
               completeAccess: response.data.survey !== "" ? true : false,
             })
           );
-
           window.history.pushState({}, document.title, "/personal-details");
         }
       });
@@ -280,12 +283,26 @@ const PersonalDetails = () => {
   // ========== ALERT MESSAGE ===============
   const [updateNote, setUpdateNote] = useState(false);
   const [alert, setAlert] = useState(false);
+  const [alertTop, setAlertTop] = useState(false);
   const [alertMsg, setAlertMsg] = useState("");
 
   function outPutErrorMessagesInAllusers(errorMessage) {
-    setAlert(true);
+    setAlertTop(true);
+    setAlert(false);
+    setUpdateNote(false);
     window.scrollTo({
       top: 60,
+      behavior: "smooth",
+    });
+    setAlertMsg(errorMessage);
+  }
+
+  function outPutErrorMessages(errorMessage) {
+    setAlert(true);
+    setAlertTop(false);
+    setUpdateNote(false);
+    window.scrollTo({
+      top: 200,
       behavior: "smooth",
     });
     setAlertMsg(errorMessage);
@@ -347,8 +364,8 @@ const PersonalDetails = () => {
         dispatch(
           login({
             firstName: user.firstName,
-            isLoggedIn: true,
             lastName: user.lastName,
+            isLoggedIn: true,
             email: user.email,
             filename: "",
             isLocum: user.isLocum,
@@ -381,10 +398,10 @@ const PersonalDetails = () => {
       .then((data) => {
         if (data.invalid) {
           outPutErrorMessagesInAllusers(data.invalid);
-          setAlert(false);
         } else {
           setUpdateNote(true);
           setAlert(false);
+          setAlertTop(false);
           setIdPhoto(data.newImage);
           dispatch(
             login({
@@ -439,12 +456,13 @@ const PersonalDetails = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.invalid) {
-          outPutErrorMessagesInAllusers(data.invalid);
+          outPutErrorMessages(data.invalid);
           setIsloading(false);
         } else {
           setUpdateNote(true);
           setIsloading(false);
           setAlert(false);
+          setAlertTop(false);
           window.scrollTo({
             top: 0,
             behavior: "smooth",
@@ -474,10 +492,6 @@ const PersonalDetails = () => {
         console.error(err);
       });
   };
-
-  // =========== BACKDROP ============//
-  const [backdrop, setBackdrop] = useState(true);
-  const [alertBanner, setAlertBanner] = useState(true);
 
   // ================= GEOLOCATION ==================
   const geoLocate = (e) => {
@@ -596,6 +610,10 @@ const PersonalDetails = () => {
       getAddressObject(places);
     });
   };
+
+  // =========== BACKDROP ============//
+  const [backdrop, setBackdrop] = useState(true);
+  const [alertBanner, setAlertBanner] = useState(true);
 
   // ================= LOAD GOOGLE MAP ==================
   const [libraries] = useState(["drawing", "places"]);
@@ -731,6 +749,22 @@ const PersonalDetails = () => {
                 </div>
               </section>
             ) : null}
+
+            {alertTop ? (
+              <div className="alert">
+                <img
+                  src="/images/cross-black.png"
+                  style={{ width: "12px", cursor: "pointer" }}
+                  alt=""
+                  onClick={() => {
+                    setAlertTop(false);
+                  }}
+                />{" "}
+                <span dangerouslySetInnerHTML={{ __html: alertMsg }}></span>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
 
           <form id="formZero" onSubmit={handleSubmit}>
