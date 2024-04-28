@@ -10,10 +10,8 @@ const Adashboard = () => {
   const email = user.email;
   const [dropdown, setDropdown] = useState(false);
   const [, setIsloaded] = useState(false);
-
   const [close, setClose] = useState(false);
   const [applications, setApplications] = useState("");
-
   const [nsw, setNSW] = useState("");
   const [vic, setVIC] = useState("");
   const [qld, setQLD] = useState("");
@@ -22,12 +20,10 @@ const Adashboard = () => {
   const [act, setACT] = useState("");
   const [nt, setNT] = useState("");
   const [tas, setTAS] = useState("");
-
   const [noOfLocums, setNoOfLocums] = useState("");
   const [inactiveList, setInactiveList] = useState("");
   const [activeList, setActiveList] = useState("");
   const [expired, setExpired] = useState("");
-
   const [nswLocum, setNSWLocum] = useState("");
   const [vicLocum, setVICLocum] = useState("");
   const [qldLocum, setQLDLocum] = useState("");
@@ -261,10 +257,10 @@ const Adashboard = () => {
                   <span className="material-symbols-outlined">sms</span>
                   <h4>SMS</h4>
                 </Link>
-                <Link to="/signout">
+                <ExternalLink href="/signout">
                   <span className="material-icons-sharp">logout</span>
                   <h4>Log Out</h4>
-                </Link>
+                </ExternalLink>
               </div>
 
               {/* END OF SIDEBAR */}
