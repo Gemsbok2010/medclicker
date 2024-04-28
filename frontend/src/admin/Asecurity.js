@@ -3,12 +3,15 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ExternalLink } from "react-external-link";
+import { FiEyeOff, FiEye } from "react-icons/fi";
 
 const Asecurity = () => {
   const user = useSelector((state) => state.userInfo.value);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [dropdown, setDropdown] = useState(false);
+  const [show, setShow] = useState(false);
+  const [show2nd, setShow2nd] = useState(false);
 
   // ================= PUT ===================
   const onSubmit = (e) => {
@@ -184,7 +187,7 @@ const Asecurity = () => {
                   <div className="container1">
                     <label htmlFor="password">New Password</label>
                     <input
-                      type="password"
+                      type={show ? "text" : "password"}
                       id="password"
                       autoComplete="off"
                       value={password}
@@ -192,6 +195,30 @@ const Asecurity = () => {
                         setPassword(e.target.value);
                       }}
                     />
+                    <span
+                      onClick={() => {
+                        setShow(!show);
+                      }}
+                      className="eye"
+                    >
+                      {show ? (
+                        <FiEye
+                          style={{
+                            color: "#777",
+                            fontSize: "18px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      ) : (
+                        <FiEyeOff
+                          style={{
+                            color: "#777",
+                            fontSize: "18px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      )}
+                    </span>
                   </div>
                   <div className="container2">
                     <label htmlFor="passwordConfirmation">
@@ -199,7 +226,7 @@ const Asecurity = () => {
                       Re-enter new Password
                     </label>
                     <input
-                      type="password"
+                      type={show2nd ? "text" : "password"}
                       id="passwordConfirmation"
                       autoComplete="off"
                       value={confirmPassword}
@@ -207,6 +234,30 @@ const Asecurity = () => {
                         setConfirmPassword(e.target.value);
                       }}
                     />
+                    <span
+                      onClick={() => {
+                        setShow2nd(!show2nd);
+                      }}
+                      className="eye"
+                    >
+                      {show2nd ? (
+                        <FiEye
+                          style={{
+                            color: "#777",
+                            fontSize: "18px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      ) : (
+                        <FiEyeOff
+                          style={{
+                            color: "#777",
+                            fontSize: "18px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      )}
+                    </span>
                   </div>
                   <div className="container1"></div>
                   <div className="container2">
@@ -484,8 +535,16 @@ const Asecurity = () => {
             position: relative;
             width: 100%;
           }
-          input[type="password"],
-          input[type="email"] {
+
+          .container1 .eye,
+          .container2 .eye {
+            position: absolute;
+            top: 41px;
+            right: 20px;
+          }
+
+          input[type="text"],
+          input[type="password"] {
             height: 42px;
             text-decoration: none;
             outline: none;
@@ -575,8 +634,13 @@ const Asecurity = () => {
             .img-fluid {
               transform: translateX(0%);
             }
-            input[type="password"],
-            input[type="email"] {
+            .container1 .eye,
+            .container2 .eye {
+              top: 41px;
+              right: 58px;
+            }
+            input[type="text"],
+            input[type="password"] {
               width: 260px;
             }
             input[type="button"],

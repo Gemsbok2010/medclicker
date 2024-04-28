@@ -2,10 +2,13 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useState } from "react";
 import Footer from "../components/Footer";
 import LoggedInNavbar from "../components/LoggedInNavbar";
+import { FiEyeOff, FiEye } from "react-icons/fi";
 
 const SecuritySettings = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [show, setShow] = useState(false);
+  const [show2nd, setShow2nd] = useState(false);
 
   // ================= PUT ===================
   const onSubmit = (e) => {
@@ -114,7 +117,7 @@ const SecuritySettings = () => {
                   <div className="container1">
                     <label htmlFor="password">New Password</label>
                     <input
-                      type="password"
+                      type={show ? "text" : "password"}
                       id="password"
                       value={password}
                       autoComplete="off"
@@ -122,6 +125,30 @@ const SecuritySettings = () => {
                         setPassword(e.target.value);
                       }}
                     />
+                    <span
+                      onClick={() => {
+                        setShow(!show);
+                      }}
+                      className="eye"
+                    >
+                      {show ? (
+                        <FiEye
+                          style={{
+                            color: "#777",
+                            fontSize: "18px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      ) : (
+                        <FiEyeOff
+                          style={{
+                            color: "#777",
+                            fontSize: "18px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      )}
+                    </span>
                   </div>
                   <div className="container2">
                     <label htmlFor="passwordConfirmation">
@@ -129,14 +156,38 @@ const SecuritySettings = () => {
                       Re-enter new Password
                     </label>
                     <input
-                      type="password"
                       id="passwordConfirmation"
                       autoComplete="off"
+                      type={show2nd ? "text" : "password"}
                       value={confirmPassword}
                       onChange={(e) => {
                         setConfirmPassword(e.target.value);
                       }}
                     />
+                    <span
+                      onClick={() => {
+                        setShow2nd(!show2nd);
+                      }}
+                      className="eye"
+                    >
+                      {show2nd ? (
+                        <FiEye
+                          style={{
+                            color: "#777",
+                            fontSize: "18px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      ) : (
+                        <FiEyeOff
+                          style={{
+                            color: "#777",
+                            fontSize: "18px",
+                            cursor: "pointer",
+                          }}
+                        />
+                      )}
+                    </span>
                   </div>
                   <div className="container1"></div>
                   <div className="container2">
@@ -260,6 +311,7 @@ const SecuritySettings = () => {
             position: relative;
             width: 100%;
           }
+          input[type="text"],
           input[type="password"] {
             height: 42px;
             text-decoration: none;
@@ -274,6 +326,14 @@ const SecuritySettings = () => {
             font-family: sans-serif;
             display: inline-block;
           }
+
+          .container1 .eye,
+          .container2 .eye {
+            position: absolute;
+            top: 41px;
+            right: 20px;
+          }
+
           input[type="button"] {
             height: 48px;
             border-radius: 4px;
@@ -346,7 +406,13 @@ const SecuritySettings = () => {
             .nav-box {
               left: 96%;
             }
+            .container1 .eye,
+            .container2 .eye {
+              top: 41px;
+              right: 58px;
+            }
 
+            input[type="text"],
             input[type="password"] {
               width: 260px;
             }
