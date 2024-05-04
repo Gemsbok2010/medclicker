@@ -1,9 +1,11 @@
+import { Link } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useState, useEffect } from "react";
 import Footer from "../components/Footer";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { ExternalLink } from "react-external-link";
 
 const Resume = () => {
   const user = useSelector((state) => state.userInfo.value);
@@ -50,399 +52,427 @@ const Resume = () => {
     <>
       <HelmetProvider>
         <Helmet>
-          <title>Locum CV | Medclicker</title>
+          <title>Preview | Medclicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>
         <LoggedInNavbar />
+        <div className="locum_details">
+          <Link to="/dashboard">Back to my Dashboard</Link>
+          <h2>Resume Preview</h2>
+        </div>
         <div className="wrap">
           <div className="top-container">
-            <div className="ad-description">
-              <div className="sidebar">
-                <div className="sidebarlogo">
-                  <img
-                    className="img-fluid"
-                    src="/images/mainLogo_white.png"
-                    width="180px"
-                    alt=""
-                  />
-                </div>
-                {idPhoto ? (
-                  <div className="candidate-photo">
-                    <figure className="smallPhoto">
-                      <img src={idPhoto} alt="" name="image-File" />
-                    </figure>
+            <div className="divider">
+              <div className="personContent">
+                <div className="threeItem">
+                  <div>
+                    <Link to="/locum_profile"> My Locum Profile</Link>
                   </div>
-                ) : (
-                  ""
-                )}
-
-                <div className="candidate-name">
-                  <h2>
-                    {firstName} {lastName}
-                  </h2>
-                </div>
-                <div className="candidate-address">
-                  <h2>Contact Details</h2>
-
-                  {streetNo ? (
-                    <>
-                      <p>{streetNo + " " + street}</p>
-                      <p>{suburb + " " + state + " " + postalCode}</p>
-                      <p>{country}</p>
-                      <br />
-                    </>
-                  ) : (
-                    <>
-                      <p>{street}</p>
-                      <p>{suburb + " " + state + " " + postalCode}</p>
-                      <p>{country}</p>
-                      <br />
-                    </>
-                  )}
-
-                  <p>Mobile: {userInfo.phone}</p>
-                  <p>Email: {user.email}</p>
-                </div>
-
-                <div className="candidate-dl">
-                  {userInfo.driverslicense === "I don't drive" ? (
-                    ""
-                  ) : (
-                    <>
-                      <h2>DRIVER'S LICENSE</h2>
-                      <p>{userInfo.driverslicense}</p>
-                    </>
-                  )}
-                </div>
-
-                {userInfo.skillOne1 ||
-                userInfo.skillOne2 ||
-                userInfo.skillOne3 ? (
-                  <div className="candidate-skills">
-                    <h2>{userInfo.skillOne}</h2>
-
-                    <p>{userInfo.skillOne1}</p>
-
-                    {userInfo.skillProf1 ? (
-                      userInfo.skillProf1 === "Specialised" ? (
-                        <div className="bar">
-                          <div className="level-excellent"></div>
-                        </div>
-                      ) : userInfo.skillProf1 === "Experienced" ? (
-                        <div className="bar">
-                          <div className="level-int"></div>
-                        </div>
-                      ) : (
-                        <div className="bar">
-                          <div className="level-deb"></div>
-                        </div>
-                      )
-                    ) : (
-                      ""
-                    )}
-
-                    <p>{userInfo.skillOne2}</p>
-                    {userInfo.skillProf2 ? (
-                      userInfo.skillProf2 === "Specialised" ? (
-                        <div className="bar">
-                          <div className="level-excellent"></div>
-                        </div>
-                      ) : userInfo.skillProf2 === "Experienced" ? (
-                        <div className="bar">
-                          <div className="level-int"></div>
-                        </div>
-                      ) : (
-                        <div className="bar">
-                          <div className="level-deb"></div>
-                        </div>
-                      )
-                    ) : (
-                      <p></p>
-                    )}
-                    <p>{userInfo.skillOne3}</p>
-                    {userInfo.skillProf3 ? (
-                      userInfo.skillProf3 === "Specialised" ? (
-                        <div className="bar">
-                          <div className="level-excellent"></div>
-                        </div>
-                      ) : userInfo.skillProf3 === "Experienced" ? (
-                        <div className="bar">
-                          <div className="level-int"></div>
-                        </div>
-                      ) : (
-                        <div className="bar">
-                          <div className="level-deb"></div>
-                        </div>
-                      )
-                    ) : (
-                      <p></p>
-                    )}
+                  <div>
+                    <Link to="/locum_cv">My Skills & Experiences</Link>
                   </div>
-                ) : (
-                  ""
-                )}
-
-                {userInfo.skillTwo1 ||
-                userInfo.skillTwo2 ||
-                userInfo.skillTwo3 ? (
-                  <div className="candidate-computer">
-                    <h2>{userInfo.skillTwo}</h2>
-
-                    <p>{userInfo.skillTwo1}</p>
-
-                    {userInfo.skillComp1 ? (
-                      userInfo.skillComp1 === "Specialised" ? (
-                        <div className="bar">
-                          <div className="level-excellent"></div>
-                        </div>
-                      ) : userInfo.skillComp1 === "Experienced" ? (
-                        <div className="bar">
-                          <div className="level-int"></div>
-                        </div>
-                      ) : (
-                        <div className="bar">
-                          <div className="level-deb"></div>
-                        </div>
-                      )
-                    ) : (
-                      <p></p>
-                    )}
-
-                    <p>{userInfo.skillTwo2}</p>
-                    {userInfo.skillComp2 ? (
-                      userInfo.skillComp2 === "Specialised" ? (
-                        <div className="bar">
-                          <div className="level-excellent"></div>
-                        </div>
-                      ) : userInfo.skillComp2 === "Experienced" ? (
-                        <div className="bar">
-                          <div className="level-int"></div>
-                        </div>
-                      ) : (
-                        <div className="bar">
-                          <div className="level-deb"></div>
-                        </div>
-                      )
-                    ) : (
-                      <p></p>
-                    )}
-
-                    <p>{userInfo.skillTwo3}</p>
-                    {userInfo.skillComp3 ? (
-                      userInfo.skillComp3 === "Specialised" ? (
-                        <div className="bar">
-                          <div className="level-excellent"></div>
-                        </div>
-                      ) : userInfo.skillComp3 === "Experienced" ? (
-                        <div className="bar">
-                          <div className="level-int"></div>
-                        </div>
-                      ) : (
-                        <div className="bar">
-                          <div className="level-deb"></div>
-                        </div>
-                      )
-                    ) : (
-                      <p></p>
-                    )}
+                  <div>
+                    <ExternalLink
+                      style={{ color: "#14a248" }}
+                      href={
+                        process.env.REACT_APP_BACKEND_URL +
+                        `api/locums/resume/${userInfo.locumId}`
+                      }
+                      target="_self"
+                    >
+                      Preview CV
+                    </ExternalLink>
                   </div>
-                ) : (
-                  ""
-                )}
-
-                {userInfo.skillThree1 ||
-                userInfo.skillThree2 ||
-                userInfo.skillThree3 ? (
-                  <div className="candidate-pharmacoth">
-                    <h2>{userInfo.skillThree}</h2>
-
-                    <p>{userInfo.skillThree1}</p>
-                    {userInfo.skillPharma1 ? (
-                      userInfo.skillPharma1 === "Specialised" ? (
-                        <div className="bar">
-                          <div className="level-excellent"></div>
-                        </div>
-                      ) : userInfo.skillPharma1 === "Experienced" ? (
-                        <div className="bar">
-                          <div className="level-int"></div>
-                        </div>
-                      ) : (
-                        <div className="bar">
-                          <div className="level-deb"></div>
-                        </div>
-                      )
-                    ) : (
-                      <p></p>
-                    )}
-
-                    <p>{userInfo.skillThree2}</p>
-                    {userInfo.skillPharma2 ? (
-                      userInfo.skillPharma2 === "Specialised" ? (
-                        <div className="bar">
-                          <div className="level-excellent"></div>
-                        </div>
-                      ) : userInfo.skillPharma2 === "Experienced" ? (
-                        <div className="bar">
-                          <div className="level-int"></div>
-                        </div>
-                      ) : (
-                        <div className="bar">
-                          <div className="level-deb"></div>
-                        </div>
-                      )
-                    ) : (
-                      <p></p>
-                    )}
-                    <p>{userInfo.skillThree3}</p>
-                    {userInfo.skillPharma3 ? (
-                      userInfo.skillPharma3 === "Specialised" ? (
-                        <div className="bar">
-                          <div className="level-excellent"></div>
-                        </div>
-                      ) : userInfo.skillPharma3 === "Experienced" ? (
-                        <div className="bar">
-                          <div className="level-int"></div>
-                        </div>
-                      ) : (
-                        <div className="bar">
-                          <div className="level-deb"></div>
-                        </div>
-                      )
-                    ) : (
-                      <p></p>
-                    )}
-                  </div>
-                ) : (
-                  ""
-                )}
-
-                <div className="candidate-languages">
-                  {userInfo.whichlanguage0 ||
-                  userInfo.whichlanguage1 ||
-                  userInfo.whichlanguage2 ? (
-                    <h2>{userInfo.languages}</h2>
-                  ) : (
-                    <h2></h2>
-                  )}
-
-                  <p>{userInfo.whichlanguage0}</p>
-                  {userInfo.languageLvl0 ? (
-                    userInfo.languageLvl0 === "Advanced or mother tongue" ? (
-                      <div className="bar">
-                        <div className="level-excellent"></div>
-                      </div>
-                    ) : userInfo.languageLvl0 === "Intermediate" ? (
-                      <div className="bar">
-                        <div className="level-int"></div>
-                      </div>
-                    ) : (
-                      <div className="bar">
-                        <div className="level-deb"></div>
-                      </div>
-                    )
-                  ) : (
-                    <p></p>
-                  )}
-
-                  <p>{userInfo.whichlanguage1}</p>
-
-                  {userInfo.languageLvl1 ? (
-                    userInfo.languageLvl1 === "Advanced or mother tongue" ? (
-                      <div className="bar">
-                        <div className="level-excellent"></div>
-                      </div>
-                    ) : userInfo.languageLvl1 === "Intermediate" ? (
-                      <div className="bar">
-                        <div className="level-int"></div>
-                      </div>
-                    ) : (
-                      <div className="bar">
-                        <div className="level-deb"></div>
-                      </div>
-                    )
-                  ) : (
-                    <p></p>
-                  )}
-
-                  <p>{userInfo.whichlanguage2}</p>
-                  {userInfo.languageLvl2 ? (
-                    userInfo.languageLvl2 === "Advanced or mother tongue" ? (
-                      <div className="bar">
-                        <div className="level-excellent"></div>
-                      </div>
-                    ) : userInfo.languageLvl2 === "Intermediate" ? (
-                      <div className="bar">
-                        <div className="level-int"></div>
-                      </div>
-                    ) : (
-                      <div className="bar">
-                        <div className="level-deb"></div>
-                      </div>
-                    )
-                  ) : (
-                    <p></p>
-                  )}
                 </div>
               </div>
-              <div className="main">
-                <div className="main-education">
-                  <h2>{userInfo.education}</h2>
-                  {userInfo.university1 ? (
-                    <>
-                      <p className="uni">
-                        {userInfo.degree1} at {userInfo.university1}
-                      </p>
-                      <p className="uni-dates">
-                        From {userInfo.start1} to {userInfo.finish1}
-                      </p>
-                    </>
+              <div className="ad-description">
+                <div className="sidebar">
+                  <div className="sidebarlogo">
+                    <img
+                      className="img-fluid"
+                      src="/images/mainLogo_white.png"
+                      width="180px"
+                      alt=""
+                    />
+                  </div>
+                  {idPhoto ? (
+                    <div className="candidate-photo">
+                      <figure className="smallPhoto">
+                        <img src={idPhoto} alt="" name="image-File" />
+                      </figure>
+                    </div>
                   ) : (
-                    <p></p>
+                    ""
                   )}
 
-                  {userInfo.university2 ? (
-                    <>
-                      <p className="uni">
-                        {userInfo.degree2} at {userInfo.university2}
-                      </p>
-                      <p className="uni-dates">
-                        From {userInfo.start2} to {userInfo.finish2}
-                      </p>
-                    </>
+                  <div className="candidate-name">
+                    <h2>
+                      {firstName} {lastName}
+                    </h2>
+                  </div>
+                  <div className="candidate-address">
+                    <h2>Contact Details</h2>
+
+                    {streetNo ? (
+                      <>
+                        <p>{streetNo + " " + street}</p>
+                        <p>{suburb + " " + state + " " + postalCode}</p>
+                        <p>{country}</p>
+                        <br />
+                      </>
+                    ) : (
+                      <>
+                        <p>{street}</p>
+                        <p>{suburb + " " + state + " " + postalCode}</p>
+                        <p>{country}</p>
+                        <br />
+                      </>
+                    )}
+
+                    <p>Mobile: {userInfo.phone}</p>
+                    <p>Email: {user.email}</p>
+                  </div>
+
+                  <div className="candidate-dl">
+                    {userInfo.driverslicense === "I don't drive" ? (
+                      ""
+                    ) : (
+                      <>
+                        <h2>DRIVER'S LICENSE</h2>
+                        <p>{userInfo.driverslicense}</p>
+                      </>
+                    )}
+                  </div>
+
+                  {userInfo.skillOne1 ||
+                  userInfo.skillOne2 ||
+                  userInfo.skillOne3 ? (
+                    <div className="candidate-skills">
+                      <h2>{userInfo.skillOne}</h2>
+
+                      <p>{userInfo.skillOne1}</p>
+
+                      {userInfo.skillProf1 ? (
+                        userInfo.skillProf1 === "Specialised" ? (
+                          <div className="bar">
+                            <div className="level-excellent"></div>
+                          </div>
+                        ) : userInfo.skillProf1 === "Experienced" ? (
+                          <div className="bar">
+                            <div className="level-int"></div>
+                          </div>
+                        ) : (
+                          <div className="bar">
+                            <div className="level-deb"></div>
+                          </div>
+                        )
+                      ) : (
+                        ""
+                      )}
+
+                      <p>{userInfo.skillOne2}</p>
+                      {userInfo.skillProf2 ? (
+                        userInfo.skillProf2 === "Specialised" ? (
+                          <div className="bar">
+                            <div className="level-excellent"></div>
+                          </div>
+                        ) : userInfo.skillProf2 === "Experienced" ? (
+                          <div className="bar">
+                            <div className="level-int"></div>
+                          </div>
+                        ) : (
+                          <div className="bar">
+                            <div className="level-deb"></div>
+                          </div>
+                        )
+                      ) : (
+                        <p></p>
+                      )}
+                      <p>{userInfo.skillOne3}</p>
+                      {userInfo.skillProf3 ? (
+                        userInfo.skillProf3 === "Specialised" ? (
+                          <div className="bar">
+                            <div className="level-excellent"></div>
+                          </div>
+                        ) : userInfo.skillProf3 === "Experienced" ? (
+                          <div className="bar">
+                            <div className="level-int"></div>
+                          </div>
+                        ) : (
+                          <div className="bar">
+                            <div className="level-deb"></div>
+                          </div>
+                        )
+                      ) : (
+                        <p></p>
+                      )}
+                    </div>
                   ) : (
-                    <p></p>
+                    ""
                   )}
 
-                  {userInfo.university3 ? (
-                    <>
-                      <p className="uni">
-                        {userInfo.degree3} at {userInfo.university3}
-                      </p>
-                      <p className="uni-dates">
-                        From {userInfo.start3} to {userInfo.finish3}
-                      </p>
-                    </>
+                  {userInfo.skillTwo1 ||
+                  userInfo.skillTwo2 ||
+                  userInfo.skillTwo3 ? (
+                    <div className="candidate-computer">
+                      <h2>{userInfo.skillTwo}</h2>
+
+                      <p>{userInfo.skillTwo1}</p>
+
+                      {userInfo.skillComp1 ? (
+                        userInfo.skillComp1 === "Specialised" ? (
+                          <div className="bar">
+                            <div className="level-excellent"></div>
+                          </div>
+                        ) : userInfo.skillComp1 === "Experienced" ? (
+                          <div className="bar">
+                            <div className="level-int"></div>
+                          </div>
+                        ) : (
+                          <div className="bar">
+                            <div className="level-deb"></div>
+                          </div>
+                        )
+                      ) : (
+                        <p></p>
+                      )}
+
+                      <p>{userInfo.skillTwo2}</p>
+                      {userInfo.skillComp2 ? (
+                        userInfo.skillComp2 === "Specialised" ? (
+                          <div className="bar">
+                            <div className="level-excellent"></div>
+                          </div>
+                        ) : userInfo.skillComp2 === "Experienced" ? (
+                          <div className="bar">
+                            <div className="level-int"></div>
+                          </div>
+                        ) : (
+                          <div className="bar">
+                            <div className="level-deb"></div>
+                          </div>
+                        )
+                      ) : (
+                        <p></p>
+                      )}
+
+                      <p>{userInfo.skillTwo3}</p>
+                      {userInfo.skillComp3 ? (
+                        userInfo.skillComp3 === "Specialised" ? (
+                          <div className="bar">
+                            <div className="level-excellent"></div>
+                          </div>
+                        ) : userInfo.skillComp3 === "Experienced" ? (
+                          <div className="bar">
+                            <div className="level-int"></div>
+                          </div>
+                        ) : (
+                          <div className="bar">
+                            <div className="level-deb"></div>
+                          </div>
+                        )
+                      ) : (
+                        <p></p>
+                      )}
+                    </div>
                   ) : (
-                    <p></p>
+                    ""
                   )}
+
+                  {userInfo.skillThree1 ||
+                  userInfo.skillThree2 ||
+                  userInfo.skillThree3 ? (
+                    <div className="candidate-pharmacoth">
+                      <h2>{userInfo.skillThree}</h2>
+
+                      <p>{userInfo.skillThree1}</p>
+                      {userInfo.skillPharma1 ? (
+                        userInfo.skillPharma1 === "Specialised" ? (
+                          <div className="bar">
+                            <div className="level-excellent"></div>
+                          </div>
+                        ) : userInfo.skillPharma1 === "Experienced" ? (
+                          <div className="bar">
+                            <div className="level-int"></div>
+                          </div>
+                        ) : (
+                          <div className="bar">
+                            <div className="level-deb"></div>
+                          </div>
+                        )
+                      ) : (
+                        <p></p>
+                      )}
+
+                      <p>{userInfo.skillThree2}</p>
+                      {userInfo.skillPharma2 ? (
+                        userInfo.skillPharma2 === "Specialised" ? (
+                          <div className="bar">
+                            <div className="level-excellent"></div>
+                          </div>
+                        ) : userInfo.skillPharma2 === "Experienced" ? (
+                          <div className="bar">
+                            <div className="level-int"></div>
+                          </div>
+                        ) : (
+                          <div className="bar">
+                            <div className="level-deb"></div>
+                          </div>
+                        )
+                      ) : (
+                        <p></p>
+                      )}
+                      <p>{userInfo.skillThree3}</p>
+                      {userInfo.skillPharma3 ? (
+                        userInfo.skillPharma3 === "Specialised" ? (
+                          <div className="bar">
+                            <div className="level-excellent"></div>
+                          </div>
+                        ) : userInfo.skillPharma3 === "Experienced" ? (
+                          <div className="bar">
+                            <div className="level-int"></div>
+                          </div>
+                        ) : (
+                          <div className="bar">
+                            <div className="level-deb"></div>
+                          </div>
+                        )
+                      ) : (
+                        <p></p>
+                      )}
+                    </div>
+                  ) : (
+                    ""
+                  )}
+
+                  <div className="candidate-languages">
+                    {userInfo.whichlanguage0 ||
+                    userInfo.whichlanguage1 ||
+                    userInfo.whichlanguage2 ? (
+                      <h2>{userInfo.languages}</h2>
+                    ) : (
+                      <h2></h2>
+                    )}
+
+                    <p>{userInfo.whichlanguage0}</p>
+                    {userInfo.languageLvl0 ? (
+                      userInfo.languageLvl0 === "Advanced or mother tongue" ? (
+                        <div className="bar">
+                          <div className="level-excellent"></div>
+                        </div>
+                      ) : userInfo.languageLvl0 === "Intermediate" ? (
+                        <div className="bar">
+                          <div className="level-int"></div>
+                        </div>
+                      ) : (
+                        <div className="bar">
+                          <div className="level-deb"></div>
+                        </div>
+                      )
+                    ) : (
+                      <p></p>
+                    )}
+
+                    <p>{userInfo.whichlanguage1}</p>
+
+                    {userInfo.languageLvl1 ? (
+                      userInfo.languageLvl1 === "Advanced or mother tongue" ? (
+                        <div className="bar">
+                          <div className="level-excellent"></div>
+                        </div>
+                      ) : userInfo.languageLvl1 === "Intermediate" ? (
+                        <div className="bar">
+                          <div className="level-int"></div>
+                        </div>
+                      ) : (
+                        <div className="bar">
+                          <div className="level-deb"></div>
+                        </div>
+                      )
+                    ) : (
+                      <p></p>
+                    )}
+
+                    <p>{userInfo.whichlanguage2}</p>
+                    {userInfo.languageLvl2 ? (
+                      userInfo.languageLvl2 === "Advanced or mother tongue" ? (
+                        <div className="bar">
+                          <div className="level-excellent"></div>
+                        </div>
+                      ) : userInfo.languageLvl2 === "Intermediate" ? (
+                        <div className="bar">
+                          <div className="level-int"></div>
+                        </div>
+                      ) : (
+                        <div className="bar">
+                          <div className="level-deb"></div>
+                        </div>
+                      )
+                    ) : (
+                      <p></p>
+                    )}
+                  </div>
                 </div>
+                <div className="main">
+                  <div className="main-education">
+                    <h2>{userInfo.education}</h2>
+                    {userInfo.university1 ? (
+                      <>
+                        <p className="uni">
+                          {userInfo.degree1} at {userInfo.university1}
+                        </p>
+                        <p className="uni-dates">
+                          From {userInfo.start1} to {userInfo.finish1}
+                        </p>
+                      </>
+                    ) : (
+                      <p></p>
+                    )}
 
-                <div className="main-experiences">
-                  <h2>{userInfo.workhistory}</h2>
-                  <p style={{ whiteSpace: "pre-line" }}>{userInfo.resume}</p>
-                </div>
+                    {userInfo.university2 ? (
+                      <>
+                        <p className="uni">
+                          {userInfo.degree2} at {userInfo.university2}
+                        </p>
+                        <p className="uni-dates">
+                          From {userInfo.start2} to {userInfo.finish2}
+                        </p>
+                      </>
+                    ) : (
+                      <p></p>
+                    )}
 
-                <div className="main-honor-awards">
-                  {userInfo.honourAwards !== "" ? (
-                    <h2>{userInfo.honourTitle}</h2>
-                  ) : (
-                    <p></p>
-                  )}
+                    {userInfo.university3 ? (
+                      <>
+                        <p className="uni">
+                          {userInfo.degree3} at {userInfo.university3}
+                        </p>
+                        <p className="uni-dates">
+                          From {userInfo.start3} to {userInfo.finish3}
+                        </p>
+                      </>
+                    ) : (
+                      <p></p>
+                    )}
+                  </div>
 
-                  <p style={{ whiteSpace: "pre-line" }}>
-                    {userInfo.honourAwards}
-                  </p>
+                  <div className="main-experiences">
+                    <h2>{userInfo.workhistory}</h2>
+                    <p style={{ whiteSpace: "pre-line" }}>{userInfo.resume}</p>
+                  </div>
+
+                  <div className="main-honor-awards">
+                    {userInfo.honourAwards !== "" ? (
+                      <h2>{userInfo.honourTitle}</h2>
+                    ) : (
+                      <p></p>
+                    )}
+
+                    <p style={{ whiteSpace: "pre-line" }}>
+                      {userInfo.honourAwards}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -469,10 +499,100 @@ const Resume = () => {
             padding-top: 60px;
             background-color: #f0eff5;
           }
+          .wrap .divider {
+            display: grid;
+            grid-template-columns: 30% 70%;
+          }
 
-          /* ============== 履歷表 ============== */
+          /* =========== LEFT RAIL ========== */
+          .wrap .personContent {
+            width: 350px;
+            margin: 0 20px;
+          }
+          .wrap .personContent .threeItem:last-child {
+            height: 135px;
+          }
+          .wrap .personContent .threeItem > div {
+            padding: 10px 30px;
+            width: 100%;
+          }
+          .wrap .personContent .threeItem > div:last-child {
+            padding: 0px 30px;
+            margin-top: 20px;
+            border: 1px solid #14a248;
+            height: 38px;
+            border-radius: 4px;
+            line-height: 38px;
+            text-align: center;
+          }
+          .wrap .personContent .threeItem > div:last-child:hover {
+            border: 1px solid #777;
+          }
+          .wrap .personContent .threeItem > div a:hover {
+            color: #777;
+          }
+          .wrap .personContent .threeItem > div a {
+            color: #2b2b2b;
+            font-weight: 800;
+            font-size: 22px;
+            font-family: sans-serif;
+          }
+          .wrap .personContent .threeItem > div:hover {
+            cursor: pointer;
+          }
+          @media screen and (max-width: 768px) {
+            .wrap .personContent {
+              display: block;
+              width: 420px;
+              margin: 0 auto 30px;
+              height: 200px;
+            }
+            .wrap .divider {
+              display: block;
+            }
+            .wrap .personContent .threeItem {
+              margin: 0;
+              width: 420px;
+              margin-bottom: 20px;
+              text-align: center;
+            }
+            .wrap .personContent .threeItem > div {
+              width: 100%;
+            }
+          }
+
+          /* ============= PERSONAL DETAILS ============== */
+
+          .locum_details {
+            margin: 15px auto 25px;
+            padding: 10px 440px;
+          }
+
+          .locum_details h2 {
+            color: #323232;
+            font-weight: 500;
+            font-size: 32px;
+          }
+          .locum_details a {
+            color: #14a248;
+            display: block;
+            margin-bottom: 10px;
+          }
+
+          .locum_details a:hover {
+            color: #0e7132;
+          }
+
+          @media screen and (max-width: 768px) {
+            .locum_details {
+              margin: 25px auto;
+              padding: 10px 100px;
+              text-align: center;
+            }
+          }
+
+          /* ============== RESUME ============== */
           .top-container {
-            display: flex;
             height: 100%;
             width: 100%;
             display: block;
@@ -498,7 +618,7 @@ const Resume = () => {
           .ad-description p {
             color: rgb(51, 51, 51);
             line-height: 20px;
-            font-size: 15px;
+            font-size: 12px;
             font-weight: 400;
             font-family: sans-serif;
             width: 100%;
@@ -553,7 +673,7 @@ const Resume = () => {
           .candidate-name h2 {
             color: #fff;
             width: 100%;
-            font-size: 23px;
+            font-size: 14px;
             font-family: sans-serif;
           }
 
@@ -565,7 +685,7 @@ const Resume = () => {
           }
           .candidate-address h2 {
             color: #fff;
-            font-size: 16px;
+            font-size: 14px;
             font-family: sans-serif;
           }
 
@@ -722,7 +842,7 @@ const Resume = () => {
             text-align: left;
           }
           .main-education h2 {
-            font-size: 23px;
+            font-size: 14px;
             margin-bottom: 12px;
             font-family: sans-serif;
           }
@@ -743,7 +863,7 @@ const Resume = () => {
           }
 
           .main-experiences h2 {
-            font-size: 23px;
+            font-size: 14px;
             margin-bottom: 12px;
             font-family: sans-serif;
           }
@@ -765,7 +885,7 @@ const Resume = () => {
           }
 
           .main-honor-awards h2 {
-            font-size: 23px;
+            font-size: 14px;
             margin-bottom: 12px;
             font-family: sans-serif;
           }
@@ -777,7 +897,6 @@ const Resume = () => {
               text-align: left;
             }
             .top-container {
-              display: flex;
               justify-content: center;
               flex-direction: row;
               padding-bottom: 60px;
@@ -785,7 +904,12 @@ const Resume = () => {
             .ad-description {
               width: 1000px;
             }
-
+            .ad-description p {
+              font-size: 15px;
+            }
+            .candidate-name h2 {
+              font-size: 23px;
+            }
             .sidebar {
               padding: 80px 0px 60px;
               width: 350px;
@@ -796,10 +920,18 @@ const Resume = () => {
             .candidate-address h2 {
               font-size: 20px;
             }
+            .main-experiences h2 {
+              font-size: 23px;
+            }
+            .main-honor-awards h2 {
+              font-size: 23px;
+            }
             .candidate-dl {
               padding: 5px 46px 0px 50px;
             }
-
+            .main-education h2 {
+              font-size: 23px;
+            }
             .candidate-skills {
               padding: 5px 46px 10px 50px;
             }
