@@ -601,6 +601,7 @@ const Resume = () => {
 
           .ad-description {
             width: 460px;
+            margin: 0 auto;
             background-color: white;
             position: relative;
             border: none;
@@ -902,6 +903,7 @@ const Resume = () => {
             }
             .ad-description {
               width: 1000px;
+              margin: 0;
             }
             .ad-description p {
               font-size: 15px;
