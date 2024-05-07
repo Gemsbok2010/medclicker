@@ -426,7 +426,7 @@ const Aprofessions = () => {
   };
 
   // ========== ALERT MESSAGE ===============
-
+  const [updateNote, setUpdateNote] = useState(false);
   const [alert, setAlert] = useState(false);
   const [alertMsg, setAlertMsg] = useState("");
 
@@ -480,6 +480,10 @@ const Aprofessions = () => {
         setTypes({});
         outPutErrorMessage(data.prompt);
         setBackdrop(false);
+        setTimeout(function () {
+          setUpdateNote(false);
+          setAlert(false);
+        }, 5000);
       } else {
         setProfessionTitle("");
         setTypes({});
@@ -488,6 +492,10 @@ const Aprofessions = () => {
         setSort(data.sort);
         setBackdrop(false);
         setAlert(false);
+        setTimeout(function () {
+          setUpdateNote(false);
+          setAlert(false);
+        }, 5000);
       }
     } catch (err) {
       console.error(err);
@@ -669,13 +677,21 @@ const Aprofessions = () => {
         )}
         <div className="wrap">
           <div className="errorMessageHere">
+            {updateNote && (
+              <section className="updateNote container-fluid">
+                <div className="container-fluid ">
+                  <img src="/images/tick.png" width="12px" alt="" />
+                  <span>The subject is added successfully.</span>
+                </div>
+              </section>
+            )}
             {alert ? (
               <div className="alert">
                 <img
                   src="/images/cross-black.png"
                   style={{ width: "12px" }}
                   alt=""
-                />
+                />{" "}
                 <span dangerouslySetInnerHTML={{ __html: alertMsg }}></span>
               </div>
             ) : (
@@ -1141,6 +1157,19 @@ const Aprofessions = () => {
               rgba(0, 131, 123, 0.5)
             );
             background-color: #00a1e4;
+          }
+          /* ============= UPDATE NOTE ============== */
+          .wrap .updateNote {
+            width: 80%;
+            background-color: #bff4f2;
+            margin-bottom: 8px;
+            height: 40px;
+            line-height: 40px;
+            padding: 0px 15px 0px 28px;
+            display: block;
+          }
+          .wrap .updateNote span {
+            margin-left: 5px;
           }
           .wrap .alert {
             background-color: #fcebcd;
