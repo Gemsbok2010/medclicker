@@ -519,40 +519,39 @@ const LocumCV = () => {
         console.error(err);
       });
   };
-
-  if (!isloaded)
+  if (isloaded === false)
     return (
       <div
         style={{
-          backgroundColor: "rgba(33, 40, 46, 0.8)",
+          backgroundColor: "#14a248",
           top: "0",
           left: "0",
           height: "100%",
           width: "100%",
           zIndex: "2500",
-          justifyContent: "center",
-          alignItems: "center",
           display: "block",
           position: "fixed",
-          color: "white",
         }}
       >
         <div
           style={{
             textAlign: "center",
             position: "absolute",
-            transform: "translate(50%,50%)",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
           }}
         >
           <RotatingLines
             strokeColor="white"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="76"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
             visible={true}
           />
-          {"  "}
-          Loading...
         </div>
       </div>
     );
@@ -566,7 +565,10 @@ const LocumCV = () => {
           <meta name="description" content="Medclicker" />
         </Helmet>
         <LoggedInNavbar />
-
+        <div className="locum_details">
+          <Link to="/dashboard">Back to my Dashboard</Link>
+          <h2>Skills & Experiences</h2>
+        </div>
         <div className="wrap">
           {updateNote && (
             <div className="updateNote container-fluid">
@@ -1757,26 +1759,46 @@ const LocumCV = () => {
                               {activeButton === i &&
                               linguistics[`whichlanguage${i}`] !== "" &&
                               linguistics[`languageLvl${i}`] !== "" ? (
-                                <button
-                                  style={{
-                                    cursor: "pointer",
-                                    backgroundColor: "#14a248",
-                                    border: "#14a248",
-                                    width: "115px",
-                                    color: "#fff",
-                                    fontWeight: "800",
-                                    outline: "none",
-                                    borderRadius: "4px",
-                                    height: "39px",
-                                    lineHeight: "39px",
-                                    marginRight: "20px",
-                                  }}
-                                  onClick={(e) => {
-                                    handleAdd(e);
-                                  }}
-                                >
-                                  Add Language
-                                </button>
+                                activeButton === 2 ? (
+                                  <button
+                                    type="button"
+                                    style={{
+                                      color: "#888",
+                                      backgroundColor: "#ddd",
+                                      width: "115px",
+                                      fontWeight: "800",
+                                      outline: "none",
+                                      borderRadius: "4px",
+                                      border: "#ddd",
+                                      height: "39px",
+                                      lineHeight: "39px",
+                                      marginRight: "20px",
+                                    }}
+                                  >
+                                    Add Language
+                                  </button>
+                                ) : (
+                                  <button
+                                    style={{
+                                      cursor: "pointer",
+                                      backgroundColor: "#14a248",
+                                      border: "#14a248",
+                                      width: "115px",
+                                      color: "#fff",
+                                      fontWeight: "800",
+                                      outline: "none",
+                                      borderRadius: "4px",
+                                      height: "39px",
+                                      lineHeight: "39px",
+                                      marginRight: "20px",
+                                    }}
+                                    onClick={(e) => {
+                                      handleAdd(e);
+                                    }}
+                                  >
+                                    Add Language
+                                  </button>
+                                )
                               ) : (
                                 <button
                                   type="button"
@@ -1823,12 +1845,26 @@ const LocumCV = () => {
                   </div>
                 </div>
               </section>
+
               {resume && workhistory ? (
-                <section className="buttonCard">
-                  <button type="submit" className="btn-save">
-                    Update
-                  </button>
-                </section>
+                activeButton === 0 ||
+                activeButton === 1 ||
+                activeButton === 2 ? (
+                  <section className="buttonCard">
+                    <button type="submit" className="btn-save">
+                      Update
+                    </button>
+                  </section>
+                ) : (
+                  <section className="buttonCard">
+                    <input
+                      type="button"
+                      disabled
+                      className="btn-save"
+                      defaultValue="Update"
+                    />
+                  </section>
+                )
               ) : (
                 <section className="buttonCard">
                   <input
@@ -1890,6 +1926,36 @@ const LocumCV = () => {
             .wrap .buttonCard {
               width: 450px;
               margin: 25px 15px;
+            }
+          }
+
+          /* ============= PERSONAL DETAILS ============== */
+
+          .locum_details {
+            margin: 15px auto 25px;
+            padding: 10px 440px;
+          }
+
+          .locum_details h2 {
+            color: #323232;
+            font-weight: 500;
+            font-size: 32px;
+          }
+          .locum_details a {
+            color: #14a248;
+            display: block;
+            margin-bottom: 10px;
+          }
+
+          .locum_details a:hover {
+            color: #0e7132;
+          }
+
+          @media screen and (max-width: 768px) {
+            .locum_details {
+              margin: 25px auto;
+              padding: 10px 100px;
+              text-align: center;
             }
           }
 

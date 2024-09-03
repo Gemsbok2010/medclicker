@@ -225,6 +225,7 @@ const Step1 = () => {
     } else {
       setLongitude(ReactSession.get("locum_longitude"));
     }
+
     setResume(ReactSession.get("resume"));
     // ============ PROFILE DATA ===========
     axios
@@ -982,11 +983,11 @@ const Step1 = () => {
           input[type="text"],
           input[type="email"] {
             height: 42px;
-            border-radius: 0px;
+            border-radius: 7px;
             text-decoration: none;
             outline: none !important;
             background: none;
-            border: 2px solid #dadada;
+            border: 1px solid #dadada;
             padding: 12px 15px;
             font-weight: 500;
             width: 100%;
@@ -1116,7 +1117,7 @@ const Step1 = () => {
             -webkit-box-direction: normal;
             -ms-flex-direction: column;
             flex-direction: column;
-            border-radius: 0px;
+            border-radius: 7px;
             background: #fff;
           }
           .wrap .bottomQuestionCard h2,

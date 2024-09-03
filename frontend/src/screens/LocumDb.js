@@ -6,13 +6,14 @@ import { useState, useEffect } from "react";
 import { ReactSession } from "react-client-session";
 import { ExternalLink } from "react-external-link";
 import { useSelector } from "react-redux";
+import { RotatingLines } from "react-loader-spinner";
 
 const LocumDb = () => {
   ReactSession.setStoreType("sessionStorage");
   const user = useSelector((state) => state.userInfo.value);
   const { search } = useLocation();
   const [noOfCases, setNoOfCases] = useState([]);
-  const [page, setPage] = useState([]);
+  const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const email = user.email;
 
@@ -22,7 +23,7 @@ const LocumDb = () => {
     const res = await fetch(
       process.env.REACT_APP_BACKEND_URL +
         `api/locums/database?page=${page <= 0 ? 0 : page - 1}` +
-        "sortBy=" +
+        "&sortBy=" +
         sort +
         "&language=" +
         language +
@@ -53,7 +54,7 @@ const LocumDb = () => {
         `api/locums/database?page=${
           page < maxPage ? 1 + parseInt(page) : page
         }` +
-        "sortBy=" +
+        "&sortBy=" +
         sort +
         "&language=" +
         language +
@@ -115,7 +116,7 @@ const LocumDb = () => {
   // =============== SORT ================
   const [ascDesc, setAscDesc] = useState(false);
   const [sort, setSort] = useState(-1);
-  const [, setReload] = useState(false);
+  const [reload, setReload] = useState(false);
 
   const sorting = async (ascDesc) => {
     setReload(false);
@@ -372,6 +373,43 @@ const LocumDb = () => {
       listOfProfessions.map((list) => [list.professionName, list])
     ).values(),
   ];
+
+  if (reload === false)
+    return (
+      <div
+        style={{
+          backgroundColor: "#14a248",
+          top: "0",
+          left: "0",
+          height: "100%",
+          width: "100%",
+          zIndex: "2500",
+          display: "block",
+          position: "fixed",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            position: "absolute",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <RotatingLines
+            strokeColor="white"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
+            visible={true}
+          />
+        </div>
+      </div>
+    );
 
   return (
     <>

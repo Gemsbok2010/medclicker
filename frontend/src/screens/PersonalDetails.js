@@ -6,7 +6,7 @@ import LoggedInNavbar from "../components/LoggedInNavbar";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-
+import { RotatingLines } from "react-loader-spinner";
 import { ThreeDots } from "react-loader-spinner";
 import {
   GoogleMap,
@@ -15,7 +15,6 @@ import {
   Autocomplete,
 } from "@react-google-maps/api";
 
-import { RotatingLines } from "react-loader-spinner";
 import { login } from "../redux/userInfo";
 
 function Plan({ address, latitude, longitude, geoLocate }) {
@@ -132,7 +131,7 @@ const PersonalDetails = () => {
   let token = params.get("token");
   let access = params.get("access");
   access = access === "true";
-
+  const [readyToShow, setReadyToShow] = useState(false);
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");
   const [postalCode, setPostalCode] = useState("");
@@ -153,6 +152,7 @@ const PersonalDetails = () => {
     }
 
     // ============ PROFILE DATA ===========
+    setReadyToShow(false);
     axios
       .get(
         process.env.REACT_APP_BACKEND_URL +
@@ -219,6 +219,7 @@ const PersonalDetails = () => {
             })
           );
           window.history.pushState({}, document.title, "/personal-details");
+          setReadyToShow(true);
         }
       });
   }, [id]);
@@ -626,39 +627,39 @@ const PersonalDetails = () => {
     libraries: libraries,
   });
 
-  if (!isLoaded)
+  if (!isLoaded || readyToShow === false)
     return (
       <div
         style={{
-          backgroundColor: "rgba(33, 40, 46, 0.8)",
+          backgroundColor: "#14a248",
           top: "0",
           left: "0",
           height: "100%",
           width: "100%",
           zIndex: "2500",
-          justifyContent: "center",
-          alignItems: "center",
           display: "block",
           position: "fixed",
-          color: "white",
         }}
       >
         <div
           style={{
             textAlign: "center",
             position: "absolute",
-            transform: "translate(50%,50%)",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
           }}
         >
           <RotatingLines
             strokeColor="white"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="76"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
             visible={true}
           />
-          {"  "}
-          Loading...
         </div>
       </div>
     );
@@ -669,10 +670,7 @@ const PersonalDetails = () => {
         <Helmet>
           <title>Personal Details | Medclicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
-          <meta
-            name="description"
-            content="Medclicker Medclicker Personal Details"
-          />
+          <meta name="description" content="Medclicker Personal Details" />
         </Helmet>
         <LoggedInNavbar />
 
@@ -1325,6 +1323,8 @@ const PersonalDetails = () => {
             border-radius: 4px;
             padding: 0;
             width: 100%;
+            display: flex;
+            justify-content: center;
           }
 
           .regCon {
@@ -1386,7 +1386,7 @@ const PersonalDetails = () => {
             width: 80%;
           }
 
-          /* ========= 頭像照片 =========== */
+          /* ========= ID Photo =========== */
           .wrap .questionCard {
             width: 80%;
             min-height: 270px;
@@ -1399,7 +1399,7 @@ const PersonalDetails = () => {
             -ms-flex-direction: column;
             flex-direction: column;
             margin-top: 40px;
-            border-radius: 0px;
+            border-radius: 7px;
             background: #fff;
           }
 
@@ -1435,6 +1435,7 @@ const PersonalDetails = () => {
             height: 40px;
             margin: 0px auto;
             width: 130px;
+            border-radius: 7px;
             margin-left: 5px;
           }
           .bigHead #savePhoto:active,
@@ -1513,7 +1514,8 @@ const PersonalDetails = () => {
             text-align: center;
             line-height: 36px;
             cursor: pointer;
-            border: 2px solid #dadada;
+            border: 1px solid #dadada;
+            border-radius: 7px;
             background-color: white;
           }
 
@@ -1607,7 +1609,7 @@ const PersonalDetails = () => {
             -webkit-box-direction: normal;
             -ms-flex-direction: column;
             flex-direction: column;
-            border-radius: 0px;
+            border-radius: 7px;
             background: #fff;
           }
 
@@ -1648,8 +1650,9 @@ const PersonalDetails = () => {
             text-decoration: none;
             outline: none !important;
             background: none;
-            border: 2px solid #dadada;
-            padding: 12px 15px;
+            border: 1px solid #dadada;
+            border-radius: 7px;
+            padding: 12px 10px;
             font-weight: 500;
             width: 100%;
             font-size: 14px;

@@ -10,14 +10,16 @@ import Footer from "../components/Footer";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 // Three dots
 import { ThreeDots } from "react-loader-spinner";
+import { RotatingLines } from "react-loader-spinner";
 
 const LocumAgreements = () => {
   const user = useSelector((state) => state.userInfo.value);
   const [noOfInvoices, setNoOfInvoices] = useState([]);
   const [contracts, setContracts] = useState([]);
-  const [page, setPage] = useState([]);
+  const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const email = user.email;
+  const [readyToShow, setReadyToShow] = useState(false);
 
   // =============== PAGE BUTTONS ================
 
@@ -25,7 +27,7 @@ const LocumAgreements = () => {
     const res = await fetch(
       process.env.REACT_APP_BACKEND_URL +
         `api/applications/agreements?page=${page <= 0 ? 0 : page - 1}` +
-        "sortBy=" +
+        "&sortBy=" +
         sort +
         "&email=" +
         email +
@@ -53,7 +55,7 @@ const LocumAgreements = () => {
         `api/applications/agreements?page=${
           page < maxPage ? 1 + parseInt(page) : page
         }` +
-        "sortBy=" +
+        "&sortBy=" +
         sort +
         "&email=" +
         email +
@@ -216,14 +218,13 @@ const LocumAgreements = () => {
 
   useEffect(() => {
     let isCancelled = false;
-
+    setReadyToShow(false);
     // declare the data fetching function
     const fetchData = async () => {
       setReload(false);
       const res = await fetch(
         process.env.REACT_APP_BACKEND_URL +
-          "api/applications/agreements?" +
-          "sortBy=" +
+          "api/applications/agreements?sortBy=" +
           sort +
           "&page=" +
           page +
@@ -243,6 +244,7 @@ const LocumAgreements = () => {
         setPage(data.page);
         setMaxPage(data.maxPage);
         setSort(data.sort);
+        setReadyToShow(true);
       }
     };
     if (isCancelled === false) {
@@ -270,8 +272,7 @@ const LocumAgreements = () => {
       setReload(false);
       const res = await fetch(
         process.env.REACT_APP_BACKEND_URL +
-          "api/applications/agreements?" +
-          "sortBy=" +
+          "api/applications/agreements?sortBy=" +
           sort +
           "&page=" +
           page +
@@ -323,6 +324,43 @@ const LocumAgreements = () => {
         }
       });
   }, []);
+
+  if (readyToShow === false)
+    return (
+      <div
+        style={{
+          backgroundColor: "#14a248",
+          top: "0",
+          left: "0",
+          height: "100%",
+          width: "100%",
+          zIndex: "2500",
+          display: "block",
+          position: "fixed",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            position: "absolute",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <RotatingLines
+            strokeColor="white"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
+            visible={true}
+          />
+        </div>
+      </div>
+    );
 
   return (
     <>

@@ -18,7 +18,7 @@ const Ausers = () => {
   const [users, setUsers] = useState([]);
   const [total, setTotal] = useState([]);
   const [blacklisted, setBlacklisted] = useState([]);
-  const [page, setPage] = useState([]);
+  const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const [dropdown, setDropdown] = useState(false);
 

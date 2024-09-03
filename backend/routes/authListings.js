@@ -195,7 +195,7 @@ router.get("/search", async (req, res) => {
     let locatie = req.query.location;
 
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
     let match = {
@@ -394,7 +394,7 @@ router.get("/listingEditReg/:slug", async (req, res) => {
 router.get("/listingmanager", async (req, res) => {
   Listing.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -512,7 +512,7 @@ router.get("/listingmanager", async (req, res) => {
 router.get("/candidates", async (req, res) => {
   Listing.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -609,7 +609,7 @@ router.get("/candidates", async (req, res) => {
 router.put("/sleepAd/:slug", async (req, res) => {
   const user = await Listing.findOne({ slug: req.params.slug });
   let sort = req.query.sortBy;
-  if (sort === undefined || sort === "") {
+  if (sort === undefined || sort === "-1") {
     sort = -1;
   }
 
@@ -686,7 +686,7 @@ router.put("/delete/:slug", async (req, res) => {
 // ============= REJECT CANDIDATE ================
 router.put("/reject/:slug/:nanoId", async (req, res) => {
   let sort = req.query.sortBy;
-  if (sort === undefined || sort === "") {
+  if (sort === undefined || sort === "-1") {
     sort = -1;
   }
   try {

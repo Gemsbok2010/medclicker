@@ -203,7 +203,7 @@ router.get("/Ad_details/:slug", async (req, res, next) => {
 router.get("/applicationsmanager", async (req, res) => {
   Pub.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -283,7 +283,7 @@ router.get("/applicationsmanager", async (req, res) => {
 router.get("/getList", async (req, res) => {
   Listing.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
     let email = req.query.email;
@@ -370,7 +370,7 @@ router.get("/getList", async (req, res) => {
 router.get("/myapplications/:slug", async (req, res) => {
   Listing.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -799,7 +799,7 @@ router.get("/agreements", async (req, res) => {
     const email = req.query.email;
 
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
     let match = {
@@ -880,7 +880,7 @@ router.get("/sortagreements", async (req, res) => {
 
     let email = req.query.email;
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 

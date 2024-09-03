@@ -9,7 +9,7 @@ const Question2 = () => {
   const navigate = useNavigate();
   ReactSession.setStoreType("sessionStorage");
   const [listOfProfessions, setListOfProfessions] = useState([]);
-  const [page, setPage] = useState([]);
+  const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const [customerId, setCustomerId] = useState("");
 

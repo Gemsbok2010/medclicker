@@ -6,7 +6,6 @@ import { useLocation } from "react-router-dom";
 import LoggedInNavbarByAdmin from "../components/LoggedInNavbarByAdmin";
 import { ReactSession } from "react-client-session";
 import { ThreeDots } from "react-loader-spinner";
-
 import {
   GoogleMap,
   useJsApiLoader,
@@ -137,9 +136,11 @@ const Aedituser = () => {
   const [userInfo, setUserInfo] = useState({});
   const [idPhoto, setIdPhoto] = useState("");
   const [isloading, setIsloading] = useState(false);
+  const [readyToShow, setReadyToShow] = useState(false);
 
   // ============ PROFILE DATA ===========
   useEffect(() => {
+    setReadyToShow(false);
     ReactSession.set("customerId", userid);
     axios
       .get(process.env.REACT_APP_BACKEND_URL + "api/users/allusers/" + userid)
@@ -155,6 +156,7 @@ const Aedituser = () => {
           setLongitude(response.data.longitude);
           setPostalCode(response.data.postalCode);
           setIdPhoto(response.data.filename);
+          setReadyToShow(true);
         }
       });
   }, []);
@@ -314,6 +316,7 @@ const Aedituser = () => {
             top: 0,
             behavior: "smooth",
           });
+
           setTimeout(function () {
             setUpdateNote(false);
           }, 2000);
@@ -504,39 +507,39 @@ const Aedituser = () => {
     libraries: libraries,
   });
 
-  if (!isLoaded)
+  if (!isLoaded || readyToShow === false)
     return (
       <div
         style={{
-          backgroundColor: "rgba(33, 40, 46, 0.8)",
+          backgroundColor: "#14a248",
           top: "0",
           left: "0",
           height: "100%",
           width: "100%",
           zIndex: "2500",
-          justifyContent: "center",
-          alignItems: "center",
           display: "block",
           position: "fixed",
-          color: "white",
         }}
       >
         <div
           style={{
             textAlign: "center",
             position: "absolute",
-            transform: "translate(50%,50%)",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
           }}
         >
           <RotatingLines
             strokeColor="white"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="76"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
             visible={true}
           />
-          {"  "}
-          Loading...
         </div>
       </div>
     );
@@ -1204,7 +1207,7 @@ const Aedituser = () => {
             }
           }
 
-          /* ========= 頭像照片 =========== */
+          /* ========= ID PHOTO =========== */
           .wrap .questionCard {
             width: 80%;
             min-height: 270px;
@@ -1217,7 +1220,7 @@ const Aedituser = () => {
             -ms-flex-direction: column;
             flex-direction: column;
             margin-top: 40px;
-            border-radius: 0px;
+            border-radius: 7px;
             background: #fff;
           }
 
@@ -1254,6 +1257,7 @@ const Aedituser = () => {
             margin: 0px auto;
             width: 130px;
             margin-left: 5px;
+            border-radius: 7px;
           }
           .bigHead #savePhoto:active,
           .bigHead #savePhoto:focus {
@@ -1331,8 +1335,9 @@ const Aedituser = () => {
             text-align: center;
             line-height: 36px;
             cursor: pointer;
-            border: 2px solid #dadada;
+            border: 1px solid #dadada;
             background-color: white;
+            border-radius: 7px;
           }
 
           .bigHead .buttonsEven {
@@ -1394,7 +1399,7 @@ const Aedituser = () => {
             -webkit-box-direction: normal;
             -ms-flex-direction: column;
             flex-direction: column;
-            border-radius: 0px;
+            border-radius: 7px;
             background: #fff;
           }
 
@@ -1431,12 +1436,12 @@ const Aedituser = () => {
           input[type="tel"],
           input[type="email"] {
             height: 42px;
-            border-radius: 0px;
+            border-radius: 7px;
             text-decoration: none;
             outline: none !important;
             background: none;
-            border: 2px solid #dadada;
-            padding: 12px 15px;
+            border: 1px solid #dadada;
+            padding: 12px 10px;
             font-weight: 500;
             width: 100%;
             font-size: 14px;

@@ -19,6 +19,7 @@ const Step2 = () => {
   // ========= POPULATE SESSION DATA ==============
   useEffect(() => {
     setCountry(ReactSession.get("locum_country"));
+    setActiveButton(ReactSession.get("activeButton"));
 
     if (!ReactSession.get("skillOne")) {
       setSkillOne(ReactSession.get("locum_profession") + " Skills");
@@ -223,11 +224,6 @@ const Step2 = () => {
       setRow([]);
     } else {
       setRow(ReactSession.get("row"));
-    }
-    if (!ReactSession.get("activeButton")) {
-      setActiveButton("");
-    } else {
-      setActiveButton(ReactSession.get("activeButton"));
     }
   }, []);
 
@@ -1862,26 +1858,46 @@ const Step2 = () => {
                             {activeButton === i &&
                             linguistics[`whichlanguage${i}`] !== "" &&
                             linguistics[`languageLvl${i}`] !== "" ? (
-                              <button
-                                style={{
-                                  cursor: "pointer",
-                                  backgroundColor: "#14a248",
-                                  border: "#14a248",
-                                  width: "115px",
-                                  color: "#fff",
-                                  fontWeight: "800",
-                                  outline: "none",
-                                  borderRadius: "4px",
-                                  height: "39px",
-                                  lineHeight: "39px",
-                                  marginRight: "20px",
-                                }}
-                                onClick={(e) => {
-                                  handleAdd(e);
-                                }}
-                              >
-                                Add Language
-                              </button>
+                              activeButton === 2 ? (
+                                <button
+                                  type="button"
+                                  style={{
+                                    color: "#888",
+                                    backgroundColor: "#ddd",
+                                    width: "115px",
+                                    fontWeight: "800",
+                                    outline: "none",
+                                    borderRadius: "4px",
+                                    border: "#ddd",
+                                    height: "39px",
+                                    lineHeight: "39px",
+                                    marginRight: "20px",
+                                  }}
+                                >
+                                  Add Language
+                                </button>
+                              ) : (
+                                <button
+                                  style={{
+                                    cursor: "pointer",
+                                    backgroundColor: "#14a248",
+                                    border: "#14a248",
+                                    width: "115px",
+                                    color: "#fff",
+                                    fontWeight: "800",
+                                    outline: "none",
+                                    borderRadius: "4px",
+                                    height: "39px",
+                                    lineHeight: "39px",
+                                    marginRight: "20px",
+                                  }}
+                                  onClick={(e) => {
+                                    handleAdd(e);
+                                  }}
+                                >
+                                  Add Language
+                                </button>
+                              )
                             ) : (
                               <button
                                 type="button"
@@ -1930,9 +1946,17 @@ const Step2 = () => {
             <div className="personContent">
               <section className="buttonCard">
                 {resume && workhistory ? (
-                  <button type="submit" className="btn-vori">
-                    Create CV
-                  </button>
+                  activeButton === 0 ||
+                  activeButton === 1 ||
+                  activeButton === 2 ? (
+                    <button type="submit" className="btn-vori">
+                      Create CV
+                    </button>
+                  ) : (
+                    <button type="button" disabled className="btn-vori">
+                      Create CV
+                    </button>
+                  )
                 ) : (
                   <button type="button" disabled className="btn-vori">
                     Create CV

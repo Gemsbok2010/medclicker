@@ -519,39 +519,39 @@ const AeditLocumcv = () => {
       });
   };
 
-  if (!isloaded)
+  if (isloaded === false)
     return (
       <div
         style={{
-          backgroundColor: "rgba(33, 40, 46, 0.8)",
+          backgroundColor: "#14a248",
           top: "0",
           left: "0",
           height: "100%",
           width: "100%",
           zIndex: "2500",
-          justifyContent: "center",
-          alignItems: "center",
           display: "block",
           position: "fixed",
-          color: "white",
         }}
       >
         <div
           style={{
             textAlign: "center",
             position: "absolute",
-            transform: "translate(50%,50%)",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
           }}
         >
           <RotatingLines
             strokeColor="white"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="76"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
             visible={true}
           />
-          {"  "}
-          Loading...
         </div>
       </div>
     );
@@ -1750,26 +1750,46 @@ const AeditLocumcv = () => {
                               {activeButton === i &&
                               linguistics[`whichlanguage${i}`] !== "" &&
                               linguistics[`languageLvl${i}`] !== "" ? (
-                                <button
-                                  style={{
-                                    cursor: "pointer",
-                                    backgroundColor: "#14a248",
-                                    border: "#14a248",
-                                    width: "115px",
-                                    color: "#fff",
-                                    fontWeight: "800",
-                                    outline: "none",
-                                    borderRadius: "4px",
-                                    height: "39px",
-                                    lineHeight: "39px",
-                                    marginRight: "20px",
-                                  }}
-                                  onClick={(e) => {
-                                    handleAdd(e);
-                                  }}
-                                >
-                                  Add Language
-                                </button>
+                                activeButton === 2 ? (
+                                  <button
+                                    type="button"
+                                    style={{
+                                      color: "#888",
+                                      backgroundColor: "#ddd",
+                                      width: "115px",
+                                      fontWeight: "800",
+                                      outline: "none",
+                                      borderRadius: "4px",
+                                      border: "#ddd",
+                                      height: "39px",
+                                      lineHeight: "39px",
+                                      marginRight: "20px",
+                                    }}
+                                  >
+                                    Add Language
+                                  </button>
+                                ) : (
+                                  <button
+                                    style={{
+                                      cursor: "pointer",
+                                      backgroundColor: "#14a248",
+                                      border: "#14a248",
+                                      width: "115px",
+                                      color: "#fff",
+                                      fontWeight: "800",
+                                      outline: "none",
+                                      borderRadius: "4px",
+                                      height: "39px",
+                                      lineHeight: "39px",
+                                      marginRight: "20px",
+                                    }}
+                                    onClick={(e) => {
+                                      handleAdd(e);
+                                    }}
+                                  >
+                                    Add Language
+                                  </button>
+                                )
                               ) : (
                                 <button
                                   type="button"
@@ -1816,17 +1836,55 @@ const AeditLocumcv = () => {
                   </div>
                 </div>
               </section>
+
               {resume && workhistory ? (
-                <button type="submit" className="btn-save">
-                  Update
-                </button>
+                linguistics.whichlanguage0 && linguistics.languageLvl0 ? (
+                  linguistics.whichlanguage1 && linguistics.languageLvl1 ? (
+                    linguistics.whichlanguage2 && linguistics.languageLvl2 ? (
+                      <section className="buttonCard">
+                        <button type="submit" className="btn-save">
+                          Update
+                        </button>
+                      </section>
+                    ) : (
+                      <section className="buttonCard">
+                        <input
+                          type="button"
+                          disabled
+                          className="btn-save"
+                          defaultValue="Update"
+                        />
+                      </section>
+                    )
+                  ) : (
+                    <section className="buttonCard">
+                      <input
+                        type="button"
+                        disabled
+                        className="btn-save"
+                        defaultValue="Update"
+                      />
+                    </section>
+                  )
+                ) : (
+                  <section className="buttonCard">
+                    <input
+                      type="button"
+                      disabled
+                      className="btn-save"
+                      defaultValue="Update"
+                    />
+                  </section>
+                )
               ) : (
-                <input
-                  type="button"
-                  disabled
-                  className="btn-save"
-                  defaultValue="Update"
-                />
+                <section className="buttonCard">
+                  <input
+                    type="button"
+                    disabled
+                    className="btn-save"
+                    defaultValue="Update"
+                  />
+                </section>
               )}
             </form>
           </div>

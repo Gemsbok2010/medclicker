@@ -97,7 +97,7 @@ router.post("/login", async (req, res) => {
 router.post("/profession", async (req, res) => {
   try {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -140,7 +140,7 @@ router.post("/profession", async (req, res) => {
 router.get("/contractType", async (req, res) => {
   Profession.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -188,7 +188,7 @@ router.get("/contractType", async (req, res) => {
 router.get("/sortnames", async (req, res) => {
   Profession.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -236,7 +236,7 @@ router.get("/sortnames", async (req, res) => {
 router.get("/professions", async (req, res) => {
   Profession.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -294,7 +294,7 @@ router.get("/professions", async (req, res) => {
 // =========== HIDE PROFESSION (from AProfessions.js) ===========
 router.put("/hideProf/:id", async (req, res) => {
   let sort = req.query.sortBy;
-  if (sort === undefined || sort === "") {
+  if (sort === undefined || sort === "-1") {
     sort = -1;
   }
   let num = await Profession.find({ showProfession: true }).countDocuments();
@@ -352,7 +352,7 @@ router.delete("/deleteProfession/:id", async (req, res) => {
 // ============= BLACLIST AN USER (From Ausers.js) =============
 router.put("/blackme/:id", async (req, res) => {
   let sort = req.query.sortBy;
-  if (sort === undefined || sort === "") {
+  if (sort === undefined || sort === "-1") {
     sort = -1;
   }
 
@@ -404,7 +404,7 @@ router.put("/blackme/:id", async (req, res) => {
 // ============ MAKE USER AN ADMIN (From Ausers.js) ============
 router.put("/makeAdmin/:id", async (req, res) => {
   let sort = req.query.sortBy;
-  if (sort === undefined || sort === "") {
+  if (sort === undefined || sort === "-1") {
     sort = -1;
   }
   let num = await User.find({ isAdmin: true }).countDocuments();
@@ -545,7 +545,7 @@ router.post("/upload-locum", async (req, res) => {
 router.get("/allusers", async (req, res) => {
   User.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -600,7 +600,7 @@ router.get("/sortusers", async (req, res) => {
     const thisSort = {};
 
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -684,7 +684,7 @@ router.get("/sortusers", async (req, res) => {
 router.get("/alllocums", async (req, res) => {
   Locum.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -736,7 +736,7 @@ router.get("/sortlocums", async (req, res) => {
     const thisSort = {};
 
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -822,7 +822,7 @@ router.get("/sortlocums", async (req, res) => {
 // ============== HIDE LOCUM (from Alocums.js) ============
 router.put("/hideme/:id", async (req, res) => {
   let sort = req.query.sortBy;
-  if (sort === undefined || sort === "") {
+  if (sort === undefined || sort === "-1") {
     sort = -1;
   }
   let num = await Locum.find({ showLocum: true }).countDocuments();
@@ -898,7 +898,7 @@ router.post("/forgotpassword", async (req, res) => {
 router.get("/payments", async (req, res) => {
   Payment.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -964,7 +964,7 @@ router.get("/sortpayments", async (req, res) => {
     const thisSort = {};
 
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -1166,7 +1166,7 @@ router.post("/sendinvoice", async (req, res) => {
 router.get("/sortinvoices", async (req, res) => {
   Payment.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -1363,7 +1363,7 @@ router.post("/sendagreement", async (req, res) => {
 router.get("/listings", async (req, res) => {
   Listing.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -1447,7 +1447,7 @@ router.get("/listings", async (req, res) => {
 // ================ HIDE LISTING (from Alistings.js) ===========
 router.put("/sleepAd/:slug", async (req, res) => {
   let sort = req.query.sortBy;
-  if (sort === undefined || sort === "") {
+  if (sort === undefined || sort === "-1") {
     sort = -1;
   }
 
@@ -1533,7 +1533,7 @@ router.get("/sortcase", async (req, res) => {
     const thisSort = {};
 
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -1648,7 +1648,7 @@ router.get("/sortcase", async (req, res) => {
 router.get("/locumsonly", async (req, res) => {
   Listing.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -1719,7 +1719,7 @@ router.get("/sortlocumcase", async (req, res) => {
     const thisSort = {};
 
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -1830,7 +1830,7 @@ router.get("/sortlocumcase", async (req, res) => {
 // ================ HIDE LISTING (from Alistings.js) ===========
 router.put("/locumSleepAd/:slug", async (req, res) => {
   let sort = req.query.sortBy;
-  if (sort === undefined || sort === "") {
+  if (sort === undefined || sort === "-1") {
     sort = -1;
   }
 
@@ -2103,7 +2103,7 @@ router.get("/listingedit/:slug", async (req, res) => {
 router.get("/applications", async (req, res) => {
   Pub.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -2170,7 +2170,7 @@ router.get("/sortapplications", async (req, res) => {
     const thisSort = {};
 
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -2271,7 +2271,7 @@ router.get("/sortapplications", async (req, res) => {
 router.get("/locum_applications", async (req, res) => {
   Pub.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
@@ -2326,7 +2326,7 @@ router.get("/sortlocum_applications", async (req, res) => {
     const thisSort = {};
 
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 

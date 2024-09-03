@@ -163,7 +163,7 @@ const AsearchList = () => {
   const [latitude, setLatitude] = useState("");
   const [listingInfo, setListingInfo] = useState([]);
   const [noOfCases, setNoOfCases] = useState([]);
-  const [page, setPage] = useState([]);
+  const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const [isloaded, setIsloaded] = useState(false);
   const [idPhoto, setIdPhoto] = useState("");

@@ -17,7 +17,7 @@ const ApplicationsManager = () => {
   const [candidates, setCandidates] = useState([]);
   const emptyArray = listingInfo.length;
   const [noOfCases, setNoOfCases] = useState([]);
-  const [page, setPage] = useState([]);
+  const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const email = user.email;
 

@@ -137,7 +137,7 @@ const AeditLocum = () => {
   const [SMStext, setSMStext] = useState("");
   const [newsletter, setNewsletter] = useState("");
   const [idPhoto, setIdPhoto] = useState("");
-  const [, setIsloaded] = useState(false);
+  const [isloaded, setIsloaded] = useState(false);
 
   const [listOfProfessions, setListOfProfessions] = useState([]);
 
@@ -544,39 +544,39 @@ const AeditLocum = () => {
     libraries: libraries,
   });
 
-  if (!isLoaded)
+  if (!isLoaded || isloaded === false)
     return (
       <div
         style={{
-          backgroundColor: "rgba(33, 40, 46, 0.8)",
+          backgroundColor: "#14a248",
           top: "0",
           left: "0",
           height: "100%",
           width: "100%",
           zIndex: "2500",
-          justifyContent: "center",
-          alignItems: "center",
           display: "block",
           position: "fixed",
-          color: "white",
         }}
       >
         <div
           style={{
             textAlign: "center",
             position: "absolute",
-            transform: "translate(50%,50%)",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
           }}
         >
           <RotatingLines
             strokeColor="white"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="76"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
             visible={true}
           />
-          {"  "}
-          Loading...
         </div>
       </div>
     );

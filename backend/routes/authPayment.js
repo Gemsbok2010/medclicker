@@ -1099,7 +1099,7 @@ router.get("/invoices", async (req, res) => {
   Payment.paginate({}, {}).then(async (result) => {
     const email = req.query.email;
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
     let match = {
@@ -1166,7 +1166,7 @@ router.get("/sortinvoices", async (req, res) => {
 
     let email = req.query.email;
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 

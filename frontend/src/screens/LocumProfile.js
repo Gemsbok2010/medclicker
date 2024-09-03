@@ -122,6 +122,7 @@ function Plan({ address, latitude, longitude, geoLocate }) {
 
 const LocumProfile = () => {
   const user = useSelector((state) => state.userInfo.value);
+
   const [userInfo, setUserInfo] = useState({});
   const [driverslicense, setDriverslicense] = useState("");
   const [ahpra, setAhpra] = useState("");
@@ -140,7 +141,7 @@ const LocumProfile = () => {
   const [SMStext, setSMStext] = useState("");
   const [newsletter, setNewsletter] = useState("");
   const [idPhoto, setIdPhoto] = useState("");
-  const [, setIsloaded] = useState(false);
+  const [isloaded, setIsloaded] = useState(false);
   const [listOfProfessions, setListOfProfessions] = useState([]);
 
   // ============ PROFILE DATA ===========
@@ -293,26 +294,21 @@ const LocumProfile = () => {
     const formData = new FormData();
     formData.append("file", file);
 
-  
     fetch(
-      `https://medclicker.com.au/api/locums/upload?email=${userInfo.email}`,
+      process.env.REACT_APP_BACKEND_URL +
+        `api/locums/upload?email=${userInfo.email}`,
       {
         method: "POST",
-        headers: {
-          Accept: "application/json",
-        },
         body: formData,
       }
     )
       .then((res) => res.json())
       .then((data) => {
-
         if (data.invalid) {
           outPutErrorMessagesInAllusers(data.invalid);
         } else {
           setUpdateNote(true);
           setIdPhoto(data.newImage);
-    
           window.scrollTo({
             top: 0,
             behavior: "smooth",
@@ -697,39 +693,39 @@ const LocumProfile = () => {
     libraries: libraries,
   });
 
-  if (!isLoaded)
+  if (!isLoaded || isloaded === false)
     return (
       <div
         style={{
-          backgroundColor: "rgba(33, 40, 46, 0.8)",
+          backgroundColor: "#14a248",
           top: "0",
           left: "0",
           height: "100%",
           width: "100%",
           zIndex: "2500",
-          justifyContent: "center",
-          alignItems: "center",
           display: "block",
           position: "fixed",
-          color: "white",
         }}
       >
         <div
           style={{
             textAlign: "center",
             position: "absolute",
-            transform: "translate(50%,50%)",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
           }}
         >
           <RotatingLines
             strokeColor="white"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="76"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
             visible={true}
           />
-          {"  "}
-          Loading...
         </div>
       </div>
     );
@@ -782,6 +778,15 @@ const LocumProfile = () => {
               </div>
             </div>
             <div className="allQuestionCards">
+              {/* <form
+                id="formZero"
+                method="POST"
+                action={
+                  process.env.REACT_APP_BACKEND_URL +
+                  `api/locums/upload?email=${userInfo.email}`
+                }
+                encType="multipart/form-data"
+              > */}
               <form id="formZero" onSubmit={handleSubmit}>
                 <div className="sectionHeadings">
                   <h2>Photo</h2>
@@ -865,7 +870,7 @@ const LocumProfile = () => {
                               Save Photo
                             </button>
                           ) : (
-                            <button type="button" disabled id="savePhoto">
+                            <button type="submit" disabled id="savePhoto">
                               Save Photo
                             </button>
                           )}

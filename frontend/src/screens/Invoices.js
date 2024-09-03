@@ -14,7 +14,7 @@ const Invoices = () => {
   const user = useSelector((state) => state.userInfo.value);
   const [noOfInvoices, setNoOfInvoices] = useState([]);
   const [invoices, setInvoices] = useState([]);
-  const [page, setPage] = useState([]);
+  const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const email = user.email;
 

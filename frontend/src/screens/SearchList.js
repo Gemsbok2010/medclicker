@@ -9,6 +9,7 @@ import { Wrapper } from "@googlemaps/react-wrapper";
 import { ExternalLink } from "react-external-link";
 // Three dots
 import { ThreeDots } from "react-loader-spinner";
+import { RotatingLines } from "react-loader-spinner";
 // useSelector is accessing value of states
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -165,6 +166,7 @@ const SearchList = () => {
   var { search } = useLocation();
   let index = params.get("index");
   let prof = params.get("professions");
+  const [readyToShow, setReadyToShow] = useState(false);
 
   const user = useSelector((state) => state.userInfo.value);
 
@@ -172,13 +174,14 @@ const SearchList = () => {
   const [latitude, setLatitude] = useState("");
   const [listingInfo, setListingInfo] = useState([]);
   const [noOfCases, setNoOfCases] = useState([]);
-  const [page, setPage] = useState([]);
+  const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const [isloaded, setIsloaded] = useState(false);
 
   // ========= FACEBOOK & GOOGLE LOGIN DATA ==========
 
   useEffect(() => {
+    setReadyToShow(false);
     if (id) {
       localStorage.setItem("userId", id);
       localStorage.setItem("token", token);
@@ -209,6 +212,7 @@ const SearchList = () => {
               })
             );
             window.history.pushState({}, document.title, "/searchlist");
+            setReadyToShow(true);
           }
         });
     }
@@ -237,7 +241,7 @@ const SearchList = () => {
     const res = await fetch(
       process.env.REACT_APP_BACKEND_URL +
         `api/listings/search?page=${page <= 0 ? 0 : page - 1}` +
-        "sortBy=" +
+        "&sortBy=" +
         sort +
         "&contract=" +
         contract +
@@ -266,7 +270,7 @@ const SearchList = () => {
         `api/listings/search?page=${
           page < maxPage ? 1 + parseInt(page) : page
         }` +
-        "sortBy=" +
+        "&sortBy=" +
         sort +
         "&contract=" +
         contract +
@@ -473,6 +477,7 @@ const SearchList = () => {
   useEffect(() => {
     let isCancelled = false;
     setIsloaded(false);
+    setReadyToShow(false);
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
@@ -503,6 +508,7 @@ const SearchList = () => {
       setLongitude(data.longArr);
       setLatitude(data.latArr);
       setIsloaded(true);
+      setReadyToShow(true);
     };
 
     if (isCancelled === false) {
@@ -718,7 +724,42 @@ const SearchList = () => {
     libraries: libraries,
   });
 
-  if (!isLoaded) return <div>Loading...</div>;
+  if (readyToShow === false && !isLoaded)
+    return (
+      <div
+        style={{
+          backgroundColor: "#14a248",
+          top: "0",
+          left: "0",
+          height: "100%",
+          width: "100%",
+          zIndex: "2500",
+          display: "block",
+          position: "fixed",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            position: "absolute",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <RotatingLines
+            strokeColor="white"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
+            visible={true}
+          />
+        </div>
+      </div>
+    );
 
   return (
     <>
@@ -1242,7 +1283,7 @@ const SearchList = () => {
         </div>
 
         <style jsx="true">{`
-        html,
+          html,
           body {
             width: 100%;
             margin: 0;

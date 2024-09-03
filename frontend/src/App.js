@@ -5,7 +5,7 @@ import {
   Route,
   useLocation,
 } from "react-router-dom";
-import { RotatingLines } from "react-loader-spinner";
+
 import ReactGA from "react-ga4";
 
 //Route Protection
@@ -148,37 +148,16 @@ function App() {
         fallback={
           <div
             style={{
-              backgroundColor: "rgba(33, 40, 46, 0.8)",
+              backgroundColor: "#fff",
               top: "0",
               left: "0",
               height: "100%",
               width: "100%",
               zIndex: "2500",
-              justifyContent: "center",
               alignItems: "center",
               display: "block",
-              position: "fixed",
-              color: "white",
             }}
-          >
-            <div
-              style={{
-                textAlign: "center",
-                position: "absolute",
-                transform: "translate(50%,50%)",
-              }}
-            >
-              <RotatingLines
-                strokeColor="white"
-                strokeWidth="5"
-                animationDuration="0.75"
-                width="76"
-                visible={true}
-              />
-              {"  "}
-              Loading...
-            </div>
-          </div>
+          ></div>
         }
       >
         <Routes>

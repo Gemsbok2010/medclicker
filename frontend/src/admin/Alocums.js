@@ -15,7 +15,7 @@ const Alocums = () => {
   const user = useSelector((state) => state.userInfo.value);
   const [locums, setLocums] = useState([]);
   const [total, setTotal] = useState([]);
-  const [page, setPage] = useState([]);
+  const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const [dropdown, setDropdown] = useState(false);
 

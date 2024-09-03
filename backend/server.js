@@ -28,8 +28,6 @@ app.use(
   })
 );
 
-mongoose.set("useFindAndModify", false);
-
 //Middleware
 app.use(express.json());
 app.use(cookieParser());
@@ -43,6 +41,7 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+mongoose.set("useFindAndModify", false);
 
 //Import routes
 const adminRoute = require("./routes/administration");
@@ -320,15 +319,11 @@ app.use("/assets", express.static("assets"));
 app.use("/public", express.static("public"));
 
 //Connect to DB (returns a mongoose instance)
-mongoose.connect(
-  process.env.DB_CONNECT,
-  {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-    useCreateIndex: true,
-  },
-  () => console.log("Connect to database")
-);
+const dbConnection = async () => {
+  mongoose.connect(process.env.DB_CONNECT, {});
+};
+
+dbConnection().then(() => console.log("Connected to database"));
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/build")));

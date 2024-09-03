@@ -2563,6 +2563,7 @@ const ListingEdit = () => {
           width: 100%;
           padding: 10px;
           border: 1px solid rgb(238, 238, 238);
+          outline: none;
         }
 
         /* ============= GROUP SEVEN (理想上課地點) ============== */
@@ -2621,26 +2622,6 @@ const ListingEdit = () => {
         }
         .img-fluid {
           transform: translateX(36%);
-        }
-        /*Match Tutors*/
-        .container-candidate {
-          position: relative;
-          width: 100%;
-          top: 7%;
-          left: 0%;
-        }
-        .container-candidate h2 {
-          font-weight: 800;
-          font-size: 22px;
-          width: 100%;
-          padding-top: 8px;
-          padding-bottom: 12px;
-          color: #fff;
-          border-bottom: 1px solid #ebebeb;
-        }
-        .box.box-primary {
-          padding: 15px 10px;
-          box-shadow: none;
         }
 
         input[type="button"] {
@@ -2770,9 +2751,6 @@ const ListingEdit = () => {
             width: 80px;
           }
 
-          .box.box-primary {
-            padding: 15px 40px;
-          }
           .box .row {
             text-align: left;
           }

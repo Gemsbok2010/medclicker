@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { ExternalLink } from "react-external-link";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/userInfo";
+import { RotatingLines } from "react-loader-spinner";
 
 // Three dots
 import { ThreeDots } from "react-loader-spinner";
@@ -20,6 +21,7 @@ const Dashboard = () => {
 
   // ============== BACKDROP ============== //
   const [backdrop, setBackdrop] = useState(false);
+  const [readyToShow, setReadyToShow] = useState(false);
   const [contractType, setContractType] = useState("");
   const [userInfo, setUserInfo] = useState({});
   const [locum, setLocum] = useState({});
@@ -88,6 +90,7 @@ const Dashboard = () => {
 
   // ========== LOGGEDIN APPLICANT APPLIED =========
   useEffect(() => {
+    setReadyToShow(false);
     axios
       .get(
         process.env.REACT_APP_BACKEND_URL +
@@ -107,12 +110,14 @@ const Dashboard = () => {
           setNT(response.data.nt);
           setSA(response.data.sa);
           setWA(response.data.wa);
+          setReadyToShow(true);
         }
       });
   }, []);
 
   const hideMe = async (e, id) => {
     e.preventDefault();
+
     if (show === true) {
       setBackdrop(true);
       const res = await fetch(
@@ -170,6 +175,43 @@ const Dashboard = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  if (readyToShow === false)
+    return (
+      <div
+        style={{
+          backgroundColor: "#14a248",
+          top: "0",
+          left: "0",
+          height: "100%",
+          width: "100%",
+          zIndex: "2500",
+          display: "block",
+          position: "fixed",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            position: "absolute",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <RotatingLines
+            strokeColor="white"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
+            visible={true}
+          />
+        </div>
+      </div>
+    );
 
   return (
     <>
@@ -232,6 +274,7 @@ const Dashboard = () => {
                 ) : (
                   ""
                 )}
+
                 {dropdown ? (
                   <div id="dropItem">
                     <div className="dropwrap">
@@ -771,7 +814,7 @@ const Dashboard = () => {
                       )}
                     </div>
                   </div>
-                  {userInfo.isLocum === false ? (
+                  {user.isLocum === false ? (
                     <div className="bottomBox-none">
                       <h2>Locum Profile</h2>
                       <div>
@@ -1926,7 +1969,7 @@ const Dashboard = () => {
               width: 22rem;
               height: 100vh;
               box-shadow: 2rem 0 2rem var(--color-primary-light);
-              display: "none";
+              display: none;
               animation: showSidebar 500ms ease-in forwards;
             }
 

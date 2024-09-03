@@ -14,7 +14,7 @@ const Aprofessions = () => {
   const user = useSelector((state) => state.userInfo.value);
   const [noOfProfessions, setNoOfProfessions] = useState([]);
   const [professions, setProfessions] = useState([]);
-  const [page, setPage] = useState([]);
+  const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const [dropdown, setDropdown] = useState(false);
 

@@ -6,9 +6,11 @@ import LoggedInNavbar from "../components/LoggedInNavbar";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { ExternalLink } from "react-external-link";
+import { RotatingLines } from "react-loader-spinner";
 
 const Resume = () => {
   const user = useSelector((state) => state.userInfo.value);
+  const [readyToShow, setReadyToShow] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [userInfo, setUserInfo] = useState({});
@@ -23,6 +25,7 @@ const Resume = () => {
   const [idPhoto, setIdPhoto] = useState("");
 
   useEffect(() => {
+    setReadyToShow(false);
     // ============ PROFILE DATA ===========
     axios
       .get(
@@ -44,9 +47,47 @@ const Resume = () => {
           setIdPhoto(response.data.filename);
           setFirstName(response.data.firstName);
           setLastName(response.data.lastName);
+          setReadyToShow(true);
         }
       });
   }, []);
+
+  if (readyToShow === false)
+    return (
+      <div
+        style={{
+          backgroundColor: "#14a248",
+          top: "0",
+          left: "0",
+          height: "100%",
+          width: "100%",
+          zIndex: "2500",
+          display: "block",
+          position: "fixed",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            position: "absolute",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <RotatingLines
+            strokeColor="white"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
+            visible={true}
+          />
+        </div>
+      </div>
+    );
 
   return (
     <>

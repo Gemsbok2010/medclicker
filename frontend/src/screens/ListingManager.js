@@ -22,7 +22,7 @@ const ListingManager = () => {
   const [newApplicants, setNewApplicants] = useState([]);
   const [noApplied, setNoApplied] = useState("");
   const [noOfCases, setNoOfCases] = useState([]);
-  const [page, setPage] = useState([]);
+  const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const email = user.email;
 

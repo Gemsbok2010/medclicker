@@ -14,7 +14,7 @@ const Alistings = () => {
   const user = useSelector((state) => state.userInfo.value);
   const [noOfCases, setNoOfCases] = useState([]);
   const [listings, setListings] = useState([]);
-  const [page, setPage] = useState([]);
+  const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const [dropdown, setDropdown] = useState(false);
 

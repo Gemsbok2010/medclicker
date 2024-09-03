@@ -337,7 +337,7 @@ router.get("/resumeCandidate/:nanoId/:slug", async (req, res) => {
 router.get("/database", async (req, res) => {
   Locum.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
-    if (sort === undefined || sort === "") {
+    if (sort === undefined || sort === "-1") {
       sort = -1;
     }
 
