@@ -1,19 +1,16 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Cards from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
 import axios from "axios";
 import { ReactSession } from "react-client-session";
 import { useSelector } from "react-redux";
-// Three dots
-import { ThreeDots } from "react-loader-spinner";
 
 const CreditCardRegular = () => {
   ReactSession.setStoreType("sessionStorage");
   const user = useSelector((state) => state.userInfo.value);
-  const [isloaded, setIsloaded] = useState(false);
   const [accessCode, setAccessCode] = useState("");
   const [close, setClose] = useState(false);
   const [regFee1, setRegFee1] = useState("");
