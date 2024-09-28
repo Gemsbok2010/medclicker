@@ -16,7 +16,7 @@
     "formik": "^2.2.9",
     "jquery": "^3.6.3",
     "react": "^18.2.0",
-    "react-credit-cards-2": "^1.0.1",
+    "react-credit-cards-2": "^1.0.3",
     "react-csv": "^2.2.2",
     "react-day-picker": "^8.6.0",
     "react-dom": "^18.2.0",
