@@ -29,12 +29,9 @@ const QuestionContinue = () => {
     setStreet(ReactSession.get("street"));
   }, []);
 
-  // ========= CLEAR SESSION WHEN START OVER IS CLICKED =======
+  // ========= CLEAR SESSION WHEN 重新開始 IS CLICKED =======
   const clearSession = () => {
-    sessionStorage.remove("contractType");
-    sessionStorage.remove("professions");
-    sessionStorage.remove("about");
-    sessionStorage.remove("street");
+    sessionStorage.clear();
   };
 
   return (
@@ -127,7 +124,7 @@ const QuestionContinue = () => {
           }
 
           .wrap .questionCard {
-            width: 380px;
+            width: 340px;
             padding: 20px 10px;
             display: -webkit-box;
             display: -ms-flexbox;

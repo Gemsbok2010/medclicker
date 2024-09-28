@@ -18,9 +18,9 @@ const ApplicationSent = () => {
         <div className="wrap">
           <section className="questionCard container">
             <figure>
-              <Link to="/dashboard">
+              <Link to="/">
                 <img
-                  src="/images/medclicker-white.png"
+                  src="/images/medclicker.png"
                   alt="LOGO"
                   className="img-fluid"
                 />
@@ -63,23 +63,19 @@ const ApplicationSent = () => {
             -ms-flex-align: center;
             align-items: center;
             padding-top: 60px;
-            background: #14a248;
+            background-color: #333;
           }
-
-          /* =========== MODAL ============= */
-
+          /* ======== MODAL ========= */
           .wrap .img-fluid {
             transform: translateX(0%);
           }
-
-          .wrap .brief {
-            width: 400px;
-            height: 150px;
-            background-image: url("./../../images/sanofi-ipad.jpg");
+          .plane {
+            width: 300px;
+            height: 80px;
+            background-image: url("../../../images/paperairplane.png");
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
-            margin-bottom: 30px;
           }
 
           .wrap .questionCard {
@@ -95,16 +91,17 @@ const ApplicationSent = () => {
             -webkit-box-align: center;
             -ms-flex-align: center;
             align-items: center;
-            border-radius: 7px;
+            border-radius: 0px;
             border: 1px solid #ebebeb;
-
-            background: #14a248;
+            background: #fff;
+            margin-bottom: 60px;
             -webkit-box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
             box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
           }
+
           .wrap .questionCard > figure {
             width: 200px;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
           }
           .wrap .questionCard > figure > a {
             display: block;
@@ -119,12 +116,12 @@ const ApplicationSent = () => {
             margin: 0px auto 24px;
             padding-top: 8px;
             padding-bottom: 8px;
-            color: #fff;
+            color: #2b2b2b;
           }
           .questionCard p {
             margin: 10px auto;
             text-align: center;
-            color: #fff;
+            color: #777;
             width: 100%;
             font-size: 15px;
             font-weight: 500;
@@ -140,7 +137,9 @@ const ApplicationSent = () => {
             -webkit-box-direction: normal;
             -ms-flex-direction: column;
             flex-direction: column;
-            margin-bottom: 60px;
+          }
+          .questionCard figure {
+            margin-bottom: 80px !important;
           }
 
           @media only screen and (min-width: 768px) {
@@ -151,7 +150,7 @@ const ApplicationSent = () => {
               width: 710px;
               padding: 30px 20px;
             }
-            .wrap .brief {
+            .wrap .tutor {
               width: 500px;
               height: 200px;
             }
@@ -169,16 +168,14 @@ const ApplicationSent = () => {
             height: 50px;
             line-height: 50px;
             outline: none;
-            font-size: 18px;
+            font-size: 20px;
             border-radius: 4px;
             padding: 0;
             margin-top: 20px;
-            border: 1px solid white;
           }
 
           button {
             cursor: pointer;
-            border: 1px solid white;
           }
           button a {
             display: block;
@@ -203,6 +200,35 @@ const ApplicationSent = () => {
             button a {
               width: 100%;
             }
+          }
+
+          .wrap .location h2 {
+            font-weight: 800;
+            font-size: 28px;
+            width: 440px;
+            margin-top: 10px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            margin-bottom: 40px;
+            color: #2b2b2b;
+          }
+
+          input[type="text"]:invalid,
+          input[type="date"]:invalid,
+          input[type="tel"]:invalid {
+            border: 3px solid #14a248;
+          }
+
+          .noDetails_block {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: white;
+            z-index: 3000;
+            display: block;
+            opacity: 0;
           }
         `}</style>
       </HelmetProvider>

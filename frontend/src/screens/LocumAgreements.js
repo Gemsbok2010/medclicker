@@ -10,6 +10,7 @@ import Footer from "../components/Footer";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 // Three dots
 import { ThreeDots } from "react-loader-spinner";
+import { RotatingLines } from "react-loader-spinner";
 
 const LocumAgreements = () => {
   const user = useSelector((state) => state.userInfo.value);
@@ -18,7 +19,7 @@ const LocumAgreements = () => {
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const email = user.email;
-  const [isloaded, setIsloaded] = useState(true);
+  const [readyToShow, setReadyToShow] = useState(false);
 
   // =============== PAGE BUTTONS ================
 
@@ -217,7 +218,7 @@ const LocumAgreements = () => {
 
   useEffect(() => {
     let isCancelled = false;
-    setIsloaded(false);
+    setReadyToShow(false);
     // declare the data fetching function
     const fetchData = async () => {
       setReload(false);
@@ -243,7 +244,7 @@ const LocumAgreements = () => {
         setPage(data.page);
         setMaxPage(data.maxPage);
         setSort(data.sort);
-        setIsloaded(true);
+        setReadyToShow(true);
       }
     };
     if (isCancelled === false) {
@@ -255,7 +256,7 @@ const LocumAgreements = () => {
     return () => {
       isCancelled = true;
     };
-  }, []);
+  }, [startDate]);
 
   // ============== BACKDROP ============== //
   const [backdrop, setBackdrop] = useState(false);
@@ -323,6 +324,43 @@ const LocumAgreements = () => {
         }
       });
   }, []);
+
+  if (readyToShow === false)
+    return (
+      <div
+        style={{
+          backgroundColor: "#14a248",
+          top: "0",
+          left: "0",
+          height: "100%",
+          width: "100%",
+          zIndex: "2500",
+          display: "block",
+          position: "fixed",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            position: "absolute",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <RotatingLines
+            strokeColor="white"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
+            visible={true}
+          />
+        </div>
+      </div>
+    );
 
   return (
     <>
@@ -483,23 +521,7 @@ const LocumAgreements = () => {
             <div className="container-members">
               <div className="box">
                 <div className="container-candidate">
-                  {!isloaded ? (
-                    <div
-                      className="results"
-                      style={{
-                        position: "absolute",
-                        transform: "translate(-50%,40%)",
-                        left: "50%",
-                      }}
-                    >
-                      <ThreeDots
-                        type="ThreeDots"
-                        height={20}
-                        width={40}
-                        color={"gray"}
-                      />
-                    </div>
-                  ) : noOfInvoices === 0 ? (
+                  {noOfInvoices === 0 ? (
                     <h2>No Agreements found</h2>
                   ) : noOfInvoices > 1 ? (
                     <h2>{noOfInvoices} Agreements</h2>
@@ -507,23 +529,9 @@ const LocumAgreements = () => {
                     <h2>{noOfInvoices} Agreement</h2>
                   )}
                 </div>
-                {!isloaded ? (
-                  <div
-                    className="results"
-                    style={{
-                      position: "absolute",
-                      transform: "translate(-50%,40%)",
-                      left: "50%",
-                    }}
-                  >
-                    <ThreeDots
-                      type="ThreeDots"
-                      height={20}
-                      width={40}
-                      color={"gray"}
-                    />
-                  </div>
-                ) : contracts.length >= 1 ? (
+                {noOfInvoices === 0 ? (
+                  ""
+                ) : (
                   <table>
                     <thead>
                       <tr>
@@ -610,8 +618,6 @@ const LocumAgreements = () => {
                       </tr>
                     </thead>
                   </table>
-                ) : (
-                  ""
                 )}
 
                 <table>

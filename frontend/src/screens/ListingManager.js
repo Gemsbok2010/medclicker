@@ -1,5 +1,5 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 import { useState, useEffect } from "react";
@@ -8,7 +8,6 @@ import { ReactSession } from "react-client-session";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import ReactGA from "react-ga4";
-import moment from "moment";
 
 // Three dots
 import { ThreeDots } from "react-loader-spinner";
@@ -17,16 +16,15 @@ const ListingManager = () => {
   ReactSession.setStoreType("sessionStorage");
   const user = useSelector((state) => state.userInfo.value);
   const navigate = useNavigate();
+  const { search } = useLocation();
   const [listingInfo, setListingInfo] = useState([]);
   const [candidates, setCandidates] = useState([]);
-  const [, setNewApplicants] = useState([]);
-  const [, setNoApplied] = useState("");
+  const [newApplicants, setNewApplicants] = useState([]);
+  const [noApplied, setNoApplied] = useState("");
   const [noOfCases, setNoOfCases] = useState([]);
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const email = user.email;
-  const [isloaded, setIsloaded] = useState(true);
-  const [isloading, setIsloading] = useState(false);
 
   // =============== PAGE BUTTONS ================
 
@@ -34,7 +32,7 @@ const ListingManager = () => {
     const res = await fetch(
       process.env.REACT_APP_BACKEND_URL +
         `api/listings/listingmanager?page=${page <= 0 ? 0 : page - 1}` +
-        "&sortBy=" +
+        "sortBy=" +
         sort +
         "&contract=" +
         contract +
@@ -64,7 +62,7 @@ const ListingManager = () => {
         `api/listings/listingmanager?page=${
           page < maxPage ? 1 + parseInt(page) : page
         }` +
-        "&sortBy=" +
+        "sortBy=" +
         sort +
         "&contract=" +
         contract +
@@ -156,7 +154,6 @@ const ListingManager = () => {
       setMaxPage(data.maxPage);
       setSort(data.sort);
       setListOfProfessions(data.professions);
-      ReactSession.remove("slug");
     }
 
     if (ascDesc === true) {
@@ -186,7 +183,6 @@ const ListingManager = () => {
       setMaxPage(data.maxPage);
       setSort(data.sort);
       setListOfProfessions(data.professions);
-      ReactSession.remove("slug");
     }
   };
 
@@ -204,7 +200,6 @@ const ListingManager = () => {
   const [professions, setProfessions] = useState([]);
   const [checks, setChecks] = useState([]);
   const [location, setLocation] = useState([]);
-
   const [checkedFt, setCheckedFt] = useState(false);
   const [checkedPt, setCheckedPt] = useState(false);
   const [checkedLocum, setCheckedLocum] = useState(false);
@@ -213,7 +208,6 @@ const ListingManager = () => {
   const onContractChange = async (event) => {
     const { value } = event.target;
     setContract([...contract, value]);
-    ReactSession.remove("slug");
   };
 
   // ========== REMOVE CONTRACT TYPE ==========
@@ -232,7 +226,6 @@ const ListingManager = () => {
 
     if (!professions.includes(value)) {
       setProfessions([...professions, value]);
-      ReactSession.remove("slug");
     } else {
       const index = professions.indexOf(value);
 
@@ -281,7 +274,6 @@ const ListingManager = () => {
   const onLocationChange = async (event) => {
     const { value } = event.target;
     setLocation([...location, value]);
-    ReactSession.remove("slug");
   };
 
   // ========= FILTERCARD CLEAR ALL ===========
@@ -302,7 +294,6 @@ const ListingManager = () => {
     setContract([]);
     setProfessions([]);
     setChecks([]);
-    ReactSession.remove("slug");
   };
 
   // ============== BACKDROP ============== //
@@ -316,10 +307,10 @@ const ListingManager = () => {
   const highlight = async (slug) => {
     ReactSession.set("slug", slug);
     setReload(false);
-
     const res = await fetch(
       process.env.REACT_APP_BACKEND_URL +
-        `api/listings/candidates/${slug}?sortBy=` +
+        `api/listings/candidates?` +
+        "sortBy=" +
         sort +
         "&contract=" +
         contract +
@@ -330,9 +321,12 @@ const ListingManager = () => {
         "&page=" +
         page +
         "&email=" +
-        email
+        email +
+        "&slug=" +
+        slug
     );
     const data = await res.json();
+
     setReload(true);
     setNoApplied(data.noApplied);
     setNoOfCases(data.num);
@@ -349,7 +343,8 @@ const ListingManager = () => {
     setBackdrop(true);
     const res = await fetch(
       process.env.REACT_APP_BACKEND_URL +
-        `api/listings/sleepAd/${slug}/?sortBy=` +
+        `api/listings/sleepAd/${slug}/?` +
+        "sortBy=" +
         sort +
         "&page=" +
         page,
@@ -376,7 +371,8 @@ const ListingManager = () => {
     setBackdrop(true);
     const res = await fetch(
       process.env.REACT_APP_BACKEND_URL +
-        `api/listings/sleepAd/${slug}/?sortBy=` +
+        `api/listings/sleepAd/${slug}/?` +
+        "sortBy=" +
         sort +
         "&page=" +
         page,
@@ -403,7 +399,8 @@ const ListingManager = () => {
 
     const res = await fetch(
       process.env.REACT_APP_BACKEND_URL +
-        `api/listings/reject/${slugId}/${nanoId}?sortBy=` +
+        `api/listings/reject/${slugId}/${nanoId}?` +
+        "sortBy=" +
         sort +
         "&page=" +
         page,
@@ -430,7 +427,11 @@ const ListingManager = () => {
 
   useEffect(() => {
     let isCancelled = false;
-    setIsloaded(false);
+
+    if (search === "") {
+      sessionStorage.clear();
+    }
+
     // declare the data fetching function
     const fetchData = async () => {
       setReload(false);
@@ -470,8 +471,6 @@ const ListingManager = () => {
         setSort(data.sort);
         setNewApplicants(data.newApplicants);
         setListOfProfessions(data.professions);
-        setIsloaded(true);
-        ReactSession.remove("slug");
       }
     };
     if (isCancelled === false) {
@@ -483,7 +482,7 @@ const ListingManager = () => {
     return () => {
       isCancelled = true;
     };
-  }, [contract, professions, location, sort, page]);
+  }, [contract, professions, location, search, email, sort, page]);
 
   // ======= TAKE OUT DUPLICATE PROFESSIONS ======
 
@@ -494,9 +493,9 @@ const ListingManager = () => {
   ];
 
   // ============ LOCUM PAYMENT =============
-  const getAccessCode = async (e, nanoId, slugId) => {
-    setIsloading(true);
+  const toPayment = async (e, nanoId, slugId) => {
     e.preventDefault();
+
     await fetch(
       process.env.REACT_APP_BACKEND_URL +
         `api/locums/bookme/${nanoId}/${slugId}`,
@@ -518,7 +517,6 @@ const ListingManager = () => {
       })
       .then(({ formUrl, accessCode }) => {
         if ((formUrl, accessCode)) {
-          setIsloading(false);
           navigate(
             `/payment/${nanoId}${slugId}` +
               "?accessCode=" +
@@ -553,23 +551,10 @@ const ListingManager = () => {
   // ============ COUNTDOWN ===========
 
   const cdays = (expiry) => {
-    const jaar = expiry.split("-")[0];
-    const maand = expiry.split("-")[1];
-    const breakdag = expiry.split("T")[0];
-    const dag = breakdag.split("-")[2];
-
-    const breakhuur = expiry.split("T")[1];
-    const huur = breakhuur.split(":")[0];
-    const minuten = breakhuur.split(":")[1];
-
-    var dateObject = moment().format(
-      `${jaar}-${maand}-${dag}T${huur}:${minuten}:ssZ`
-    );
-
+    let xmas = new Date(expiry);
     let now = new Date();
-    var future = new Date(dateObject);
 
-    let timeDiff = future.getTime() - now.getTime();
+    let timeDiff = xmas.getTime() - now.getTime() - 10 * 60 * 60 * 1000;
 
     let seconds = Math.floor(timeDiff / 1000);
     let minutes = Math.floor(seconds / 60);
@@ -580,23 +565,10 @@ const ListingManager = () => {
   };
 
   const chours = (expiry) => {
-    const jaar = expiry.split("-")[0];
-    const maand = expiry.split("-")[1];
-    const breakdag = expiry.split("T")[0];
-    const dag = breakdag.split("-")[2];
-
-    const breakhuur = expiry.split("T")[1];
-    const huur = breakhuur.split(":")[0];
-    const minuten = breakhuur.split(":")[1];
-
-    var dateObject = moment().format(
-      `${jaar}-${maand}-${dag}T${huur}:${minuten}:ssZ`
-    );
-
+    let xmas = new Date(expiry);
     let now = new Date();
-    var future = new Date(dateObject);
 
-    let timeDiff = future.getTime() - now.getTime();
+    let timeDiff = xmas.getTime() - now.getTime() - 10 * 60 * 60 * 1000;
 
     let seconds = Math.floor(timeDiff / 1000);
     let minutes = Math.floor(seconds / 60);
@@ -611,23 +583,10 @@ const ListingManager = () => {
   };
 
   const cminutes = (expiry) => {
-    const jaar = expiry.split("-")[0];
-    const maand = expiry.split("-")[1];
-    const breakdag = expiry.split("T")[0];
-    const dag = breakdag.split("-")[2];
-
-    const breakhuur = expiry.split("T")[1];
-    const huur = breakhuur.split(":")[0];
-    const minuten = breakhuur.split(":")[1];
-
-    var dateObject = moment().format(
-      `${jaar}-${maand}-${dag}T${huur}:${minuten}:ssZ`
-    );
-
+    let xmas = new Date(expiry);
     let now = new Date();
-    var future = new Date(dateObject);
 
-    let timeDiff = future.getTime() - now.getTime();
+    let timeDiff = xmas.getTime() - now.getTime() - 10 * 60 * 60 * 1000;
 
     let seconds = Math.floor(timeDiff / 1000);
     let minutes = Math.floor(seconds / 60);
@@ -745,23 +704,7 @@ const ListingManager = () => {
                 )}
               </form>
 
-              {!isloaded ? (
-                <div
-                  className="results"
-                  style={{
-                    position: "relative",
-                    display: "block",
-                    transform: "translateY(25%)",
-                  }}
-                >
-                  <ThreeDots
-                    type="ThreeDots"
-                    height={20}
-                    width={40}
-                    color={"gray"}
-                  />
-                </div>
-              ) : noOfCases.length === 0 ? (
+              {noOfCases.length === 0 ? (
                 <div className="results">Results: 0 Job Cases</div>
               ) : noOfCases > 1 ? (
                 <div className="results">Results: {noOfCases} Job Cases</div>
@@ -1035,214 +978,194 @@ const ListingManager = () => {
           <section className="listContent container-fluid">
             <div className="wrapper">
               <div className="adList">
-                {!isloaded ? (
-                  <div
-                    className="sidebar"
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      position: "relative",
-                      alignItems: "center",
-                      height: "604px",
-                    }}
-                  >
-                    <ThreeDots
-                      type="ThreeDots"
-                      height={40}
-                      width={80}
-                      color={"grey"}
-                    />
-                  </div>
-                ) : (
-                  <div className="wrapper-ads">
-                    {listingInfo.map((listing) => {
-                      return (
-                        <div className="ads" key={listing._id}>
-                          <div className="leftmessage">
-                            <ExternalLink
-                              href={
-                                process.env.REACT_APP_BACKEND_URL +
-                                `api/listings/edit/${listing.slug}`
-                              }
-                              target="_self"
-                            >
-                              <div className="edit-ad">Edit</div>
-                            </ExternalLink>
+                <div className="wrapper-ads">
+                  {listingInfo.map((listing) => {
+                    return (
+                      <div className="ads" key={listing._id}>
+                        <div className="leftmessage">
+                          <ExternalLink
+                            href={
+                              process.env.REACT_APP_BACKEND_URL +
+                              `api/listings/edit/${listing.slug}`
+                            }
+                            target="_self"
+                          >
+                            <div className="edit-ad">Edit</div>
+                          </ExternalLink>
 
-                            <ExternalLink
-                              href={
-                                process.env.REACT_APP_BACKEND_URL +
-                                `api/listings/adPosts/${listing.slug}`
-                              }
-                              target="_self"
-                            >
-                              <div className="preview-ad">View</div>
-                            </ExternalLink>
+                          <ExternalLink
+                            href={
+                              process.env.REACT_APP_BACKEND_URL +
+                              `api/listings/adPosts/${listing.slug}`
+                            }
+                            target="_self"
+                          >
+                            <div className="preview-ad">View</div>
+                          </ExternalLink>
 
-                            <div
-                              id={
-                                ReactSession.get("slug") === listing.slug
-                                  ? "chosenOne"
-                                  : ""
-                              }
-                              className="applicants"
-                              onClick={() => {
-                                highlight(listing.slug);
-                                myDates(listing.slug);
-                              }}
-                            >
-                              {/* {newApplicants.map((newApplicant) => {
-                                return newApplicant.slugId === listing.slug ? (
-                                  ReactSession.get("slug") === listing.slug ? (
-                                    <span
-                                      className="showCircle"
-                                      key={newApplicant._id}
-                                    >
-                                      {noApplied}
-                                    </span>
-                                  ) : (
-                                    <span
-                                      className="alertCircle"
-                                      key={newApplicant._id}
-                                    >
-                                      New
-                                    </span>
-                                  )
+                          <div
+                            id={
+                              ReactSession.get("slug") === listing.slug
+                                ? "chosenOne"
+                                : ""
+                            }
+                            className="applicants"
+                            onClick={() => {
+                              highlight(listing.slug);
+                              myDates(listing.slug);
+                            }}
+                          >
+                            {newApplicants.map((newApplicant) => {
+                              return newApplicant.slugId === listing.slug ? (
+                                ReactSession.get("slug") === listing.slug ? (
+                                  <span
+                                    className="showCircle"
+                                    key={newApplicant._id}
+                                  >
+                                    {noApplied}
+                                  </span>
                                 ) : (
-                                  <span key={newApplicant._id}></span>
-                                );
-                              })} */}
-                              {listing.isPaidLocum === false
-                                ? "Applicants"
-                                : "Locum"}
-                            </div>
+                                  <span
+                                    className="alertCircle"
+                                    key={newApplicant._id}
+                                  >
+                                    New
+                                  </span>
+                                )
+                              ) : (
+                                <span key={newApplicant._id}></span>
+                              );
+                            })}
+                            {listing.isPaidLocum === false
+                              ? "Applicants"
+                              : "Locum"}
+                          </div>
 
-                            {listing.isPaidLocum === false ? (
-                              listing.isActiveJob === true ? (
+                          {listing.isPaidLocum === false ? (
+                            listing.isActiveJob === true ? (
+                              <div
+                                className="retire"
+                                id={listing.isActiveJob ? "" : "sleep"}
+                                onClick={(e) => {
+                                  activeAd(e, listing.slug);
+                                }}
+                              >
+                                Pause
+                              </div>
+                            ) : (
+                              <>
                                 <div
                                   className="retire"
                                   id={listing.isActiveJob ? "" : "sleep"}
                                   onClick={(e) => {
-                                    activeAd(e, listing.slug);
+                                    sleepAd(e, listing.slug);
                                   }}
                                 >
-                                  Pause
+                                  Paused
                                 </div>
-                              ) : (
-                                <>
-                                  <div
-                                    className="retire"
-                                    id={listing.isActiveJob ? "" : "sleep"}
-                                    onClick={(e) => {
-                                      sleepAd(e, listing.slug);
-                                    }}
-                                  >
-                                    Paused
-                                  </div>
-                                </>
-                              )
-                            ) : (
-                              <div className="retire" id={"sleep"}>
-                                Completed
-                              </div>
-                            )}
+                              </>
+                            )
+                          ) : (
+                            <div className="retire" id={"sleep"}>
+                              Completed
+                            </div>
+                          )}
 
-                            <h2>
-                              {listing.professions + " "}
-                              {listing.contractType === "Full-Time" ? (
-                                <span className="highlight_fulltime">
-                                  {listing.contractType}
-                                </span>
-                              ) : listing.contractType === "Part-Time" ? (
-                                <span className="highlight_parttime">
-                                  {listing.contractType}
-                                </span>
-                              ) : listing.contractType === "Locum" ? (
-                                <span className="highlight_locum">
-                                  {listing.contractType}
-                                </span>
-                              ) : (
-                                <span className="highlight_other">
-                                  {listing.contractType}
-                                </span>
-                              )}
-                            </h2>
-                            <h3
-                              style={{
-                                fontWeight: "200",
-                                marginTop: "6px",
-                                marginBottom: "8px",
-                              }}
-                            >
-                              Case ID: {listing.caseId}
-                            </h3>
+                          <h2>
+                            {listing.professions + " "}
+                            {listing.contractType === "Full-Time" ? (
+                              <span className="highlight_fulltime">
+                                {listing.contractType}
+                              </span>
+                            ) : listing.contractType === "Part-Time" ? (
+                              <span className="highlight_parttime">
+                                {listing.contractType}
+                              </span>
+                            ) : listing.contractType === "Locum" ? (
+                              <span className="highlight_locum">
+                                {listing.contractType}
+                              </span>
+                            ) : (
+                              <span className="highlight_other">
+                                {listing.contractType}
+                              </span>
+                            )}
+                          </h2>
+                          <h3
+                            style={{
+                              fontWeight: "200",
+                              marginTop: "6px",
+                              marginBottom: "8px",
+                            }}
+                          >
+                            Case ID: {listing.caseId}
+                          </h3>
+                          <h3
+                            style={{
+                              height: "20px",
+                              width: "300px",
+                              display: "block",
+                              color: "#2b2b2b",
+                              marginTop: "6px",
+                              marginBottom: "8px",
+                            }}
+                          >
+                            {listing.street +
+                              ", " +
+                              listing.suburb +
+                              " " +
+                              listing.state +
+                              " " +
+                              listing.postalCode}
+                          </h3>
+                          <h3
+                            style={{
+                              height: "20px",
+                              width: "250px",
+                              display: "block",
+                              color: "#2b2b2b",
+                              marginTop: "6px",
+                              marginBottom: "8px",
+                            }}
+                          >
+                            Expiring on: {listing.finishDate}
+                          </h3>
+                          {listing.contractType === "Locum" ? (
                             <h3
                               style={{
                                 height: "20px",
-                                width: "300px",
-                                display: "block",
-                                color: "#2b2b2b",
-                                marginTop: "6px",
-                                marginBottom: "8px",
+                                marginTop: "13px",
                               }}
                             >
-                              {listing.street +
-                                ", " +
-                                listing.suburb +
-                                " " +
-                                listing.state +
-                                " " +
-                                listing.postalCode}
+                              Need locum from:{" "}
+                              <span className="highlight">
+                                {listing.startDate}
+                              </span>{" "}
+                              to{" "}
+                              <span className="highlight">
+                                {listing.finishDate}
+                              </span>
                             </h3>
+                          ) : (
                             <h3
                               style={{
                                 height: "20px",
-                                width: "250px",
-                                display: "block",
-                                color: "#2b2b2b",
-                                marginTop: "6px",
-                                marginBottom: "8px",
+                                marginTop: "13px",
                               }}
-                            >
-                              Expiring on: {listing.finishDate}
-                            </h3>
-                            {listing.contractType === "Locum" ? (
-                              <h3
-                                style={{
-                                  height: "20px",
-                                  marginTop: "13px",
-                                }}
-                              >
-                                Need locum from:{" "}
-                                <span className="highlight">
-                                  {listing.startDate}
-                                </span>{" "}
-                                to{" "}
-                                <span className="highlight">
-                                  {listing.finishDate}
-                                </span>
-                              </h3>
-                            ) : (
-                              <h3
-                                style={{
-                                  height: "20px",
-                                  marginTop: "13px",
-                                }}
-                              ></h3>
-                            )}
+                            ></h3>
+                          )}
 
-                            <p>{listing.about}</p>
-                          </div>
+                          <p>{listing.about}</p>
                         </div>
-                      );
-                    })}
-                    {listingInfo.length === 0 && (
-                      <div className="no-listings">
-                        <h2>No listings at the moment</h2>
                       </div>
-                    )}
-                  </div>
-                )}
+                    );
+                  })}
+                  {listingInfo.length === 0 && (
+                    <div className="no-listings">
+                      <h2>No listings at the moment</h2>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {ReactSession.get("slug") ? (
@@ -1285,27 +1208,11 @@ const ListingManager = () => {
                                 >
                                   <button>Locum Details</button>
                                 </ExternalLink>
-                              ) : isloading ? (
-                                <button
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    position: "relative",
-                                    alignItems: "center",
-                                  }}
-                                >
-                                  <ThreeDots
-                                    type="ThreeDots"
-                                    height={20}
-                                    width={40}
-                                    color={"white"}
-                                  />
-                                </button>
                               ) : (
                                 <ExternalLink>
                                   <button
                                     onClick={(e) => {
-                                      getAccessCode(
+                                      toPayment(
                                         e,
                                         candidate.nanoId,
                                         candidate.slugId

@@ -7,6 +7,7 @@ import ReactGA from "react-ga4";
 const Question4 = () => {
   const navigate = useNavigate();
   ReactSession.setStoreType("sessionStorage");
+
   const [customerId, setCustomerId] = useState("");
   const [normal_rate, setNormalRate] = useState("");
   const [sat_rate, setSatRate] = useState("");
@@ -170,6 +171,11 @@ const Question4 = () => {
       });
   };
 
+  // ============= CLEAR CUSTOMER ID ================
+  const clearId = () => {
+    sessionStorage.clear();
+    navigate("/admin/users");
+  };
   return (
     <>
       <HelmetProvider>
@@ -187,6 +193,7 @@ const Question4 = () => {
                     src="/images/medclicker.png"
                     alt="LOGO"
                     className="img-fluid"
+                    onClick={clearId}
                   />
                 </Link>
               </figure>

@@ -995,7 +995,7 @@ const Step2 = () => {
             display: -webkit-box;
             display: -ms-flexbox;
             display: flex;
-            background-color: #f4f5f6;
+            background-color: #333;
             width: 80%;
             margin: 30px auto 30px;
             text-align: center;

@@ -83,6 +83,12 @@ const Question5 = () => {
       });
   };
 
+  // ============= CLEAR CUSTOMER ID ================
+  const clearId = () => {
+    sessionStorage.clear();
+    navigate("/admin/users");
+  };
+
   return (
     <>
       <HelmetProvider>
@@ -100,6 +106,7 @@ const Question5 = () => {
                     src="/images/medclicker.png"
                     alt="LOGO"
                     className="img-fluid"
+                    onClick={clearId}
                   />
                 </Link>
               </figure>

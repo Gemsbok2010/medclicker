@@ -7,7 +7,6 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/userInfo";
-import { ExternalLink } from "react-external-link";
 
 // Three dots
 import { ThreeDots } from "react-loader-spinner";
@@ -23,16 +22,113 @@ const Dashboard = () => {
   const [backdrop, setBackdrop] = useState(false);
   const [readyToShow, setReadyToShow] = useState(false);
   const [contractType, setContractType] = useState("");
-  const [, setProfessions] = useState("");
-  const [locum, setLocum] = useState("");
+  const [locum, setLocum] = useState({});
+  const [, setLocumNo] = useState("");
+  const [, setLocumId] = useState("");
 
   const [show, setShow] = useState(false);
   const [close, setClose] = useState(false);
 
+  const [, setNSW] = useState("");
+  const [, setVictoria] = useState("");
+  const [, setQLD] = useState("");
+  const [, setSA] = useState("");
+  const [, setWA] = useState("");
+  const [, setNT] = useState("");
+  const [, setTAS] = useState("");
+  const [, setNoOfCases] = useState("");
+  const [, setApplicants] = useState("");
+  const [, setMylistings] = useState("");
+  const [, setNewApply] = useState("");
+  const [, setApplied] = useState("");
+  const [, setSeen] = useState("");
+
+  useEffect(() => {
+    if (!ReactSession.get("nsw")) {
+      setNSW("");
+    } else {
+      setNSW(ReactSession.get("nsw"));
+    }
+    if (!ReactSession.get("qld")) {
+      setQLD("");
+    } else {
+      setQLD(ReactSession.get("qld"));
+    }
+    if (!ReactSession.get("vic")) {
+      setVictoria("");
+    } else {
+      setVictoria(ReactSession.get("vic"));
+    }
+    if (!ReactSession.get("sa")) {
+      setSA("");
+    } else {
+      setSA(ReactSession.get("sa"));
+    }
+    if (!ReactSession.get("nt")) {
+      setNT("");
+    } else {
+      setNT(ReactSession.get("nt"));
+    }
+    if (!ReactSession.get("tas")) {
+      setTAS("");
+    } else {
+      setTAS(ReactSession.get("tas"));
+    }
+    if (!ReactSession.get("wa")) {
+      setWA("");
+    } else {
+      setWA(ReactSession.get("wa"));
+    }
+    if (!ReactSession.get("applied")) {
+      setApplied("");
+    } else {
+      setApplied(ReactSession.get("applied"));
+    }
+    if (!ReactSession.get("seen")) {
+      setSeen("");
+    } else {
+      setSeen(ReactSession.get("seen"));
+    }
+    if (!ReactSession.get("locumNo")) {
+      setLocumNo("");
+    } else {
+      setLocumNo(ReactSession.get("locumNo"));
+    }
+    if (!ReactSession.get("locumId")) {
+      setLocumId("");
+    } else {
+      setLocumId(ReactSession.get("locumId"));
+    }
+    if (!ReactSession.get("noOfCases")) {
+      setNoOfCases("");
+    } else {
+      setNoOfCases(ReactSession.get("noOfCases"));
+    }
+    if (!ReactSession.get("newApply")) {
+      setNewApply("");
+    } else {
+      setNewApply(ReactSession.get("newApply"));
+    }
+    if (!ReactSession.get("mylistings")) {
+      setMylistings("");
+    } else {
+      setMylistings(ReactSession.get("mylistings"));
+    }
+    if (!ReactSession.get("applicants")) {
+      setApplicants("");
+    } else {
+      setApplicants(ReactSession.get("applicants"));
+    }
+    if (!ReactSession.get("readyToShow")) {
+      setReadyToShow(false);
+    } else {
+      setReadyToShow(ReactSession.get("readyToShow"));
+    }
+  }, []);
+
   // ============ FETCH DATA ===========
   const fetchBigData = async () => {
     setContractType(ReactSession.get("contractType"));
-    setProfessions(ReactSession.get("professions"));
     axios
       .get(
         process.env.REACT_APP_BACKEND_URL +
@@ -40,12 +136,13 @@ const Dashboard = () => {
           user.email
       )
       .then((response) => {
+        console.log("responded");
         if (response.status === 200) {
           if (response.data.locum !== null) {
             setShow(response.data.locum.showLocum);
           }
-
           setLocum(response.data.locum);
+          ReactSession.set("locumId", response.data.locum.locumId);
           ReactSession.set("locumNo", response.data.total);
           ReactSession.set("noOfCases", response.data.num);
           ReactSession.set("applicants", response.data.applicants);
@@ -65,19 +162,18 @@ const Dashboard = () => {
               completeAccess: response.data.user.survey !== "" ? true : false,
             })
           );
-
           ReactSession.set("applied", response.data.applied);
           ReactSession.set("seen", response.data.seen);
           ReactSession.set("currentState", response.data.state);
           ReactSession.set("nsw", response.data.nsw);
           ReactSession.set("vic", response.data.vic);
           ReactSession.set("qld", response.data.qld);
-          ReactSession.set("nt", response.data.nt);
           ReactSession.set("tas", response.data.tas);
+          ReactSession.set("nt", response.data.nt);
           ReactSession.set("sa", response.data.sa);
           ReactSession.set("wa", response.data.wa);
-          ReactSession.set("readyToShow", true);
           setReadyToShow(true);
+          ReactSession.set("readyToShow", true);
         }
       });
   };
@@ -98,6 +194,7 @@ const Dashboard = () => {
       );
       const data = await res.json();
       if (data) {
+        setLocumNo(data.num);
         ReactSession.set("locumNo", data.num);
         setBackdrop(false);
       }
@@ -115,6 +212,7 @@ const Dashboard = () => {
       );
       const data = await res.json();
       if (data) {
+        setLocumNo(data.num);
         ReactSession.set("locumNo", data.num);
         setBackdrop(false);
       }
@@ -140,11 +238,11 @@ const Dashboard = () => {
   useEffect(() => {
     if (!readyToShow) {
       fetchBigData();
+      fetchData();
     }
-    fetchData();
   }, []);
 
-  if (readyToShow === false && !ReactSession.get("readyToShow"))
+  if (readyToShow === false)
     return (
       <div
         style={{
@@ -370,12 +468,6 @@ const Dashboard = () => {
                       )}
                     </h4>
                   </Link>
-                  <Link to="/invoices">
-                    <span className="material-symbols-outlined">
-                      fact_check
-                    </span>
-                    <h4>Invoices</h4>
-                  </Link>
                   <div style={{ borderBottom: "2px solid #1A1A1A" }}>
                     <h3
                       style={{
@@ -387,17 +479,29 @@ const Dashboard = () => {
                         transform: "translateX(5%)",
                       }}
                     >
-                      Security Settings
+                      Console Management & Other
                     </h3>
                   </div>
                   <Link to="/securitysettings">
                     <span className="material-icons-sharp">settings</span>
-                    <h4>Change Password</h4>
+                    <h4>Security Settings</h4>
                   </Link>
-                  <ExternalLink href="/logout" target="_self">
-                    <span className="material-icons-sharp">logout</span>
-                    <h4>Log Out</h4>
-                  </ExternalLink>
+                  <Link to="/invoices">
+                    <span className="material-symbols-outlined">
+                      fact_check
+                    </span>
+                    <h4>Invoices</h4>
+                  </Link>
+                  {user.isLocum === true ? (
+                    <Link to="/agreements">
+                      <span className="material-symbols-outlined">
+                        fact_check
+                      </span>
+                      <h4>Locum Agreements</h4>
+                    </Link>
+                  ) : (
+                    ""
+                  )}
                 </div>
               ) : (
                 <div className="sidebar">
@@ -502,12 +606,6 @@ const Dashboard = () => {
                       )}
                     </h4>
                   </Link>
-                  <Link to="/invoices">
-                    <span className="material-symbols-outlined">
-                      fact_check
-                    </span>
-                    <h4>Invoices</h4>
-                  </Link>
 
                   <div style={{ borderBottom: "2px solid #1A1A1A" }}>
                     <h3
@@ -520,18 +618,29 @@ const Dashboard = () => {
                         transform: "translateX(5%)",
                       }}
                     >
-                      Security Settings
+                      Console Management & Other
                     </h3>
                   </div>
                   <Link to="/securitysettings">
                     <span className="material-icons-sharp">settings</span>
-                    <h4>Change Password</h4>
+                    <h4>Security Settings</h4>
                   </Link>
-
-                  <ExternalLink href="/logout" target="_self">
-                    <span className="material-icons-sharp">logout</span>
-                    <h4>Log Out</h4>
-                  </ExternalLink>
+                  <Link to="/invoices">
+                    <span className="material-symbols-outlined">
+                      fact_check
+                    </span>
+                    <h4>Invoices</h4>
+                  </Link>
+                  {user.isLocum === true ? (
+                    <Link to="/agreements">
+                      <span className="material-symbols-outlined">
+                        fact_check
+                      </span>
+                      <h4>Locum Agreements</h4>
+                    </Link>
+                  ) : (
+                    ""
+                  )}
                 </div>
               )}
               {/* END OF SIDEBAR */}
@@ -627,7 +736,7 @@ const Dashboard = () => {
                     <div className="bottomBox">
                       <div>
                         <h2>Locum Profile</h2>
-                        <h4>Locum ID: {locum.locumId}</h4>
+                        <h4>Locum ID: {ReactSession.get("locumId")}</h4>
                         <h3>Name</h3>
 
                         <p>
@@ -637,13 +746,13 @@ const Dashboard = () => {
                       <div>
                         <div className="slideKeyComponent">
                           <div className="checkbox-btn">
-                            {show ? (
+                            {locum.showLocum ? (
                               <input
                                 type="checkbox"
                                 checked={show ? true : false}
                                 id="ipt_profile_toggle"
                                 onChange={(e) => {
-                                  hideMe(e, ReactSession.get("locumId"));
+                                  hideMe(e, locum.locumId);
                                   setShow(!show);
                                 }}
                               />
@@ -653,7 +762,7 @@ const Dashboard = () => {
                                 checked={show ? true : false}
                                 id="ipt_profile_toggle"
                                 onChange={(e) => {
-                                  hideMe(e, ReactSession.get("locumId"));
+                                  hideMe(e, locum.locumId);
                                   setShow(!show);
                                 }}
                               />
@@ -1265,13 +1374,6 @@ const Dashboard = () => {
             justify-content: space-between;
           }
 
-          main section.middle .container-fluid {
-            width: 100%;
-            padding-left: 0;
-            padding-right: 0;
-            display: block;
-          }
-
           main section.middle .card .middle .chip {
             width: 3.5rem;
           }
@@ -1614,11 +1716,6 @@ const Dashboard = () => {
               padding-right: 0;
             }
 
-            main section.middle .container-fluid {
-              width: 490px;
-              margin: 0px;
-            }
-
             .wrap .sub-footer {
               display: block;
               margin-left: auto;
@@ -1734,11 +1831,6 @@ const Dashboard = () => {
               padding-right: 0;
               display: block;
             }
-            main section.middle .container-fluid {
-              width: 490px;
-              margin: 0px;
-            }
-
             main .moveback {
               transform: translateX(-100%);
               transition: all 300ms ease;

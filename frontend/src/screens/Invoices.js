@@ -16,7 +16,6 @@ const Invoices = () => {
   const [invoices, setInvoices] = useState([]);
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
-  const [isloaded, setIsloaded] = useState(true);
   const email = user.email;
 
   // =============== PAGE BUTTONS ================
@@ -25,7 +24,7 @@ const Invoices = () => {
     const res = await fetch(
       process.env.REACT_APP_BACKEND_URL +
         `api/payment/invoices?page=${page <= 0 ? 0 : page - 1}` +
-        "&sortBy=" +
+        "sortBy=" +
         sort +
         "&email=" +
         email +
@@ -55,7 +54,7 @@ const Invoices = () => {
         `api/payment/invoices?page=${
           page < maxPage ? 1 + parseInt(page) : page
         }` +
-        "&sortBy=" +
+        "sortBy=" +
         sort +
         "&email=" +
         email +
@@ -211,7 +210,7 @@ const Invoices = () => {
 
   useEffect(() => {
     let isCancelled = false;
-    setIsloaded(false);
+
     // declare the data fetching function
     const fetchData = async () => {
       setReload(false);
@@ -240,7 +239,6 @@ const Invoices = () => {
         setPage(data.page);
         setMaxPage(data.maxPage);
         setSort(data.sort);
-        setIsloaded(true);
       }
     };
     if (isCancelled === false) {
@@ -309,7 +307,8 @@ const Invoices = () => {
       setReload(false);
       const res = await fetch(
         process.env.REACT_APP_BACKEND_URL +
-          "api/payment/invoices?sortBy=" +
+          "api/payment/invoices?" +
+          "sortBy=" +
           sort +
           "&page=" +
           page +
@@ -564,23 +563,7 @@ const Invoices = () => {
             <div className="container-members">
               <div className="box">
                 <div className="container-candidate">
-                  {!isloaded ? (
-                    <div
-                      className="results"
-                      style={{
-                        position: "absolute",
-                        transform: "translate(-50%,40%)",
-                        left: "50%",
-                      }}
-                    >
-                      <ThreeDots
-                        type="ThreeDots"
-                        height={20}
-                        width={40}
-                        color={"gray"}
-                      />
-                    </div>
-                  ) : noOfInvoices === 0 ? (
+                  {noOfInvoices === 0 ? (
                     <h2>No Invoices found</h2>
                   ) : noOfInvoices > 1 ? (
                     <h2>{noOfInvoices} Invoices</h2>
@@ -588,23 +571,9 @@ const Invoices = () => {
                     <h2>{noOfInvoices} Invoice</h2>
                   )}
                 </div>
-                {!isloaded ? (
-                  <div
-                    className="results"
-                    style={{
-                      position: "absolute",
-                      transform: "translate(-50%,40%)",
-                      left: "50%",
-                    }}
-                  >
-                    <ThreeDots
-                      type="ThreeDots"
-                      height={20}
-                      width={40}
-                      color={"gray"}
-                    />
-                  </div>
-                ) : noOfInvoices.length >= 1 ? (
+                {noOfInvoices === 0 ? (
+                  ""
+                ) : (
                   <table>
                     <thead>
                       <tr>
@@ -690,8 +659,6 @@ const Invoices = () => {
                       </tr>
                     </thead>
                   </table>
-                ) : (
-                  ""
                 )}
 
                 <table>

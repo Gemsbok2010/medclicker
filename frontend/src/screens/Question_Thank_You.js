@@ -1,6 +1,5 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Link } from "react-router-dom";
-import Footer from "../components/Footer";
 
 const Question_Thank_You = () => {
   return (
@@ -16,13 +15,15 @@ const Question_Thank_You = () => {
             <figure>
               <Link to="/dashboard">
                 <img
-                  src="/images/medclicker-white.png"
+                  src="/images/medclicker.png"
                   alt="LOGO"
                   className="img-fluid"
                 />
               </Link>
             </figure>
-            <h2>Listing Processed</h2>
+            <div className="plane"></div>
+
+            <h2 className="mt-3 mb-2">Listing Processed </h2>
             <p>
               Your listing is now "live". <br /> <br /> We may or may not audit
               your listing. If we find your listing is not genuine or fails to
@@ -34,48 +35,40 @@ const Question_Thank_You = () => {
               <br />
               Thank you for your co-operation.
             </p>
+
+            <button className="btn-med">
+              <Link to="/dashboard">Return to Dashboard</Link>
+            </button>
           </section>
-          <Footer />
         </div>
-
         <style jsx="true">{`
-          html,
-          body {
-            width: 100%;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-          }
-
           .wrap {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
             -webkit-box-pack: center;
             -ms-flex-pack: center;
             justify-content: center;
             -webkit-box-align: center;
             -ms-flex-align: center;
             align-items: center;
-            padding-top: 60px;
-            background: #14a248;
+            min-height: 100vh;
+            background-image: url("./../../images/main-image.jpg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
           }
-
-          /* =========== MODAL ============= */
-
-          .wrap .img-fluid {
-            transform: translateX(0%);
-          }
-
-          .wrap .brief {
-            width: 400px;
-            height: 150px;
-            background-image: url("./../../images/sanofi-ipad.jpg");
+          .plane {
+            width: 300px;
+            height: 80px;
+            background-image: url("./../../images/paperairplane.png");
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
-            margin-bottom: 30px;
           }
-
           .wrap .questionCard {
-            width: 450px;
+            width: 475px;
+
             padding: 20px 10px;
             display: -webkit-box;
             display: -ms-flexbox;
@@ -87,21 +80,19 @@ const Question_Thank_You = () => {
             -webkit-box-align: center;
             -ms-flex-align: center;
             align-items: center;
-            border-radius: 7px;
+            border-radius: 0px;
+            background: #fff;
             border: 1px solid #ebebeb;
-
-            background: #14a248;
             -webkit-box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
             box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
           }
           .wrap .questionCard > figure {
             width: 200px;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
           }
           .wrap .questionCard > figure > a {
             display: block;
           }
-
           .wrap .questionCard h2 {
             font-family: sans-serif;
             text-align: center;
@@ -109,21 +100,19 @@ const Question_Thank_You = () => {
             font-size: 28px;
             width: 100%;
             margin: 0px auto 24px;
-            padding-top: 8px;
             padding-bottom: 8px;
-            color: #fff;
+            color: #2b2b2b;
           }
           .questionCard p {
             margin: 10px auto;
             text-align: center;
-            color: #fff;
+            color: #777;
             width: 100%;
             font-size: 15px;
             font-weight: 500;
             font-family: sans-serif;
             width: 300px;
           }
-
           .questionCard {
             display: -webkit-box;
             display: -ms-flexbox;
@@ -132,20 +121,45 @@ const Question_Thank_You = () => {
             -webkit-box-direction: normal;
             -ms-flex-direction: column;
             flex-direction: column;
-            margin-bottom: 60px;
+          }
+          .btn-med {
+            border-radius: 4px;
+            font-weight: 800;
+            font-size: 20px;
+            border: none;
+            outline: none;
+            width: 220px;
+            height: 50px;
+            line-height: 50px;
+            background: #14a248;
+            color: white;
           }
 
+          .btn-med a {
+            display: block;
+            color: white;
+            width: 100%;
+            height: 100%;
+            letter-spacing: 0;
+          }
+
+          .btn-med a:active,
+          .btn-med a:focus,
+          .btn-med:active,
+          .btn-med:focus {
+            outline: none;
+          }
+
+          .questionCard figure {
+            margin-bottom: 80px !important;
+          }
           @media only screen and (min-width: 768px) {
-            .questionCard p {
-              width: 500px;
-            }
             .wrap .questionCard {
               width: 710px;
               padding: 30px 20px;
             }
-            .wrap .brief {
+            .questionCard p {
               width: 500px;
-              height: 200px;
             }
           }
         `}</style>

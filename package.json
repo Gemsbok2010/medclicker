@@ -17,6 +17,8 @@
     "@sendgrid/mail": "^7.7.0",
     "aws-sdk": "^2.1338.0",
     "bcryptjs": "^2.4.3",
+    "browserslist": "^4.24.0",
+    "caniuse-lite": "^1.0.30001664",
     "concurrently": "^7.6.0",
     "connect-mongo": "^3.2.0",
     "cookie-parser": "^1.4.6",

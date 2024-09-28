@@ -166,6 +166,7 @@ const SearchList = () => {
   var { search } = useLocation();
   let index = params.get("index");
   let prof = params.get("professions");
+  const [readyToShow, setReadyToShow] = useState(false);
 
   const user = useSelector((state) => state.userInfo.value);
 
@@ -180,6 +181,7 @@ const SearchList = () => {
   // ========= FACEBOOK & GOOGLE LOGIN DATA ==========
 
   useEffect(() => {
+    setReadyToShow(false);
     if (id) {
       localStorage.setItem("userId", id);
       localStorage.setItem("token", token);
@@ -210,6 +212,7 @@ const SearchList = () => {
               })
             );
             window.history.pushState({}, document.title, "/searchlist");
+            setReadyToShow(true);
           }
         });
     }
@@ -474,7 +477,7 @@ const SearchList = () => {
   useEffect(() => {
     let isCancelled = false;
     setIsloaded(false);
-
+    setReadyToShow(false);
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
@@ -505,6 +508,7 @@ const SearchList = () => {
       setLongitude(data.longArr);
       setLatitude(data.latArr);
       setIsloaded(true);
+      setReadyToShow(true);
     };
 
     if (isCancelled === false) {
@@ -720,7 +724,7 @@ const SearchList = () => {
     libraries: libraries,
   });
 
-  if (!isLoaded)
+  if (readyToShow === false && !isLoaded)
     return (
       <div
         style={{
@@ -811,23 +815,8 @@ const SearchList = () => {
                   </button>
                 )}
               </form>
-              {!isloaded ? (
-                <div
-                  className="results"
-                  style={{
-                    position: "relative",
-                    display: "block",
-                    transform: "translateY(25%)",
-                  }}
-                >
-                  <ThreeDots
-                    type="ThreeDots"
-                    height={20}
-                    width={40}
-                    color={"gray"}
-                  />
-                </div>
-              ) : noOfCases.length === 0 ? (
+
+              {noOfCases.length === 0 ? (
                 <div className="results">Results: 0 Job Cases</div>
               ) : noOfCases > 1 ? (
                 <div className="results">Results: {noOfCases} Job Cases</div>

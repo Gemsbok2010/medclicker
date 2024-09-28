@@ -21,6 +21,7 @@ const CreditCard = () => {
   let code = params.get("accessCode");
 
   const nanoslug = pathname.split("/")[2];
+  const [last4, setLast4] = useState("");
   const [candidate, setCandidate] = useState({});
   const [startDate, setStartDate] = useState("");
   const [finishDate, setFinishDate] = useState("");
@@ -51,6 +52,94 @@ const CreditCard = () => {
         window.history.pushState({}, document.title, "/payment/" + nanoslug);
       });
   }, []);
+
+  // ============ EXISTING CARD DATA ===========
+  const [existingCard, setExistingCard] = useState({});
+  const inputRef = useRef(null);
+  useEffect(() => {
+    axios
+      .get(
+        process.env.REACT_APP_BACKEND_URL + "api/payment/anyCard/" + user.email
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          if (response.data.existingCard === null) {
+            setShow(false);
+            setExistingCard(null);
+            setLast4("");
+          } else {
+            setShow(true);
+            setExistingCard(response.data.existingCard);
+            setLast4(response.data.last4);
+          }
+        }
+      });
+  }, []);
+
+  // ============ SAVED CREDIT CARD DATA ===========
+  const displayCard = () => {
+    setCardName(existingCard.cardName);
+    setCardNumber(existingCard.cardNumber);
+    setExpiry(existingCard.expiry);
+    setShow(true);
+    setState((prev) => ({ ...prev, ["number"]: existingCard.cardNumber }));
+    setState((prev) => ({ ...prev, ["name"]: existingCard.cardName }));
+    setState((prev) => ({ ...prev, ["expiry"]: existingCard.expiry }));
+  };
+
+  // =============== STORE CREDIT CARD =============
+  const storeCard = async (e, email) => {
+    e.preventDefault();
+
+    if (show === true) {
+      const res = await fetch(
+        process.env.REACT_APP_BACKEND_URL + `api/payment/removeCard/${email}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify({
+            save_card: false,
+            cardNumber: null,
+            cardName: null,
+            expiry: null,
+          }),
+        }
+      );
+      const data = await res.json();
+
+      if (data) {
+        setShow(false);
+      }
+    }
+
+    if (
+      show === false &&
+      cardName &&
+      cardNumber.length >= 18 &&
+      expiry.length === 5
+    ) {
+      const res = await fetch(
+        process.env.REACT_APP_BACKEND_URL + `api/payment/storeCard/${email}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify({
+            save_card: true,
+            cardNumber: cardNumber,
+            cardName: cardName,
+            expiry: expiry,
+          }),
+        }
+      );
+      const data = await res.json();
+
+      if (data) {
+        setShow(true);
+      }
+    }
+  };
 
   // =============== CREDIT CARD DETAILS =============
   const [state, setState] = useState({
@@ -505,6 +594,27 @@ const CreditCard = () => {
                           <div>
                             <h2>Payment Details</h2>
                           </div>
+                          <div>
+                            {existingCard !== null ? (
+                              existingCard.save_card === true ? (
+                                <button
+                                  className="previousCard"
+                                  onClick={() => {
+                                    displayCard();
+                                    inputRef.current.focus();
+                                  }}
+                                  type="button"
+                                >
+                                  Saved card Ending{" ****"}
+                                  {last4}
+                                </button>
+                              ) : (
+                                ""
+                              )
+                            ) : (
+                              ""
+                            )}
+                          </div>
                         </div>
 
                         <div
@@ -700,6 +810,7 @@ const CreditCard = () => {
                               name="cvc"
                               autoComplete="off"
                               maxLength={cardNumber.length === 18 ? 4 : 3}
+                              ref={inputRef}
                               onKeyPress={(event) => {
                                 if (!/[0-9]/.test(event.key)) {
                                   event.preventDefault();
@@ -732,6 +843,36 @@ const CreditCard = () => {
                             <label htmlFor="cvv">CVV</label>
                           </div>
                         </div>
+                        {show ? (
+                          <>
+                            <input
+                              type="checkbox"
+                              id="saveCard"
+                              checked={show ? true : false}
+                              onChange={(e) => {
+                                storeCard(e, user.email);
+                              }}
+                            />
+                            <label htmlFor="saveCard">
+                              Save this card for future payments
+                            </label>
+                          </>
+                        ) : (
+                          <>
+                            <input
+                              type="checkbox"
+                              id="saveCardB"
+                              v
+                              checked={show ? true : false}
+                              onChange={(e) => {
+                                storeCard(e, user.email);
+                              }}
+                            />
+                            <label htmlFor="saveCardB">
+                              Save this card for future payments
+                            </label>
+                          </>
+                        )}
 
                         {cardName &&
                         expiry.length === 5 &&
@@ -992,7 +1133,7 @@ const CreditCard = () => {
           <Footer />
         </div>
         <style jsx="true">{`
-          /* ============ RIGHT BOX =============== */
+        /* ============ RIGHT BOX =============== */
           .rightBox {
             position: relative;
             background-color: white;
@@ -1670,12 +1811,11 @@ const CreditCard = () => {
             border-radius: 4px;
             color: #fff;
             height: 50px;
-            width: 100%;
+            width: 140px;
             background-color: #14a248;
             cursor: pointer;
             position: relative;
             right: 0px;
-                margin-top:25px
           }
 
           .insideBox button:disabled {
@@ -1683,7 +1823,6 @@ const CreditCard = () => {
             color: #888;
             cursor: default;
             border: #ddd;
-            width:100%
           }
 
           .insideBox button:focus,
@@ -1820,7 +1959,6 @@ const CreditCard = () => {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top:0px
           }
 
           /* =========== CHECKBOX ========== */

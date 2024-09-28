@@ -390,9 +390,6 @@ const LocumCV = () => {
                   </Link>
                 </div>
                 <div>
-                  <Link to="/agreements">Locum Contracts</Link>
-                </div>
-                <div>
                   <ExternalLink
                     href={
                       process.env.REACT_APP_BACKEND_URL +
@@ -1420,6 +1417,7 @@ const LocumCV = () => {
           .languages .alignSkills {
             display: flex;
             justify-content: space-between;
+            padding-left: 30px;
             padding-right: 100px;
           }
 

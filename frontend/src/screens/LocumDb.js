@@ -1,22 +1,20 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Footer from "../components/Footer";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 import { useState, useEffect } from "react";
 import { ReactSession } from "react-client-session";
 import { ExternalLink } from "react-external-link";
 import { useSelector } from "react-redux";
-// Three dots
-import { ThreeDots } from "react-loader-spinner";
 
 const LocumDb = () => {
   ReactSession.setStoreType("sessionStorage");
   const user = useSelector((state) => state.userInfo.value);
+  const { search } = useLocation();
   const [noOfCases, setNoOfCases] = useState([]);
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const email = user.email;
-  const [isloaded, setIsloaded] = useState(true);
 
   // =============== PAGE BUTTONS ================
 
@@ -314,7 +312,10 @@ const LocumDb = () => {
   const [locums, setLocums] = useState([]);
   useEffect(() => {
     let isCancelled = false;
-    setIsloaded(false);
+    if (search === "") {
+      sessionStorage.clear();
+    }
+
     // declare the data fetching function
     const fetchData = async () => {
       const res = await fetch(
@@ -331,7 +332,9 @@ const LocumDb = () => {
           "&page=" +
           page +
           "&email=" +
-          email
+          email +
+          "&slug=" +
+          ReactSession.get("slug")
       );
       const data = await res.json();
 
@@ -340,13 +343,13 @@ const LocumDb = () => {
           top: 0,
           behavior: "smooth",
         });
+        console.log(data);
         setNoOfCases(data.num);
         setLocums(data.locums);
         setPage(data.page);
         setMaxPage(data.maxPage);
         setSort(data.sort);
         setListOfProfessions(data.professions);
-        setIsloaded(true);
       }
     };
 
@@ -359,7 +362,7 @@ const LocumDb = () => {
     return () => {
       isCancelled = true;
     };
-  }, [language, professions, location, sort, page]);
+  }, [language, professions, location, search, email, sort, page]);
 
   // ======= TAKE OUT DUPLICATE PROFESSIONS ======
 
@@ -381,7 +384,6 @@ const LocumDb = () => {
             integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
             crossorigin="anonymous"
           />
-
           <meta name="description" content="Medclicker" />
         </Helmet>
         <LoggedInNavbar />
@@ -431,23 +433,7 @@ const LocumDb = () => {
                 )}
               </form>
 
-              {!isloaded ? (
-                <div
-                  className="results"
-                  style={{
-                    position: "relative",
-                    display: "block",
-                    transform: "translateY(25%)",
-                  }}
-                >
-                  <ThreeDots
-                    type="ThreeDots"
-                    height={20}
-                    width={40}
-                    color={"gray"}
-                  />
-                </div>
-              ) : noOfCases.length === 0 ? (
+              {noOfCases.length === 0 ? (
                 <div className="results">Found 0 locums</div>
               ) : noOfCases > 1 ? (
                 <div className="results">Found {noOfCases} locums</div>
@@ -793,257 +779,190 @@ const LocumDb = () => {
           ) : (
             ""
           )}
-          {!isloaded ? (
-            <div
-              className="sidebar"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                position: "relative",
-                alignItems: "center",
-                height: "604px",
-              }}
-            >
-              <ThreeDots
-                type="ThreeDots"
-                height={40}
-                width={80}
-                color={"grey"}
-              />
-            </div>
-          ) : (
-            <main>
-              <section>
-                <div className="tilesGrid">
-                  {locums.map((locum) => {
-                    return (
-                      <div className="tiles" key={locum._id}>
-                        <ExternalLink
-                          target="_blank"
-                          href={
-                            process.env.REACT_APP_BACKEND_URL +
-                            `api/locums/resumeCandidate/${locum.nanoId}/${locum.slugId}`
-                          }
-                        >
-                          <div
-                            className="topBox"
-                            style={{ overflow: "hidden" }}
-                          >
-                            <div>
-                              <span className="locumName">
-                                {locum.firstName}
+          <main>
+            <section>
+              <div className="tilesGrid">
+                {locums.map((locum) => {
+                  return (
+                    <div className="tiles" key={locum._id}>
+                      <ExternalLink
+                        target="_blank"
+                        href={
+                          process.env.REACT_APP_BACKEND_URL +
+                          `api/locums/resumeCandidate/${locum.nanoId}/${locum.slugId}`
+                        }
+                      >
+                        <div className="topBox" style={{ overflow: "hidden" }}>
+                          <div>
+                            {locum.filename && (
+                              <figure className="smallPhoto">
+                                <img
+                                  src={`/locumPhoto/${locum.filename}`}
+                                  alt=""
+                                />
+                              </figure>
+                            )}
+
+                            <span className="locumName">{locum.firstName}</span>
+                            <h4>Locum ID: {locum.locumId}</h4>
+                            <h3>
+                              {locum.suburb}, {locum.state} {locum.postalCode}
+                            </h3>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "flex-start",
+                                flexWrap: "wrap",
+                                overflow: "hidden",
+                                width: "230px",
+                                height: "58px",
+                                position: "relative",
+                                backgroundColor: "white",
+                              }}
+                            >
+                              <span
+                                className={locum.university1 ? "green" : ""}
+                              >
+                                {locum.university1}
                               </span>
-                              <h4>Locum ID: {locum.locumId}</h4>
-                              <h3>
-                                {locum.suburb}, {locum.state} {locum.postalCode}
-                              </h3>
+                              <span className={locum.university2 ? "red" : ""}>
+                                {locum.university2}
+                              </span>
+                              <span className={locum.university3 ? "blue" : ""}>
+                                {locum.university3}
+                              </span>
+                              <br />
+                              <span className={locum.degree1 ? "green" : ""}>
+                                {locum.degree1}
+                              </span>
+                              <span className={locum.degree2 ? "red" : ""}>
+                                {locum.degree2}
+                              </span>
+                              <span className={locum.degree3 ? "blue" : ""}>
+                                {locum.degree3}
+                              </span>
+                            </div>
+                          </div>
+                          <div
+                            style={{
+                              display: "grid",
+                              gridTemplateRows: "50% 50%",
+                            }}
+                          >
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                flexWrap: "no-wrap",
+                                overflow: "hidden",
+                                width: "180px",
+                              }}
+                            >
                               <div
                                 style={{
                                   display: "flex",
                                   justifyContent: "flex-start",
                                   flexWrap: "wrap",
                                   overflow: "hidden",
-                                  width: "230px",
-                                  height: "58px",
+                                  width: "100%",
+                                  height: "70px",
                                   position: "relative",
                                   backgroundColor: "white",
                                 }}
                               >
                                 <span
-                                  className={locum.university1 ? "green" : ""}
+                                  className={locum.skillOne1 ? "purpleSm" : ""}
                                 >
-                                  {locum.university1}
+                                  {locum.skillOne1 && locum.skillOne1}
                                 </span>
                                 <span
-                                  className={
-                                    !locum.university1 && locum.university2
-                                      ? "green"
-                                      : ""
-                                  }
+                                  className={locum.skillOne2 ? "purpleSm" : ""}
                                 >
-                                  {!locum.university1 && locum.university2
-                                    ? locum.university2
-                                    : ""}
+                                  {locum.skillOne2 && locum.skillOne2}
                                 </span>
-                                <br />
-
                                 <span
-                                  className={
-                                    locum.degree1 && locum.university1
-                                      ? "green"
-                                      : ""
-                                  }
+                                  className={locum.skillOne3 ? "purpleSm" : ""}
                                 >
-                                  {locum.degree1}
-                                </span>
-
-                                <span
-                                  className={
-                                    !locum.degree1 && locum.degree2
-                                      ? "green"
-                                      : ""
-                                  }
-                                >
-                                  {!locum.degree1 && locum.degree2
-                                    ? locum.degree2
-                                    : ""}
+                                  {locum.skillOne3 && locum.skillOne3}
                                 </span>
                               </div>
                             </div>
 
-                            <div style={{ width: "230px" }}>
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "flex-start",
+                                flexWrap: "wrap",
+                                overflow: "hidden",
+                                width: "100%",
+                                height: "70px",
+                                position: "relative",
+                                backgroundColor: "white",
+                              }}
+                            >
                               <span
-                                className={locum.whichlanguage0 ? "green" : ""}
+                                className={locum.skillTwo1 ? "greenSm" : ""}
+                              >
+                                {locum.skillTwo1 && locum.skillTwo1}
+                              </span>
+                              <span
+                                className={locum.skillTwo2 ? "greenSm" : ""}
+                              >
+                                {locum.skillTwo2 && locum.skillTwo2}
+                              </span>
+                              <span
+                                className={locum.skillTwo3 ? "greenSm" : ""}
+                              >
+                                {locum.skillTwo3 && locum.skillTwo3}
+                              </span>
+                              <br />
+                              <span
+                                className={locum.skillThree1 ? "redSm" : ""}
+                              >
+                                {locum.skillThree1 && locum.skillThree1}
+                              </span>
+                              <span
+                                className={locum.skillThree2 ? "redSm" : ""}
+                              >
+                                {locum.skillThree2 && locum.skillThree2}
+                              </span>
+                              <span
+                                className={locum.skillThree3 ? "redSm" : ""}
+                              >
+                                {locum.skillThree3 && locum.skillThree3}
+                              </span>
+                              <br />
+                              <span
+                                className={locum.whichlanguage0 ? "blueSm" : ""}
                               >
                                 {locum.whichlanguage0 && locum.whichlanguage0}
                               </span>
-                              {locum.languageLvl0 === "Beginners" && (
-                                <span
-                                  style={{
-                                    float: "right",
-                                    right: "0px",
-                                    textAlign: "right",
-                                  }}
-                                >
-                                  <i className="fas fa-star"></i>
-                                </span>
-                              )}
-                              {locum.languageLvl0 === "Intermediate" && (
-                                <span
-                                  style={{
-                                    float: "right",
-                                    right: "0px",
-                                    textAlign: "right",
-                                  }}
-                                >
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                </span>
-                              )}
-                              {locum.languageLvl0 ===
-                                "Advanced or mother tongue" && (
-                                <span
-                                  style={{
-                                    float: "right",
-                                    right: "0px",
-                                    textAlign: "right",
-                                  }}
-                                >
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                </span>
-                              )}
-
                               <span
-                                className={locum.whichlanguage1 ? "green" : ""}
+                                className={locum.whichlanguage1 ? "blueSm" : ""}
                               >
                                 {locum.whichlanguage1 && locum.whichlanguage1}
                               </span>
-                              {locum.languageLvl1 === "Beginners" && (
-                                <span
-                                  style={{
-                                    float: "right",
-                                    right: "0px",
-                                    textAlign: "right",
-                                  }}
-                                >
-                                  <i className="fas fa-star"></i>
-                                </span>
-                              )}
-                              {locum.languageLvl1 === "Intermediate" && (
-                                <span
-                                  style={{
-                                    float: "right",
-                                    right: "0px",
-                                    textAlign: "right",
-                                  }}
-                                >
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                </span>
-                              )}
-                              {locum.languageLvl1 ===
-                                "Advanced or mother tongue" && (
-                                <span
-                                  style={{
-                                    float: "right",
-                                    right: "0px",
-                                    textAlign: "right",
-                                  }}
-                                >
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                </span>
-                              )}
-
                               <span
-                                className={locum.whichlanguage2 ? "green" : ""}
+                                className={locum.whichlanguage2 ? "blueSm" : ""}
                               >
                                 {locum.whichlanguage2 && locum.whichlanguage2}
                               </span>
-                              {locum.languageLvl2 === "Beginners" && (
-                                <span
-                                  style={{
-                                    float: "right",
-                                    right: "0px",
-                                    textAlign: "right",
-                                  }}
-                                >
-                                  <i className="fas fa-star"></i>
-                                </span>
-                              )}
-                              {locum.languageLvl2 === "Intermediate" && (
-                                <span
-                                  style={{
-                                    float: "right",
-                                    right: "0px",
-                                    textAlign: "right",
-                                  }}
-                                >
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                </span>
-                              )}
-                              {locum.languageLvl2 ===
-                                "Advanced or mother tongue" && (
-                                <span
-                                  style={{
-                                    float: "right",
-                                    right: "0px",
-                                    textAlign: "right",
-                                  }}
-                                >
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                  <i className="fas fa-star"></i>
-                                </span>
-                              )}
                             </div>
                           </div>
-                        </ExternalLink>
-                      </div>
-                    );
-                  })}
-                  {locums.length === 0 && (
-                    <div className="no-listings">
-                      <h2>No locums at the moment.</h2>
+                        </div>
+                      </ExternalLink>
                     </div>
-                  )}
-                </div>
-              </section>
-            </main>
-          )}
+                  );
+                })}
+                {locums.length === 0 && (
+                  <div className="no-listings">
+                    <h2>No locums at the moment.</h2>
+                  </div>
+                )}
+              </div>
+            </section>
+          </main>
+
           <nav className="paginate">
             <ul>
               {maxPage >= 2 ? (
@@ -1134,6 +1053,17 @@ const LocumDb = () => {
               0 1px 3px rgba(0, 0, 0, 0.28);
           }
 
+          main .red {
+            color: #e40000;
+            font-size: 14px;
+            height: 26px;
+            line-height: 24px;
+            padding-left: 3px;
+            padding-right: 3px;
+            border: 1px solid #e40000;
+            margin-right: 8px;
+            margin-bottom: 3px;
+          }
           main .green {
             color: green;
             font-size: 14px;
@@ -1144,7 +1074,63 @@ const LocumDb = () => {
             border: 1px solid green;
             margin-right: 8px;
             margin-bottom: 3px;
-            display: inline-block;
+          }
+
+          main .blue {
+            color: #54c8e8;
+            font-size: 14px;
+            height: 26px;
+            line-height: 24px;
+            padding-left: 3px;
+            padding-right: 3px;
+            border: 1px solid #54c8e8;
+            margin-right: 8px;
+            margin-bottom: 3px;
+          }
+          main .greenSm {
+            color: green;
+            font-size: 14px;
+            height: 20px;
+            line-height: 18px;
+            padding-left: 3px;
+            padding-right: 3px;
+            border: 1px solid green;
+            margin-right: 8px;
+            margin-bottom: 3px;
+          }
+          main .purpleSm {
+            color: purple;
+            font-size: 14px;
+            height: 20px;
+            line-height: 18px;
+            padding-left: 3px;
+            padding-right: 3px;
+            border: 1px solid purple;
+            margin-right: 8px;
+            margin-bottom: 3px;
+          }
+
+          main .blueSm {
+            color: #54c8e8;
+            font-size: 14px;
+            height: 20px;
+            line-height: 18px;
+            padding-left: 3px;
+            padding-right: 3px;
+            border: 1px solid #54c8e8;
+            margin-right: 8px;
+            margin-bottom: 3px;
+          }
+          main .redSm {
+            color: #e40000;
+            font-size: 14px;
+            height: 20px;
+            line-height: 18px;
+            padding-left: 3px;
+            padding-right: 3px;
+            border: 1px solid #e40000;
+            margin-right: 8px;
+            margin-bottom: 3px;
           }
 
           main .topBox {
@@ -1156,11 +1142,6 @@ const LocumDb = () => {
             margin: 0;
             height: 100%;
             border-bottom: 1px solid rgba(0, 0, 0, 0.18);
-          }
-
-          main .topBox span {
-            text-align: right;
-            right: 0px;
           }
 
           main .topBox .smallPhoto {
@@ -1175,6 +1156,7 @@ const LocumDb = () => {
             font-weight: 600;
             letter-spacing: -0.02em;
             margin-bottom: 3px;
+            margin-left: 5px;
             position: relative;
             top: -10px;
           }

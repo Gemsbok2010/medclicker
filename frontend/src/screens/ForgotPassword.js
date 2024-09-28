@@ -2,19 +2,14 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useState } from "react";
-import { ThreeDots } from "react-loader-spinner";
-import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
   const [emailValue, setEmail] = useState("");
   const [vanishemail, setVanishemail] = useState(false);
   const [updateNote, setUpdateNote] = useState(false);
-  const [isloading, setIsloading] = useState(false);
-  const navigate = useNavigate();
 
   const onSubmit = (e) => {
     e.preventDefault();
-    setIsloading(true);
     fetch(process.env.REACT_APP_BACKEND_URL + "api/secure/forgotpassword", {
       method: "POST",
       credentials: "include",
@@ -26,11 +21,9 @@ const ForgotPassword = () => {
         if (data) {
           setUpdateNote(true);
           setEmail("");
-          setIsloading(false);
         }
         setTimeout(function () {
           setUpdateNote(false);
-          navigate("/");
         }, 6000);
       })
       .catch((err) => {
@@ -107,18 +100,7 @@ const ForgotPassword = () => {
 
                 <div className="form-group">
                   {emailValue ? (
-                    !isloading ? (
-                      <input type="submit" value="Submit" />
-                    ) : (
-                      <button className="btn-vori">
-                        <ThreeDots
-                          type="ThreeDots"
-                          height={40}
-                          width={80}
-                          color={"white"}
-                        />
-                      </button>
-                    )
+                    <input type="submit" value="Submit" />
                   ) : (
                     <input
                       type="button"
@@ -268,27 +250,6 @@ const ForgotPassword = () => {
             font-size: 14px;
             color: #2b2b2b;
             font-family: sans-serif;
-          }
-
-          #forgetPasswordForm .form-group .btn-vori {
-            height: 48px;
-            border-radius: 4px;
-            width: 100%;
-            float: left;
-            color: #fff;
-            background-color: #14a248;
-            text-align: center;
-            box-sizing: border-box;
-            font-weight: 700;
-            font-size: 16px;
-            border: none;
-            margin-top: 20px;
-            font-weight: 800;
-            outline: none;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
           }
 
           #forgetPasswordForm .form-group input[type="submit"] {

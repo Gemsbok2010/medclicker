@@ -28,15 +28,14 @@ const QuestionReview = () => {
   const [latitude, setLatitude] = useState("");
   const [todaysDate, setTodaysDate] = useState("");
   const [isloaded, setIsloaded] = useState(false);
-  const [expiryDate, setExpiryDate] = useState("");
 
   // ================= MANAGE RIGHT PANEL ================
   var media = window.matchMedia("(min-width:768px)");
   window.onscroll = function () {
-    let topContainer = 919;
-    // document.querySelector(".top-container").clientHeight - 60;
-    let selectDateHeight = 395;
-    // document.querySelector("#selectdate").clientHeight + 2;
+    let topContainer =
+      document.querySelector(".top-container").clientHeight - 60;
+    let selectDateHeight =
+      document.querySelector("#selectdate").clientHeight + 2;
     let y = window.pageYOffset + selectDateHeight;
     if (media.matches) {
       if (y <= topContainer) {
@@ -97,7 +96,7 @@ const QuestionReview = () => {
 
   // ============ CUSTOMER DATA ===========
   const [customerInfo, setCustomerInfo] = useState({});
-  const [userId] = useState(ReactSession.get("customerId"));
+  const [userId, setUserId] = useState(ReactSession.get("customerId"));
 
   useEffect(() => {
     axios
@@ -122,12 +121,6 @@ const QuestionReview = () => {
         if (response.status === 200) {
           setFreeDays(response.data.freeDays);
           setRegularPayment(response.data.regularPayment);
-          const expiry = new Date();
-          expiry.setDate(expiry.getDate() + response.data.freeDays);
-          const dag = expiry.getDate().toString();
-          const mth = expiry.getMonth() + 1;
-          const year = expiry.getFullYear();
-          setExpiryDate(new Date(year, mth, dag));
         }
       });
   }, []);
@@ -135,55 +128,39 @@ const QuestionReview = () => {
   // =========== STANDARD PAYMENT DISABLED (FREE) ===========
   const onSubmit = (e) => {
     e.preventDefault();
-
     setIsloaded(true);
     try {
-      fetch(
-        process.env.REACT_APP_BACKEND_URL +
-          "api/payment/free?expiryDate=" +
-          expiryDate,
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-type": "application/json" },
-          body: JSON.stringify({
-            isPaid: true,
-            isActiveJob: true,
-            freeDays: freeDays,
-            contractType,
-            about,
-            professions,
-            streetNo,
-            street,
-            suburb,
-            state,
-            postalCode,
-            country,
-            latitude,
-            longitude,
-            todaysDate,
-            email: customerId ? customerInfo.email : user.email,
-            firstName: customerId ? customerInfo.firstName : user.firstName,
-            lastName: customerId ? customerInfo.lastName : user.lastName,
-            filename: customerId ? customerInfo.filename : user.filename,
-          }),
-        }
-      )
+      fetch(process.env.REACT_APP_BACKEND_URL + "api/payment/free", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          nanoId: user.nanoId,
+          isPaid: true,
+          isActiveJob: true,
+          freeDays: freeDays,
+          contractType,
+          about,
+          professions,
+          streetNo,
+          street,
+          suburb,
+          state,
+          postalCode,
+          country,
+          latitude,
+          longitude,
+          todaysDate,
+          email: customerId ? customerInfo.email : user.email,
+          firstName: customerId ? customerInfo.firstName : user.firstName,
+          lastName: customerId ? customerInfo.lastName : user.lastName,
+          filename: customerId ? customerInfo.filename : user.filename,
+        }),
+      })
         .then((res) => res.json())
         .then((data) => {
           if (data.isPaid === true) {
-            ReactSession.remove("about");
-            ReactSession.remove("contractType");
-            ReactSession.remove("latitude");
-            ReactSession.remove("longitude");
-            ReactSession.remove("country");
-            ReactSession.remove("postalCode");
-            ReactSession.remove("suburb");
-            ReactSession.remove("state");
-            ReactSession.remove("street");
-            ReactSession.remove("streetNo");
-            ReactSession.remove("professions");
-            ReactSession.remove("todaysDate");
+            sessionStorage.clear();
             //Question Card on Homepage
             localStorage.setItem("contractType", "");
             localStorage.setItem("professions", "");
@@ -194,7 +171,8 @@ const QuestionReview = () => {
               category: "Post Std Ad",
               action: "Std Ad No Charge",
             });
-            navigate("/thank_you");
+
+            navigate("/payment_success");
             setIsloaded(false);
           }
         });
@@ -420,8 +398,19 @@ const QuestionReview = () => {
                 <label htmlFor="resume">Upload File</label>
               </div>
 
+              <div className="container-coverletter">
+                <p>Cover Letter (Optional)</p>
+                <input
+                  type="file"
+                  disabled="disabled"
+                  id="cover-letter"
+                  accept=".doc,.docx, application/pdf"
+                />
+                <label htmlFor="cover-letter">Upload File</label>
+              </div>
+
               <input
-                type="submit"
+                type="button"
                 disabled="disabled"
                 className="btn-med"
                 value="Request to Apply"
@@ -679,7 +668,7 @@ const QuestionReview = () => {
 
           #selectdate {
             width: 470px;
-            height: 395px;
+            height: 450px;
             background-color: white;
             position: relative;
             margin: 30px auto 0px;
@@ -721,7 +710,6 @@ const QuestionReview = () => {
             height: 40px;
             line-height: 40px;
             cursor: default;
-            margin-bottom: 25px;
           }
 
           .container-resume {
@@ -978,10 +966,10 @@ const QuestionReview = () => {
             position: relative;
             background-color: #14a248;
             color: white;
-            border: none;
+            border: 2px solid #fff;
             cursor: pointer;
             font-weight: 800;
-            width: 200px;
+            width: 160px;
             height: 58px;
             line-height: 50px;
             outline: none;
@@ -994,21 +982,21 @@ const QuestionReview = () => {
             background: #14a248;
             color: #fff;
             outline: none;
-            border: none;
+            border: 2px solid #fff;
           }
           .wrap .btn-previous:hover,
           .wrap .btn-submit:hover {
             background: #14a248;
             color: #fff;
             outline: none;
-            border: none;
+            border: 2px solid #fff;
           }
           .wrap .btn-previous:active,
           .wrap .btn-submit:active {
             background: #14a248;
             color: #fff;
             outline: none;
-            border: none;
+            border: 2px solid #fff;
           }
           .btn-previous a {
             color: white;
@@ -1027,12 +1015,12 @@ const QuestionReview = () => {
             background-color: #14a248;
             position: relative;
             color: white;
-            border: none;
+            border: 2px solid #fff;
             cursor: pointer;
             font-weight: 800;
-            width: 200px;
+            width: 160px;
             height: 58px;
-            line-height: 58px;
+            line-height: 54px;
             outline: none;
             font-size: 20px;
             border-radius: 4px;
@@ -1051,11 +1039,6 @@ const QuestionReview = () => {
               width: 100%;
               top: 5%;
             }
-
-            .wrap .bottomBtn button {
-              width: 250px;
-            }
-
             .btn-previous,
             .btn-submit {
               width: 240px;
@@ -1145,7 +1128,7 @@ const QuestionReview = () => {
 
             #selectdate {
               width: 400px;
-              height: 395px;
+              height: 450px;
               display: inline-block;
               margin-top: 0px;
               position: fixed;

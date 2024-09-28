@@ -6,7 +6,6 @@ import { ReactSession } from "react-client-session";
 import { useSelector } from "react-redux";
 import ReactGA from "react-ga4";
 import axios from "axios";
-import { ThreeDots } from "react-loader-spinner";
 
 const QuestionLocumReview = () => {
   const navigate = useNavigate();
@@ -65,7 +64,6 @@ const QuestionLocumReview = () => {
   const [accommodation, setAccommodation] = useState(false);
   const [expiryDate, setExpiryDate] = useState("");
   const [customerId, setCustomerId] = useState("");
-  const [isloading, setIsloading] = useState(false);
 
   // ================= MANAGE RIGHT PANEL ================
   var media = window.matchMedia("(min-width:768px)");
@@ -182,6 +180,7 @@ const QuestionLocumReview = () => {
     } else {
       setPhRate(ReactSession.get("ph_rate"));
     }
+
     setAirport(ReactSession.get("airport"));
     setAirtravel(ReactSession.get("airtravel"));
     setRoadtravel(ReactSession.get("roadtravel"));
@@ -191,7 +190,7 @@ const QuestionLocumReview = () => {
 
   // ============ CUSTOMER DATA ===========
   const [customerInfo, setCustomerInfo] = useState({});
-  const [userId] = useState(ReactSession.get("customerId"));
+  const [userId, setUserId] = useState(ReactSession.get("customerId"));
 
   useEffect(() => {
     axios
@@ -207,7 +206,7 @@ const QuestionLocumReview = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     const isActiveJob = true;
-    setIsloading(true);
+
     fetch(
       process.env.REACT_APP_BACKEND_URL +
         "api/listings/locumList?expiryDate=" +
@@ -279,59 +278,7 @@ const QuestionLocumReview = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data) {
-          ReactSession.remove("about");
-          ReactSession.remove("accommodation");
-          ReactSession.remove("airport");
-          ReactSession.remove("airtravel");
-          ReactSession.remove("contractType");
-          ReactSession.remove("expiryDate");
-          ReactSession.remove("finishDate");
-          ReactSession.remove("friFinish");
-          ReactSession.remove("friHr");
-          ReactSession.remove("friStart");
-          ReactSession.remove("friday");
-          ReactSession.remove("latitude");
-          ReactSession.remove("longitude");
-          ReactSession.remove("monFinish");
-          ReactSession.remove("monHr");
-          ReactSession.remove("monStart");
-          ReactSession.remove("monday");
-          ReactSession.remove("normal_rate");
-          ReactSession.remove("ph_rate");
-          ReactSession.remove("sat_rate");
-          ReactSession.remove("sun_rate");
-          ReactSession.remove("roadtravel");
-          ReactSession.remove("satFinish");
-          ReactSession.remove("satHr");
-          ReactSession.remove("satStart");
-          ReactSession.remove("saturday");
-          ReactSession.remove("selectedFinishDay");
-          ReactSession.remove("selectedStartDay");
-          ReactSession.remove("startDate");
-          ReactSession.remove("sunFinish");
-          ReactSession.remove("sunHr");
-          ReactSession.remove("sunStart");
-          ReactSession.remove("sunday");
-          ReactSession.remove("thuFinish");
-          ReactSession.remove("thuHr");
-          ReactSession.remove("thuStart");
-          ReactSession.remove("thursday");
-          ReactSession.remove("tueFinish");
-          ReactSession.remove("tueHr");
-          ReactSession.remove("tueStart");
-          ReactSession.remove("tuesday");
-          ReactSession.remove("wedFinish");
-          ReactSession.remove("wedHr");
-          ReactSession.remove("wedStart");
-          ReactSession.remove("wednesday");
-          ReactSession.remove("country");
-          ReactSession.remove("postalCode");
-          ReactSession.remove("suburb");
-          ReactSession.remove("state");
-          ReactSession.remove("street");
-          ReactSession.remove("streetNo");
-          ReactSession.remove("professions");
-          ReactSession.remove("todaysDate");
+          sessionStorage.clear();
           //Question Card on Homepage
           localStorage.setItem("contractType", "");
           localStorage.setItem("professions", "");
@@ -342,8 +289,6 @@ const QuestionLocumReview = () => {
             category: "Post Locum Ad",
             action: "Locum Ad Posted",
           });
-          setIsloading(false);
-          ReactSession.set("lockthispage", true);
           navigate("/thank_you");
         }
       })
@@ -1041,20 +986,10 @@ const QuestionLocumReview = () => {
               <button className="btn-previous">
                 <Link to="/question6">Previous</Link>
               </button>
-              {!isloading ? (
-                <button type="submit" className="btn-submit">
-                  Submit
-                </button>
-              ) : (
-                <button type="submit" className="btn-submit">
-                  <ThreeDots
-                    type="ThreeDots"
-                    height={40}
-                    width={80}
-                    color={"white"}
-                  />
-                </button>
-              )}
+
+              <button type="submit" className="btn-submit">
+                Submit
+              </button>
             </div>
           </form>
         </div>
@@ -1702,10 +1637,10 @@ const QuestionLocumReview = () => {
             position: relative;
             background-color: #14a248;
             color: white;
-            border: none;
+            border: 2px solid #fff;
             cursor: pointer;
             font-weight: 800;
-            width: 200px;
+            width: 160px;
             height: 58px;
             line-height: 50px;
             outline: none;
@@ -1718,21 +1653,21 @@ const QuestionLocumReview = () => {
             background: #14a248;
             color: #fff;
             outline: none;
-            border: none;
+            border: 2px solid #fff;
           }
           .wrap .btn-previous:hover,
           .wrap .btn-submit:hover {
             background: #14a248;
             color: #fff;
             outline: none;
-            border: none;
+            border: 2px solid #fff;
           }
           .wrap .btn-previous:active,
           .wrap .btn-submit:active {
             background: #14a248;
             color: #fff;
             outline: none;
-            border: none;
+            border: 2px solid #fff;
           }
           .btn-previous a {
             color: white;
@@ -1751,10 +1686,10 @@ const QuestionLocumReview = () => {
             background-color: #14a248;
             position: relative;
             color: white;
-            border: none;
+            border: 2px solid #fff;
             cursor: pointer;
             font-weight: 800;
-            width: 200px;
+            width: 160px;
             height: 58px;
             line-height: 54px;
             outline: none;
@@ -1766,10 +1701,6 @@ const QuestionLocumReview = () => {
           @media only screen and (min-width: 768px) {
             .container-license {
               top: 6%;
-            }
-
-            .wrap .bottomBtn button {
-              width: 250px;
             }
             .container-airport {
               width: 100%;
