@@ -16,7 +16,6 @@ const apiKey = process.env.API_KEY,
 // Imports
 const Listing = require("../models/listingModel");
 const Payment = require("../models/paymentModel");
-const PaymentCard = require("../models/paymentCardModel");
 const Pub = require("../models/applicationModel");
 const User = require("../models/userModel");
 const Locum = require("../models/locumModel");
