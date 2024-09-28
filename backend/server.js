@@ -319,11 +319,17 @@ app.use("/assets", express.static("assets"));
 app.use("/public", express.static("public"));
 
 //Connect to DB (returns a mongoose instance)
-const dbConnection = async () => {
-  mongoose.connect(process.env.DB_CONNECT, {});
-};
 
-dbConnection().then(() => console.log("Connected to database"));
+mongoose.connect(
+  process.env.DB_CONNECT,
+  {
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+  },
+  () => console.log("connected to database")
+);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/build")));
