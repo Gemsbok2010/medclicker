@@ -107,12 +107,12 @@ router.get("/dashboard/:email", async (req, res) => {
     }).countDocuments();
 
     const applied = await Pub.find({
-      email: req.params.email,
+      nanoId: req.query.nanoId,
     }).countDocuments();
 
     const seen = await Pub.find({
       seen: true,
-      email: req.params.email,
+      nanoId: req.query.nanoId,
     }).countDocuments();
 
     res.status(200).json({

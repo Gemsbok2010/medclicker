@@ -21,7 +21,7 @@ const { locumApplication, sendLocumEmail } = require("../emails/sendEmail");
 
 // ======== CRON JOB - Schedule tasks to be run on the server ======== //.
 cron.schedule(
-  "* * * * *",
+  "*/30 * * * *",
   async () => {
     let today = new Date();
     today = today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
@@ -200,6 +200,84 @@ router.get("/Ad_details/:slug", async (req, res, next) => {
 });
 
 //============ GET APPLICATIONSMANAGER.JS ==============
+router.get("/applicationsmanager", async (req, res) => {
+  Pub.paginate({}, {}).then(async (result) => {
+    let sort = req.query.sortBy;
+    if (sort === undefined || sort === "-1") {
+      sort = -1;
+    }
+
+    let email = req.query.email;
+    let match = { email };
+
+    // Contract Type
+    if (req.query.contract !== "") {
+      const breakContract = req.query.contract;
+      const contractArr = breakContract.split(",");
+      const ans = { contract: contractArr };
+      let contract = [];
+      if (contractArr) {
+        contract = contractArr;
+        match["contractType"] = contract;
+      }
+    }
+
+    // Professions
+    if (req.query.professions !== "") {
+      const breakProfessions = req.query.professions;
+      const professionArr = breakProfessions.split(",");
+      const ans = { professions: professionArr };
+
+      let professions = [];
+      if (professionArr) {
+        professions = professionArr;
+        match["professions"] = professions;
+      }
+    }
+
+    // Location (STATE ONLY)
+    if (req.query.location !== "") {
+      const breakLocation = req.query.location;
+      const stateArr = breakLocation.split(",");
+      match["state"] = stateArr;
+    }
+
+    try {
+      const candidates = await Pub.find({
+        email: email,
+        slugId: req.query.slug,
+      }).sort({ createdAt: "desc" });
+
+      const professions = await Profession.find({ showProfession: true });
+
+      const num = await Pub.find(match).countDocuments();
+      let perPage = 10;
+      let maxPage = Math.ceil(num / perPage);
+
+      const page =
+        req.query.page && num > perPage ? parseInt(req.query.page) : 1;
+
+      const applications = await Pub.find(match)
+        .sort({ createdAt: sort })
+        .skip((page - 1) * perPage)
+        .limit(perPage);
+
+      res.status(200).json({
+        applications: applications,
+        candidates: candidates,
+        num: num,
+        page: page,
+        maxPage: maxPage,
+        sort: sort,
+        professions: professions,
+      });
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  });
+});
+
+//============ GET APPLICATIONSMANAGER.JS ==============
 router.get("/getList", async (req, res) => {
   Listing.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
@@ -258,7 +336,6 @@ router.get("/getList", async (req, res) => {
       }
       match["slug"] = slugArr;
 
-      console.log(match, "match");
       const professions = await Profession.find({ showProfession: true });
       const num = await Listing.find(match).countDocuments();
       let perPage = 10;
@@ -270,8 +347,6 @@ router.get("/getList", async (req, res) => {
         .sort({ createdAt: sort })
         .skip((page - 1) * perPage)
         .limit(perPage);
-
-      console.log(adPosts, "ad Posts");
 
       res.status(200).json({
         adPosts: adPosts,
@@ -347,8 +422,6 @@ router.get("/myapplications/:slug", async (req, res) => {
         slugArr.push(results);
       }
       match["slug"] = slugArr;
-
-      console.log(match, "match");
 
       const num = await Listing.find(match).countDocuments();
       let perPage = 10;
@@ -516,7 +589,6 @@ router.post("/singleUpload", async (req, res) => {
           dateApplied: moment().format("DD MMM YYYY"),
         });
         const storedApplication = await application.save();
-
         res.json({ storedApplication });
       }
     });
@@ -548,7 +620,7 @@ router.get("/getdates", async (req, res, next) => {
   }
 });
 
-//===== NO RESPONSE BUTTON (from applicationsManager.js) ========
+//============ NO RESPONSE BUTTON (from applicationsManager.js) ==============
 router.get("/noresponse", async (req, res, next) => {
   try {
     let match = {
@@ -570,8 +642,6 @@ router.get("/noresponse", async (req, res, next) => {
     }
     match["slugId"] = array;
 
-    console.log(match, "match");
-
     const thisAd = await Pub.find(match);
 
     res.status(200).json({ thisAd: thisAd });
@@ -580,7 +650,7 @@ router.get("/noresponse", async (req, res, next) => {
   }
 });
 
-//======== HIRED BUTTON (from applicationsManager.js) ========
+//============ HIRED BUTTON (from applicationsManager.js) ==============
 router.get("/hired", async (req, res, next) => {
   try {
     let match = { isSelected: true, isRejected: false, email: req.query.email };
@@ -598,8 +668,6 @@ router.get("/hired", async (req, res, next) => {
     }
     match["slugId"] = array;
 
-    console.log(match, "match");
-
     const thisAd = await Pub.find(match);
 
     res.status(200).json({ thisAd: thisAd });
@@ -608,7 +676,7 @@ router.get("/hired", async (req, res, next) => {
   }
 });
 
-//======== REJECTED BUTTON (from applicationsManager.js) =========
+//======== REJECTED BUTTON (from applicationsManager.js) ========
 router.get("/nothired", async (req, res, next) => {
   try {
     let match = { isSelected: false, isRejected: true, email: req.query.email };
@@ -625,8 +693,6 @@ router.get("/nothired", async (req, res, next) => {
       array.push(results);
     }
     match["slugId"] = array;
-
-    console.log(match, "match");
 
     const thisAd = await Pub.find(match);
 
@@ -669,7 +735,6 @@ router.get("/agreements", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
     try {
       const contracts = await Pub.find(match)
         .sort({ createdAt: sort })
@@ -705,8 +770,6 @@ router.get("/thisAd", async (req, res, next) => {
       array.push(results);
     }
     match["slug"] = array;
-
-    console.log(match, "match");
 
     const thisAd = await Listing.find(match);
 
@@ -773,8 +836,6 @@ router.get("/sortagreements", async (req, res) => {
     let maxPage = Math.ceil(num / perPage);
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
-
-    console.log(match, "match");
 
     try {
       const contracts = await Pub.find(match)
@@ -889,7 +950,6 @@ router.get("/calendar", async (req, res) => {
     }
     match["slug"] = slugArr;
 
-    console.log(match, "match");
     const adPosts = await Listing.find(match);
 
     res.status(200).json({

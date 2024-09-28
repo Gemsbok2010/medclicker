@@ -4,6 +4,7 @@ const moment = require("moment");
 const generate = require("nanoid-generate");
 const generateCaseId = generate.numbers(3);
 const cron = require("node-cron");
+require("dotenv/config");
 
 // Imports
 const Listing = require("../models/listingModel");
@@ -20,7 +21,7 @@ const {
 
 // ======== CRON JOB - Schedule tasks to be run on the server ======== //.
 cron.schedule(
-  "* * * * *",
+  "10 0 * * *",
   async () => {
     let today = new Date();
     today = today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
@@ -256,7 +257,7 @@ router.get("/search", async (req, res) => {
     let maxPage = Math.ceil(num / perPage);
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
     try {
       const adPosts = await Listing.find(match)
         .sort({ createdAt: sort })
@@ -398,7 +399,6 @@ router.get("/listingmanager", async (req, res) => {
     }
 
     const email = req.query.email;
-
     let match = { email: email, isDeletedJob: false };
     let Cmatch = { isRejected: false, slugId: req.query.slug };
 
@@ -460,7 +460,7 @@ router.get("/listingmanager", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-    console.log(match, "match");
+
     try {
       const adPosts = await Listing.find(match)
         .sort({ createdAt: sort })
@@ -508,8 +508,8 @@ router.get("/listingmanager", async (req, res) => {
   });
 });
 
-// Candidates Slug Number (from ListingManager.js)
-router.get("/candidates/:slug", async (req, res) => {
+// Candidates Slug Number (from listingManager.ejs)
+router.get("/candidates", async (req, res) => {
   Listing.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
     if (sort === undefined || sort === "-1") {
@@ -521,7 +521,7 @@ router.get("/candidates/:slug", async (req, res) => {
     match = { email: email, isDeletedJob: false };
 
     // Contract Type
-    if (req.query.contract !== "") {
+    if (req.query.contract !== "" || req.query.contract !== undefined) {
       const breakContract = req.query.contract;
       const contractArr = breakContract.split(",");
       const ans = { contract: contractArr };
@@ -533,7 +533,7 @@ router.get("/candidates/:slug", async (req, res) => {
     }
 
     // Professions
-    if (req.query.professions !== "") {
+    if (req.query.professions !== "" || req.query.professions !== undefined) {
       const breakProfessions = req.query.professions;
       const professionArr = breakProfessions.split(",");
       const ans = { professions: professionArr };
@@ -553,8 +553,10 @@ router.get("/candidates/:slug", async (req, res) => {
     }
 
     const professions = await Profession.find({ showProfession: true });
-
-    const num = await Listing.find(match).countDocuments();
+    const num = await Listing.find({
+      email: email,
+      isDeletedJob: false,
+    }).countDocuments();
 
     // MAKE AS SEEN: TRUE WHEN JUST APPLICANT BUTTON IS CLICKED
     if (
@@ -563,7 +565,7 @@ router.get("/candidates/:slug", async (req, res) => {
     ) {
       let set = {};
       set["seen"] = true;
-      await Pub.updateMany({ slugId: req.params.slug }, { $set: set });
+      await Pub.updateMany({ slugId: req.query.slug }, { $set: set });
     }
 
     let totalItems = result.totalDocs;
@@ -572,20 +574,18 @@ router.get("/candidates/:slug", async (req, res) => {
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
     try {
-      const adPosts = await Listing.find(match)
+      const adPosts = await Listing.find({ email, isDeletedJob: false })
         .sort({ createdAt: sort })
         .skip((page - 1) * perPage)
         .limit(perPage);
 
-      console.log(match, "match");
-
       const candidates = await Pub.find({
-        slugId: req.params.slug,
+        slugId: req.query.slug,
         isRejected: false,
       }).sort({ createdAt: "desc" });
 
       const noApplied = await Pub.find({
-        slugId: req.params.slug,
+        slugId: req.query.slug,
         isRejected: false,
       }).countDocuments();
 
@@ -605,7 +605,7 @@ router.get("/candidates/:slug", async (req, res) => {
   });
 });
 
-// Candidates Slug Number (from ListingManager.js)
+// Candidates Slug Number (from listingManager.ejs)
 router.put("/sleepAd/:slug", async (req, res) => {
   const user = await Listing.findOne({ slug: req.params.slug });
   let sort = req.query.sortBy;

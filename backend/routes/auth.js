@@ -72,7 +72,7 @@ router.post("/login", async (req, res) => {
   if (!user) {
     return res.status(400).json({
       invalid:
-        "<b>Email</b> or <b>Password</b> incorrect. Please check your inputs and try again.",
+        "Email or password incorrect. Please check your inputs and try again.",
     });
   }
   // If password is incorrect?
@@ -80,13 +80,13 @@ router.post("/login", async (req, res) => {
   if (!validPass)
     return res.status(400).json({
       invalid:
-        "<b>Email</b> or <b>Password</b> incorrect. Please check your inputs and try again.",
+        "Email or password incorrect. Please check your inputs and try again.",
     });
 
   if (!user) {
     res.status(400).json({
       invalid:
-        "<b>Email</b> or <b>Password</b> incorrect. Please check your inputs and try again.",
+        "Email or password incorrect. Please check your inputs and try again.",
     });
   } else {
     const authToken = generateToken(user);
