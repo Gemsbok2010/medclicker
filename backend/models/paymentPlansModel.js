@@ -5,7 +5,6 @@ const paymentSchema = new mongoose.Schema(
   {
     regularPayment: {
       type: Boolean,
-      default: true,
     },
     freeDays: {
       type: Number,

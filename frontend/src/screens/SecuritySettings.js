@@ -3,21 +3,26 @@ import { useState } from "react";
 import Footer from "../components/Footer";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 import { FiEyeOff, FiEye } from "react-icons/fi";
+import { ThreeDots } from "react-loader-spinner";
+import { useSelector } from "react-redux";
 
 const SecuritySettings = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [show, setShow] = useState(false);
   const [show2nd, setShow2nd] = useState(false);
+  const [isloading, setIsloading] = useState(false);
+  const user = useSelector((state) => state.userInfo.value);
 
   // ================= PUT ===================
   const onSubmit = (e) => {
     e.preventDefault();
+    setIsloading(true);
     try {
       fetch(
         process.env.REACT_APP_BACKEND_URL +
           "api/secure/securitySettings/" +
-          localStorage.getItem("userId"),
+          user.email,
         {
           method: "PUT",
           credentials: "include",
@@ -32,9 +37,11 @@ const SecuritySettings = () => {
         .then((data) => {
           if (data.invalid) {
             outPutErrorMessagesInSecuritySettings(data.invalid);
+            setIsloading(false);
           }
           if (data.user) {
             outPutSuccessMessageInSecuritySettings(data.user);
+            setIsloading(false);
           }
         });
     } catch (err) {
@@ -54,7 +61,6 @@ const SecuritySettings = () => {
       behavior: "smooth",
     });
     setTimeout(function () {
-      setAlert(false);
       setUpdateNote(false);
     }, 5000);
     setAlertMsg(errorMessage);
@@ -92,9 +98,12 @@ const SecuritySettings = () => {
                   <div className="alert">
                     <img
                       src="/images/cross-black.png"
-                      style={{ width: "12px" }}
+                      style={{ width: "12px", cursor: "pointer" }}
                       alt=""
-                    />
+                      onClick={() => {
+                        setAlert(false);
+                      }}
+                    />{" "}
                     <span dangerouslySetInnerHTML={{ __html: alertMsg }}></span>
                   </div>
                 ) : null}
@@ -193,7 +202,18 @@ const SecuritySettings = () => {
                   <div className="container2">
                     {password === confirmPassword ? (
                       password && confirmPassword ? (
-                        <input type="submit" value="Confirm" />
+                        !isloading ? (
+                          <input type="submit" value="Confirm" />
+                        ) : (
+                          <button className="btn-vori">
+                            <ThreeDots
+                              type="ThreeDots"
+                              height={40}
+                              width={80}
+                              color={"white"}
+                            />
+                          </button>
+                        )
                       ) : (
                         <input
                           type="button"
@@ -264,8 +284,6 @@ const SecuritySettings = () => {
             margin-bottom: 60px;
             border: 1px solid #ebebeb;
             background: #fff;
-            /* -webkit-box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
-  box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3); */
           }
           .wrap .questionCard > figure {
             width: 200px;
@@ -311,20 +329,47 @@ const SecuritySettings = () => {
             position: relative;
             width: 100%;
           }
+
+          .container2 .btn-vori {
+            height: 48px;
+            background-color: #14a248;
+            color: white;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+            font-weight: 500;
+            font-size: 16px;
+            border: none;
+            margin-top: 20px;
+            outline: none;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
           input[type="text"],
           input[type="password"] {
             height: 42px;
             text-decoration: none;
             outline: none;
             background: none;
-            border: 2px solid #dadada;
-            padding: 12px 20px;
+            border: 1px solid #dadada;
+            padding: 12px 10px;
             font-weight: 500;
             width: 100%;
             font-size: 14px;
             color: #777;
             font-family: sans-serif;
             display: inline-block;
+            border-radius: 7px;
+          }
+
+          input[type="text"]:focus,
+          input[type="password"]:focus,
+          input[type="text"]:active,
+          input[type="password"]:active {
+            outline: none;
           }
 
           .container1 .eye,
@@ -411,7 +456,9 @@ const SecuritySettings = () => {
               top: 41px;
               right: 58px;
             }
-
+            .container2 .btn-vori {
+              width: 260px;
+            }
             input[type="text"],
             input[type="password"] {
               width: 260px;

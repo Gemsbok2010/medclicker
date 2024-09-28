@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import $ from "jquery";
 import { RotatingLines } from "react-loader-spinner";
+import { ThreeDots } from "react-loader-spinner";
 import { ExternalLink } from "react-external-link";
 import { useSelector } from "react-redux";
 
@@ -29,127 +30,9 @@ const LocumCV = () => {
   const [university3, setUniversity3] = useState("");
   const [start3, setStart3] = useState("");
   const [finish3, setFinish3] = useState("");
-  const [isloaded, setIsloaded] = useState(false);
 
-  // =========== 技能一 例如:學校科目 ===============
-  const [skillOne, setSkillOne] = useState("Eg: Pharmacy Skills");
-  const [skillOne1, setSkillOne1] = useState("");
-  const [skillOne2, setSkillOne2] = useState("");
-  const [skillOne3, setSkillOne3] = useState("");
-  const [seeSkill1Level1, setSeeSkill1Level1] = useState(false);
-  const [seeSkill1Level2, setSeeSkill1Level2] = useState(false);
-  const [seeSkill1Level3, setSeeSkill1Level3] = useState(false);
-  const [experience, setExperience] = useState({});
-  const [naam, setNaam] = useState("");
-  const [ans, setAns] = useState("");
-
-  const explvl = (e) => {
-    const innerHTML = e.target.innerHTML;
-    setSeeSkill1Level1(false);
-    setSeeSkill1Level2(false);
-    setSeeSkill1Level3(false);
-    setAns(innerHTML);
-    setExperience({ ...experience, [naam]: innerHTML });
-  };
-
-  const handleSkill = (e) => {
-    const name = e.target.name;
-    setNaam(name);
-    setExperience({ ...experience, [name]: ans });
-  };
-
-  const deleteExp = async (e) => {
-    const value = e.target.value;
-    const name = e.target.name;
-    setNaam("");
-    setAns("");
-    if (value === "") {
-      setExperience({ ...experience, [name]: "" });
-      setSeeSkill1Level1(false);
-      setSeeSkill1Level2(false);
-      setSeeSkill1Level3(false);
-    }
-  };
-
-  // =========== 技能二 例如:電腦 ===============
-  const [skillTwo, setSkillTwo] = useState("Eg: Clinical");
-  const [skillTwo1, setSkillTwo1] = useState("");
-  const [skillTwo2, setSkillTwo2] = useState("");
-  const [skillTwo3, setSkillTwo3] = useState("");
-  const [seeSkill2Level1, setSeeSkill2Level1] = useState(false);
-  const [seeSkill2Level2, setSeeSkill2Level2] = useState(false);
-  const [seeSkill2Level3, setSeeSkill2Level3] = useState(false);
-  const [clinical, setClinical] = useState({});
-  const [com, setCom] = useState("");
-  const [comValue, setComValue] = useState("");
-
-  const complvl = (e) => {
-    const innerHTML = e.target.innerHTML;
-    setSeeSkill2Level1(false);
-    setSeeSkill2Level2(false);
-    setSeeSkill2Level3(false);
-    setComValue(innerHTML);
-    setClinical({ ...clinical, [com]: innerHTML });
-  };
-
-  const handleComp = (e) => {
-    const name = e.target.name;
-    setCom(name);
-    setClinical({ ...clinical, [name]: comValue });
-  };
-
-  const deleteComp = async (e) => {
-    const value = e.target.value;
-    const name = e.target.name;
-    setComValue("");
-    setCom("");
-    if (value === "") {
-      setClinical({ ...clinical, [name]: "" });
-      setSeeSkill2Level1(false);
-      setSeeSkill2Level2(false);
-      setSeeSkill2Level3(false);
-    }
-  };
-
-  // =========== 技能三 例如:體育 ===============
-  const [skillThree, setSkillThree] = useState("Eg: Pharmacotherapy");
-  const [skillThree1, setSkillThree1] = useState("");
-  const [skillThree2, setSkillThree2] = useState("");
-  const [skillThree3, setSkillThree3] = useState("");
-  const [seeSkill3Level1, setSeeSkill3Level1] = useState(false);
-  const [seeSkill3Level2, setSeeSkill3Level2] = useState(false);
-  const [seeSkill3Level3, setSeeSkill3Level3] = useState(false);
-  const [pharmaName, setPharmaName] = useState("");
-  const [pharmaValue, setPharmaValue] = useState("");
-  const [pharma, setPharma] = useState({});
-
-  const pharmalvl = (e) => {
-    const innerHTML = e.target.innerHTML;
-    setSeeSkill3Level1(false);
-    setSeeSkill3Level2(false);
-    setSeeSkill3Level3(false);
-    setPharmaValue(innerHTML);
-    setPharma({ ...pharma, [pharmaName]: innerHTML });
-  };
-
-  const handlePharma = (e) => {
-    const name = e.target.name;
-    setPharmaName(name);
-    setPharma({ ...pharma, [name]: pharmaValue });
-  };
-
-  const deletePharma = async (e) => {
-    const value = e.target.value;
-    const name = e.target.name;
-    setPharmaValue("");
-    setPharmaName("");
-    if (value === "") {
-      setPharma({ ...pharma, [name]: "" });
-      setSeeSkill3Level1(false);
-      setSeeSkill3Level2(false);
-      setSeeSkill3Level3(false);
-    }
-  };
+  const [readyToShow, setReadyToShow] = useState(false);
+  const [isloading, setIsloading] = useState(false);
 
   // ================ 語言 ==================
   const [languages, setLanguages] = useState("");
@@ -296,7 +179,7 @@ const LocumCV = () => {
   ]);
 
   useEffect(() => {
-    setIsloaded(false);
+    setReadyToShow(false);
     // ============ PROFILE DATA ===========
     axios
       .get(
@@ -322,36 +205,7 @@ const LocumCV = () => {
           setFinish1(response.data.finish1);
           setFinish2(response.data.finish2);
           setFinish3(response.data.finish3);
-          setSkillOne(response.data.skillOne);
-          setSkillOne1(response.data.skillOne1);
-          setSkillOne2(response.data.skillOne2);
-          setSkillOne3(response.data.skillOne3);
-          setExperience({
-            ...experience,
-            skill1Level1: response.data.skillProf1,
-            skill1Level2: response.data.skillProf2,
-            skill1Level3: response.data.skillProf3,
-          });
-          setSkillTwo(response.data.skillTwo);
-          setSkillTwo1(response.data.skillTwo1);
-          setSkillTwo2(response.data.skillTwo2);
-          setSkillTwo3(response.data.skillTwo3);
-          setClinical({
-            ...clinical,
-            skill2Level1: response.data.skillComp1,
-            skill2Level2: response.data.skillComp2,
-            skill2Level3: response.data.skillComp3,
-          });
-          setSkillThree(response.data.skillThree);
-          setSkillThree1(response.data.skillThree1);
-          setSkillThree2(response.data.skillThree2);
-          setSkillThree3(response.data.skillThree3);
-          setPharma({
-            ...pharma,
-            skill3Level1: response.data.skillPharma1,
-            skill3Level2: response.data.skillPharma2,
-            skill3Level3: response.data.skillPharma3,
-          });
+
           setLanguages(response.data.languages);
           setRow(response.data.row);
           setActiveButton(response.data.activeButton);
@@ -364,31 +218,14 @@ const LocumCV = () => {
             languageLvl1: response.data.languageLvl1,
             languageLvl2: response.data.languageLvl2,
           });
-          setIsloaded(true);
+          setReadyToShow(true);
         }
       });
   }, []);
 
   // ============ HIGHLIGHT ADDRESS SEARCH FIELD ==========
   var has_focus = false;
-  $("#skillOne").click(function (e) {
-    if (!has_focus) {
-      $(this).select();
-      has_focus = true;
-    }
-  });
-  $("#skillTwo").click(function (e) {
-    if (!has_focus) {
-      $(this).select();
-      has_focus = true;
-    }
-  });
-  $("#skillThree").click(function (e) {
-    if (!has_focus) {
-      $(this).select();
-      has_focus = true;
-    }
-  });
+
   $("#languages").click(function (e) {
     if (!has_focus) {
       $(this).select();
@@ -414,15 +251,6 @@ const LocumCV = () => {
     }
   });
 
-  $("#skillOne").blur(function (e) {
-    has_focus = false;
-  });
-  $("#skillTwo").blur(function (e) {
-    has_focus = false;
-  });
-  $("#skillThree").blur(function (e) {
-    has_focus = false;
-  });
   $("#languages").blur(function (e) {
     has_focus = false;
   });
@@ -441,7 +269,7 @@ const LocumCV = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-
+    setIsloading(true);
     fetch(process.env.REACT_APP_BACKEND_URL + "api/locums/updateCv", {
       method: "PUT",
       credentials: "include",
@@ -464,27 +292,6 @@ const LocumCV = () => {
         university3: university3,
         start3: start3,
         finish3: finish3,
-        skillOne: skillOne,
-        skillOne1: skillOne1,
-        skillOne2: skillOne2,
-        skillOne3: skillOne3,
-        skillProf1: experience.skill1Level1,
-        skillProf2: experience.skill1Level2,
-        skillProf3: experience.skill1Level3,
-        skillTwo: skillTwo,
-        skillTwo1: skillTwo1,
-        skillTwo2: skillTwo2,
-        skillTwo3: skillTwo3,
-        skillComp1: clinical.skill2Level1,
-        skillComp2: clinical.skill2Level2,
-        skillComp3: clinical.skill2Level3,
-        skillThree: skillThree,
-        skillThree1: skillThree1,
-        skillThree2: skillThree2,
-        skillThree3: skillThree3,
-        skillPharma1: pharma.skill3Level1,
-        skillPharma2: pharma.skill3Level2,
-        skillPharma3: pharma.skill3Level3,
         languages: languages,
         whichlanguage0: linguistics.whichlanguage0
           ? linguistics.whichlanguage0
@@ -511,6 +318,7 @@ const LocumCV = () => {
           top: 0,
           behavior: "smooth",
         });
+        setIsloading(false);
         setTimeout(function () {
           setUpdateNote(false);
         }, 2000);
@@ -519,7 +327,7 @@ const LocumCV = () => {
         console.error(err);
       });
   };
-  if (isloaded === false)
+  if (readyToShow === false)
     return (
       <div
         style={{
@@ -567,18 +375,9 @@ const LocumCV = () => {
         <LoggedInNavbar />
         <div className="locum_details">
           <Link to="/dashboard">Back to my Dashboard</Link>
-          <h2>Skills & Experiences</h2>
+          <h2>My Experiences</h2>
         </div>
         <div className="wrap">
-          {updateNote && (
-            <div className="updateNote container-fluid">
-              <div className="container-fluid ">
-                <img src="/images/tick.png" width="12px" />
-                <span>Your details have been updated</span>
-              </div>
-            </div>
-          )}
-
           <div className="divider">
             <div className="personContent">
               <div className="threeItem">
@@ -587,8 +386,11 @@ const LocumCV = () => {
                 </div>
                 <div>
                   <Link style={{ color: "#14a248" }} to="#">
-                    My Skills & Experiences
+                    My Experiences
                   </Link>
+                </div>
+                <div>
+                  <Link to="/agreements">Locum Contracts</Link>
                 </div>
                 <div>
                   <ExternalLink
@@ -606,6 +408,16 @@ const LocumCV = () => {
             <form onSubmit={onSubmit}>
               <section className="questionCard container-fluid">
                 <div className="container-fluid regCon">
+                  <div className="errorMessageHere">
+                    {updateNote && (
+                      <section className="updateNote container-fluid">
+                        <div className="container-fluid ">
+                          <img src="/images/tick.png" width="12px" alt="" />
+                          <span>Updated successfully.</span>
+                        </div>
+                      </section>
+                    )}
+                  </div>
                   <h2>My Experiences</h2>
                   <div className="form-group">
                     <span className="pencil"></span>
@@ -819,787 +631,6 @@ const LocumCV = () => {
                               value={finish3}
                               onChange={(e) => setFinish3(e.target.value)}
                             />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <span className="pencil"></span>
-                      <input
-                        autoComplete="off"
-                        type="text"
-                        id="skillOne"
-                        value={skillOne}
-                        onChange={(e) => setSkillOne(e.target.value)}
-                        onBlur={() =>
-                          skillOne === ""
-                            ? setSkillOne(userInfo.skillOne)
-                            : skillOne
-                        }
-                      />
-
-                      <div className="skillOne">
-                        <div className="alignSkills">
-                          <div className="container1">
-                            <input
-                              autoComplete="off"
-                              id="skillOne1"
-                              name="skill1Level1"
-                              type="text"
-                              placeholder="Eg: Communication Skills"
-                              value={skillOne1}
-                              onChange={(e) => {
-                                setSkillOne1(e.target.value);
-                                deleteExp(e);
-                              }}
-                            />
-                            <label htmlFor="skillOne1"></label>
-                          </div>
-                          <div className="container2">
-                            {skillOne1 ? (
-                              <>
-                                <label htmlFor="skill1Level1"></label>
-                                <input
-                                  autoComplete="off"
-                                  type="text"
-                                  id="skill1Level1"
-                                  name="skill1Level1"
-                                  placeholder="Select Level"
-                                  value={
-                                    experience.skill1Level1
-                                      ? experience.skill1Level1
-                                      : ""
-                                  }
-                                  onFocus={() => {
-                                    setSeeSkill1Level1(!seeSkill1Level1);
-                                  }}
-                                  onChange={() => {
-                                    setSeeSkill1Level1(!seeSkill1Level1);
-                                  }}
-                                  onSelect={handleSkill}
-                                />
-                              </>
-                            ) : (
-                              <input
-                                type="text"
-                                id="skill1Level1"
-                                disabled
-                                placeholder="Inactive"
-                              />
-                            )}
-                            {seeSkill1Level1 ? (
-                              <div className="skill1Level1">
-                                <ul>
-                                  <li
-                                    onClick={(e) => {
-                                      explvl(e);
-                                    }}
-                                  >
-                                    Some experience
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      explvl(e);
-                                    }}
-                                  >
-                                    Experienced
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      explvl(e);
-                                    }}
-                                  >
-                                    Specialised
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        </div>
-                        <br />
-                        <div className="alignSkills">
-                          <div className="container1">
-                            <input
-                              autoComplete="off"
-                              id="skillOne2"
-                              name="skill1Level2"
-                              type="text"
-                              placeholder="Eg: Fred Dispense"
-                              value={skillOne2}
-                              onChange={(e) => {
-                                setSkillOne2(e.target.value);
-                                deleteExp(e);
-                              }}
-                            />
-                            <label htmlFor="skillOne2"></label>
-                          </div>
-                          <div className="container2">
-                            {skillOne2 ? (
-                              <>
-                                <label htmlFor="skill1Level2"></label>
-                                <input
-                                  autoComplete="off"
-                                  type="text"
-                                  id="skill1Level2"
-                                  name="skill1Level2"
-                                  placeholder="Select Level"
-                                  value={
-                                    experience.skill1Level2
-                                      ? experience.skill1Level2
-                                      : ""
-                                  }
-                                  onFocus={() => {
-                                    setSeeSkill1Level2(!seeSkill1Level2);
-                                  }}
-                                  onChange={() => {
-                                    setSeeSkill1Level2(!seeSkill1Level2);
-                                  }}
-                                  onSelect={handleSkill}
-                                />
-                              </>
-                            ) : (
-                              <input
-                                type="text"
-                                id="skill1Level2"
-                                disabled
-                                placeholder="Inactive"
-                              />
-                            )}
-                            {seeSkill1Level2 ? (
-                              <div className="skill1Level2">
-                                <ul>
-                                  <li
-                                    onClick={(e) => {
-                                      explvl(e);
-                                    }}
-                                  >
-                                    Some experience
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      explvl(e);
-                                    }}
-                                  >
-                                    Experienced
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      explvl(e);
-                                    }}
-                                  >
-                                    Specialised
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        </div>
-                        <br />
-                        <div className="alignSkills">
-                          <div className="container1">
-                            <input
-                              autoComplete="off"
-                              id="skillOne3"
-                              name="skill1Level3"
-                              type="text"
-                              placeholder="Eg: Vaccination"
-                              value={skillOne3}
-                              onChange={(e) => {
-                                setSkillOne3(e.target.value);
-                                deleteExp(e);
-                              }}
-                            />
-                            <label htmlFor="skillOne3"></label>
-                          </div>
-                          <div className="container2">
-                            {skillOne3 ? (
-                              <>
-                                <label htmlFor="skill1Level3"></label>
-                                <input
-                                  autoComplete="off"
-                                  type="text"
-                                  id="skill1Level3"
-                                  name="skill1Level3"
-                                  placeholder="Select Level"
-                                  value={
-                                    experience.skill1Level3
-                                      ? experience.skill1Level3
-                                      : ""
-                                  }
-                                  onFocus={() => {
-                                    setSeeSkill1Level3(!seeSkill1Level3);
-                                  }}
-                                  onChange={() => {
-                                    setSeeSkill1Level3(!seeSkill1Level3);
-                                  }}
-                                  onSelect={handleSkill}
-                                />
-                              </>
-                            ) : (
-                              <input
-                                type="text"
-                                id="skill1Level3"
-                                disabled
-                                placeholder="Inactive"
-                              />
-                            )}
-                            {seeSkill1Level3 ? (
-                              <div className="skill1Level3">
-                                <ul>
-                                  <li
-                                    onClick={(e) => {
-                                      explvl(e);
-                                    }}
-                                  >
-                                    Some experience
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      explvl(e);
-                                    }}
-                                  >
-                                    Experienced
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      explvl(e);
-                                    }}
-                                  >
-                                    Specialised
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <span className="pencil"></span>
-
-                      <input
-                        type="text"
-                        id="skillTwo"
-                        value={skillTwo}
-                        autoComplete="off"
-                        onChange={(e) => {
-                          setSkillTwo(e.target.value);
-                        }}
-                        onBlur={() =>
-                          skillTwo === ""
-                            ? setSkillTwo(userInfo.skillTwo)
-                            : skillTwo
-                        }
-                      />
-
-                      <div className="skillTwo">
-                        <div className="alignSkills">
-                          <div className="container1">
-                            <input
-                              autoComplete="off"
-                              id="skillTwo1"
-                              name="skill2Level1"
-                              type="text"
-                              placeholder="Eg: Cardiovascular"
-                              value={skillTwo1}
-                              onChange={(e) => {
-                                setSkillTwo1(e.target.value);
-                                deleteComp(e);
-                              }}
-                            />
-                            <label htmlFor="skillTwo1"></label>
-                          </div>
-                          <div className="container2">
-                            {skillTwo1 ? (
-                              <>
-                                <label htmlFor="skill2Level1"></label>
-                                <input
-                                  autoComplete="off"
-                                  type="text"
-                                  id="skill2Level1"
-                                  name="skill2Level1"
-                                  placeholder="Select Experience Level"
-                                  value={
-                                    clinical.skill2Level1
-                                      ? clinical.skill2Level1
-                                      : ""
-                                  }
-                                  onFocus={() => {
-                                    setSeeSkill2Level1(!seeSkill2Level1);
-                                  }}
-                                  onChange={() => {
-                                    setSeeSkill2Level1(!seeSkill2Level1);
-                                  }}
-                                  onSelect={handleComp}
-                                />
-                              </>
-                            ) : (
-                              <input
-                                type="text"
-                                disabled
-                                id="skill2Level1"
-                                placeholder="Inactive"
-                              />
-                            )}
-                            {seeSkill2Level1 ? (
-                              <div className="skill2Level1">
-                                <ul>
-                                  <li
-                                    onClick={(e) => {
-                                      complvl(e);
-                                    }}
-                                  >
-                                    Some experience
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      complvl(e);
-                                    }}
-                                  >
-                                    Experienced
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      complvl(e);
-                                    }}
-                                  >
-                                    Specialised
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        </div>
-                        <br />
-                        <div className="alignSkills">
-                          <div className="container1">
-                            <input
-                              autoComplete="off"
-                              id="skillTwo2"
-                              name="skill2Level2"
-                              type="text"
-                              placeholder="Eg: Diabetes"
-                              value={skillTwo2}
-                              onChange={(e) => {
-                                setSkillTwo2(e.target.value);
-                                deleteComp(e);
-                              }}
-                            />
-                            <label htmlFor="skillTwo2"></label>
-                          </div>
-                          <div className="container2">
-                            {skillTwo2 ? (
-                              <>
-                                <label htmlFor="skill2Level2"></label>
-                                <input
-                                  autoComplete="off"
-                                  type="text"
-                                  id="skill2Level2"
-                                  name="skill2Level2"
-                                  placeholder="Select Experience Level"
-                                  value={
-                                    clinical.skill2Level2
-                                      ? clinical.skill2Level2
-                                      : ""
-                                  }
-                                  onFocus={() => {
-                                    setSeeSkill2Level2(!seeSkill2Level2);
-                                  }}
-                                  onChange={() => {
-                                    setSeeSkill2Level2(!seeSkill2Level2);
-                                  }}
-                                  onSelect={handleComp}
-                                />
-                              </>
-                            ) : (
-                              <input
-                                type="text"
-                                id="skill2Level2"
-                                disabled
-                                placeholder="Inactive"
-                              />
-                            )}
-                            {seeSkill2Level2 ? (
-                              <div className="skill2Level2">
-                                <ul>
-                                  <li
-                                    onClick={(e) => {
-                                      complvl(e);
-                                    }}
-                                  >
-                                    Some experience
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      complvl(e);
-                                    }}
-                                  >
-                                    Experienced
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      complvl(e);
-                                    }}
-                                  >
-                                    Specialised
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        </div>
-                        <br />
-                        <div className="alignSkills">
-                          <div className="container1">
-                            <input
-                              autoComplete="off"
-                              id="skillTwo3"
-                              name="skill2Level3"
-                              type="text"
-                              placeholder="Eg: Home Medicine Review"
-                              value={skillTwo3}
-                              onChange={(e) => {
-                                setSkillTwo3(e.target.value);
-                                deleteComp(e);
-                              }}
-                            />
-                            <label htmlFor="skillTwo3"></label>
-                          </div>
-                          <div className="container2">
-                            {skillTwo3 ? (
-                              <>
-                                <label htmlFor="skill2Level3"></label>
-                                <input
-                                  autoComplete="off"
-                                  type="text"
-                                  id="skill2Level3"
-                                  name="skill2Level3"
-                                  placeholder="Select Experience Level"
-                                  value={
-                                    clinical.skill2Level3
-                                      ? clinical.skill2Level3
-                                      : ""
-                                  }
-                                  onFocus={() => {
-                                    setSeeSkill2Level3(!seeSkill2Level3);
-                                  }}
-                                  onChange={() => {
-                                    setSeeSkill2Level3(!seeSkill2Level3);
-                                  }}
-                                  onSelect={handleComp}
-                                />
-                              </>
-                            ) : (
-                              <input
-                                type="text"
-                                id="skill2Level3"
-                                disabled
-                                placeholder="Inactive"
-                              />
-                            )}
-
-                            {seeSkill2Level3 ? (
-                              <div className="skill2Level3">
-                                <ul>
-                                  <li
-                                    onClick={(e) => {
-                                      complvl(e);
-                                    }}
-                                  >
-                                    Some experience
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      complvl(e);
-                                    }}
-                                  >
-                                    Experienced
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      complvl(e);
-                                    }}
-                                  >
-                                    Specialised
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="form-group">
-                      <span className="pencil"></span>
-                      <input
-                        type="text"
-                        id="skillThree"
-                        value={skillThree}
-                        autoComplete="off"
-                        onChange={(e) => {
-                          setSkillThree(e.target.value);
-                        }}
-                        onBlur={() =>
-                          skillThree === ""
-                            ? setSkillThree(userInfo.skillThree)
-                            : skillThree
-                        }
-                      />
-                      <div className="skillThree">
-                        <div className="alignSkills">
-                          <div className="container1">
-                            <input
-                              autoComplete="off"
-                              id="skillThree1"
-                              name="skill3Level1"
-                              type="text"
-                              placeholder="Eg: Methadone"
-                              value={skillThree1}
-                              onChange={(e) => {
-                                setSkillThree1(e.target.value);
-                                deletePharma(e);
-                              }}
-                            />
-                            <label htmlFor="skillThree1"></label>
-                          </div>
-                          <div className="container2">
-                            <label htmlFor="skill3Level1"></label>
-                            {skillThree1 ? (
-                              <>
-                                <label htmlFor="skill3Level1"></label>
-                                <input
-                                  autoComplete="off"
-                                  type="text"
-                                  id="skill3Level1"
-                                  name="skill3Level1"
-                                  placeholder="Select Experience Level"
-                                  value={
-                                    pharma.skill3Level1
-                                      ? pharma.skill3Level1
-                                      : ""
-                                  }
-                                  onFocus={() => {
-                                    setSeeSkill3Level1(!seeSkill3Level1);
-                                  }}
-                                  onChange={() => {
-                                    setSeeSkill3Level1(!seeSkill3Level1);
-                                  }}
-                                  onSelect={handlePharma}
-                                />
-                              </>
-                            ) : (
-                              <input
-                                type="text"
-                                id="skill3Level1"
-                                disabled
-                                placeholder="Inactive"
-                              />
-                            )}
-
-                            {seeSkill3Level1 ? (
-                              <div className="skill3Level1">
-                                <ul>
-                                  <li
-                                    onClick={(e) => {
-                                      pharmalvl(e);
-                                    }}
-                                  >
-                                    Some experience
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      pharmalvl(e);
-                                    }}
-                                  >
-                                    Experienced
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      pharmalvl(e);
-                                    }}
-                                  >
-                                    Specialised
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        </div>
-                        <br />
-                        <div className="alignSkills">
-                          <div className="container1">
-                            <input
-                              autoComplete="off"
-                              id="skillThree2"
-                              name="skill3Level2"
-                              type="text"
-                              placeholder="Eg: Suboxone"
-                              value={skillThree2}
-                              onChange={(e) => {
-                                setSkillThree2(e.target.value);
-                                deletePharma(e);
-                              }}
-                            />
-                            <label htmlFor="skillThree2"></label>
-                          </div>
-                          <div className="container2">
-                            {skillThree2 ? (
-                              <>
-                                <label htmlFor="skill3Level2"></label>
-                                <input
-                                  autoComplete="off"
-                                  type="text"
-                                  id="skill3Level2"
-                                  name="skill3Level2"
-                                  placeholder="Select Experience Level"
-                                  value={
-                                    pharma.skill3Level2
-                                      ? pharma.skill3Level2
-                                      : ""
-                                  }
-                                  onFocus={() => {
-                                    setSeeSkill3Level2(!seeSkill3Level2);
-                                  }}
-                                  onChange={() => {
-                                    setSeeSkill3Level2(!seeSkill3Level2);
-                                  }}
-                                  onSelect={handlePharma}
-                                />
-                              </>
-                            ) : (
-                              <input
-                                type="text"
-                                id="skill3Level2"
-                                disabled
-                                placeholder="Inactive"
-                              />
-                            )}
-                            {seeSkill3Level2 ? (
-                              <div className="skill3Level2">
-                                <ul>
-                                  <li
-                                    onClick={(e) => {
-                                      pharmalvl(e);
-                                    }}
-                                  >
-                                    Some experience
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      pharmalvl(e);
-                                    }}
-                                  >
-                                    Experienced
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      pharmalvl(e);
-                                    }}
-                                  >
-                                    Specialised
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        </div>
-                        <br />
-                        <div className="alignSkills">
-                          <div className="container1">
-                            <input
-                              autoComplete="off"
-                              id="skillThree3"
-                              name="skill3Level3"
-                              type="text"
-                              placeholder="Eg: Subutex"
-                              value={skillThree3}
-                              onChange={(e) => {
-                                setSkillThree3(e.target.value);
-                                deletePharma(e);
-                              }}
-                            />
-                            <label htmlFor="skillThree3"></label>
-                          </div>
-                          <div className="container2">
-                            {skillThree3 ? (
-                              <>
-                                <label htmlFor="skill3Level3"></label>
-                                <input
-                                  autoComplete="off"
-                                  type="text"
-                                  id="skill3Level3"
-                                  name="skill3Level3"
-                                  placeholder="Select Experience Level"
-                                  value={
-                                    pharma.skill3Level3
-                                      ? pharma.skill3Level3
-                                      : ""
-                                  }
-                                  onFocus={() => {
-                                    setSeeSkill3Level3(!seeSkill3Level3);
-                                  }}
-                                  onChange={() => {
-                                    setSeeSkill3Level3(!seeSkill3Level3);
-                                  }}
-                                  onSelect={handlePharma}
-                                />
-                              </>
-                            ) : (
-                              <input
-                                type="text"
-                                id="skill3Level3"
-                                disabled
-                                placeholder="Inactive"
-                              />
-                            )}
-                            {seeSkill3Level3 ? (
-                              <div className="skill3Level3">
-                                <ul>
-                                  <li
-                                    onClick={(e) => {
-                                      pharmalvl(e);
-                                    }}
-                                  >
-                                    Some experience
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      pharmalvl(e);
-                                    }}
-                                  >
-                                    Experienced
-                                  </li>
-                                  <li
-                                    onClick={(e) => {
-                                      pharmalvl(e);
-                                    }}
-                                  >
-                                    Specialised
-                                  </li>
-                                </ul>
-                              </div>
-                            ) : (
-                              ""
-                            )}
                           </div>
                         </div>
                       </div>
@@ -1845,8 +876,44 @@ const LocumCV = () => {
                   </div>
                 </div>
               </section>
+              <section className="buttonCard">
+                {resume && workhistory ? (
+                  activeButton === 0 ||
+                  activeButton === 1 ||
+                  activeButton === 2 ? (
+                    isloading ? (
+                      <button className="btn-vori">
+                        <ThreeDots
+                          type="ThreeDots"
+                          height={40}
+                          width={80}
+                          color={"white"}
+                        />
+                      </button>
+                    ) : (
+                      <button type="submit" className="btn-save">
+                        Update
+                      </button>
+                    )
+                  ) : (
+                    <input
+                      type="button"
+                      disabled
+                      className="btn-save"
+                      defaultValue="Update"
+                    />
+                  )
+                ) : (
+                  <input
+                    type="button"
+                    disabled
+                    className="btn-save"
+                    defaultValue="Update"
+                  />
+                )}
+              </section>
 
-              {resume && workhistory ? (
+              {/* {resume && workhistory ? (
                 activeButton === 0 ||
                 activeButton === 1 ||
                 activeButton === 2 ? (
@@ -1874,7 +941,7 @@ const LocumCV = () => {
                     defaultValue="Update"
                   />
                 </section>
-              )}
+              )} */}
             </form>
           </div>
           <Footer />
@@ -1904,7 +971,7 @@ const LocumCV = () => {
             grid-template-columns: 30% 70%;
           }
           .wrap .updateNote {
-            width: 80%;
+            width: 90%;
             background-color: #bff4f2;
             margin-bottom: 8px;
             height: 40px;
@@ -1956,6 +1023,102 @@ const LocumCV = () => {
               margin: 25px auto;
               padding: 10px 100px;
               text-align: center;
+            }
+          }
+
+          /* ========== SUBMIT BUTTON ========= */
+          .btn-vori {
+            position: relative;
+            background-color: #14a248;
+            color: white;
+            cursor: pointer;
+            font-weight: 800;
+            width: 200px;
+            height: 50px;
+            line-height: 50px;
+            outline: none;
+            font-size: 20px;
+            border-radius: 4px;
+            padding: 0;
+            margin: 20px 0px 20px 0px;
+            border: none;
+          }
+
+          .buttonCard .btn-vori {
+            width: 200px;
+            text-align: center;
+            background-color: #14a248;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .buttonCard .btn-vori:active,
+          .buttonCard .btn-vori:focus {
+            outline: none;
+          }
+
+          @media screen and (max-width: 768px) {
+            .wrap {
+              padding: 10px;
+            }
+            .wrap .divider {
+              display: block;
+            }
+            .wrap .buttonCard {
+              width: 450px;
+              margin: 25px 15px;
+            }
+            .buttonCard .btn-vori {
+              width: 100%;
+            }
+          }
+
+          /* ========== SUBMIT BUTTON ========= */
+          form .btn-save {
+            position: relative;
+            background-color: #14a248;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 800;
+            width: 100%;
+
+            margin: 0px;
+            height: 50px;
+            line-height: 50px;
+            outline: none;
+            font-size: 20px;
+            border-radius: 4px;
+            padding: 0;
+          }
+
+          .buttonCard .btn-save {
+            width: 100%;
+            text-align: center;
+            background-color: #14a248;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          form .btn-save:focus,
+          form .btn-save:active {
+            outline: none;
+          }
+
+          form .btn-save:disabled {
+            background-color: #ddd;
+            color: #888;
+            cursor: default;
+            border: #ddd;
+          }
+          @media only screen and (min-width: 768px) {
+            .buttonCard .btn-save {
+              width: 200px;
+              margin: 20px 0px;
             }
           }
 
@@ -2111,7 +1274,7 @@ const LocumCV = () => {
             -webkit-box-direction: normal;
             -ms-flex-direction: column;
             flex-direction: column;
-            border-radius: 0px;
+            border-radius: 7px;
             background: #fff;
           }
           .wrap .questionCard h2 {
@@ -2254,61 +1417,13 @@ const LocumCV = () => {
             font-weight: 800;
           }
 
-          .skillOne .alignSkills {
-            display: flex;
-            justify-content: space-between;
-            padding-left: 30px;
-            padding-right: 100px;
-          }
-
-          .skillTwo .alignSkills {
-            display: flex;
-            justify-content: space-between;
-            padding-left: 30px;
-            padding-right: 100px;
-          }
-
-          .skillThree .alignSkills {
-            display: flex;
-            justify-content: space-between;
-            padding-left: 30px;
-            padding-right: 100px;
-          }
-
           .languages .alignSkills {
             display: flex;
             justify-content: space-between;
-            padding-left: 30px;
             padding-right: 100px;
           }
 
-          .questionCard .form-group #skillOne {
-            font-size: 20px;
-            margin-bottom: 0px;
-            margin-top: 30px;
-            border: none;
-            color: #2b2b2b;
-            font-weight: 800;
-          }
           .questionCard .form-group #languages {
-            font-size: 20px;
-            margin-bottom: 0px;
-            margin-top: 30px;
-            border: none;
-            color: #2b2b2b;
-            font-weight: 800;
-          }
-
-          .questionCard .form-group #skillTwo {
-            font-size: 20px;
-            margin-bottom: 0px;
-            margin-top: 30px;
-            border: none;
-            color: #2b2b2b;
-            font-weight: 800;
-          }
-
-          .questionCard .form-group #skillThree {
             font-size: 20px;
             margin-bottom: 0px;
             margin-top: 30px;
@@ -2324,15 +1439,6 @@ const LocumCV = () => {
             position: relative;
           }
 
-          .skill1Level1,
-          .skill1Level2,
-          .skill1Level3,
-          .skill2Level1,
-          .skill2Level2,
-          .skill2Level3,
-          .skill3Level1,
-          .skill3Level2,
-          .skill3Level3,
           .language1,
           .languageLevel1,
           .language2,
@@ -2347,15 +1453,6 @@ const LocumCV = () => {
             height: 200px;
           }
 
-          .skill1Level1 ul,
-          .skill1Level2 ul,
-          .skill1Level3 ul,
-          .skill2Level1 ul,
-          .skill2Level2 ul,
-          .skill2Level3 ul,
-          .skill3Level1 ul,
-          .skill3Level2 ul,
-          .skill3Level3 ul,
           .language1 ul,
           .languageLevel1 ul,
           .language2 ul,
@@ -2367,22 +1464,7 @@ const LocumCV = () => {
             padding: 0;
             width: 100%;
           }
-          .skill1Level1 ul li,
-          .skillOne1 ul li,
-          .skill1Level2 ul li,
-          .skillOne2 ul li,
-          .skill1Level3 ul li,
-          .skillOne3 ul li,
-          .skill2Level1 ul li,
-          .skillTwo1 ul li,
-          .skill2Level2 ul li,
-          .skillTwo2 ul li,
-          .skill2Level3 ul li,
-          .skillTwo3 ul li,
-          .skill3Level1 ul li,
-          .skillThree1 ul li,
-          .skill3Level2 ul li,
-          .skill3Level3 ul li,
+
           .languageLevel1 ul li,
           .language1 ul li,
           .languageLevel2 ul li,
@@ -2404,24 +1486,8 @@ const LocumCV = () => {
             width: 100%;
           }
 
-          .skillOne1 ul li:hover,
-          .skill1Level1 ul li:hover,
-          .skillOne2 ul li:hover,
-          .skill1Level2 ul li:hover,
-          .skillOne3 ul li:hover,
-          .skill1Level3 ul li:hover,
           .language1 ul li:hover,
-          .skillTwo1 ul li:hover,
-          .skill2Level1 ul li:hover,
-          .skillTwo2 ul li:hover,
-          .skill2Level2 ul li:hover,
-          .skillTwo3 ul li:hover,
-          .skill2Level3 ul li:hover,
           .language1 ul li:hover,
-          .skillThree1 ul li:hover,
-          .skill3Level1 ul li:hover,
-          .skill3Level2 ul li:hover,
-          .skill3Level3 ul li:hover,
           .language1 ul li:hover,
           .languageLevel1 ul li:hover,
           .language2 ul li:hover,
@@ -2431,46 +1497,6 @@ const LocumCV = () => {
             background-color: white;
             border-left: 3px solid #14a248;
             padding-left: 17px;
-          }
-
-          /* ========== SUBMIT BUTTON ========= */
-          form .btn-save {
-            position: relative;
-            background-color: #14a248;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: 800;
-            width: 100%;
-            margin: 20px auto;
-            height: 50px;
-            line-height: 50px;
-            outline: none;
-            font-size: 20px;
-            border-radius: 4px;
-            padding: 0;
-          }
-
-          form .btn-save:focus,
-          form .btn-save:active {
-            outline: none;
-          }
-
-          form .btn-save:disabled {
-            background-color: #ddd;
-            color: #888;
-            cursor: default;
-            border: #ddd;
-          }
-          @media only screen and (min-width: 768px) {
-            form .btn-save {
-              width: 200px;
-            }
-          }
-          @media only screen and (min-width: 768px) {
-            .btn-save {
-              width: 200px;
-            }
           }
 
           @media screen and (max-width: 768px) {
@@ -2493,18 +1519,13 @@ const LocumCV = () => {
               width: 170px;
               font-size: 13px;
             }
-            .skillOne .alignSkills,
-            .skillTwo .alignSkills,
-            .skillThree .alignSkills,
+
             .languages .alignSkills {
               padding: 0px;
             }
 
             #workhistory,
             #honourTitle,
-            #skillOne,
-            #skillTwo,
-            #skillThree,
             #languages {
               width: 265px;
             }

@@ -1,5 +1,5 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 import { useState, useEffect } from "react";
@@ -7,19 +7,18 @@ import { ExternalLink } from "react-external-link";
 import { ReactSession } from "react-client-session";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { ThreeDots } from "react-loader-spinner";
 
 const ApplicationsManager = () => {
   ReactSession.setStoreType("sessionStorage");
   const user = useSelector((state) => state.userInfo.value);
-  const { search } = useLocation();
   const [listingInfo, setListingInfo] = useState([]);
-  const [applications, setApplications] = useState([]);
   const [candidates, setCandidates] = useState([]);
-  const emptyArray = listingInfo.length;
   const [noOfCases, setNoOfCases] = useState([]);
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
   const email = user.email;
+  const [isloaded, setIsloaded] = useState(true);
 
   // =============== PAGE BUTTONS ================
 
@@ -125,6 +124,7 @@ const ApplicationsManager = () => {
 
   const sorting = async (ascDesc) => {
     setReload(false);
+
     if (ascDesc === false) {
       const res = await fetch(
         process.env.REACT_APP_BACKEND_URL +
@@ -152,10 +152,12 @@ const ApplicationsManager = () => {
       setMaxPage(data.maxPage);
       setSort(data.sort);
       setListOfProfessions(data.professions);
+      ReactSession.remove("slug");
     }
 
     if (ascDesc === true) {
       setReload(false);
+
       const res = await fetch(
         process.env.REACT_APP_BACKEND_URL +
           "api/applications/getList?sortBy=desc" +
@@ -182,6 +184,7 @@ const ApplicationsManager = () => {
       setMaxPage(data.maxPage);
       setSort(data.sort);
       setListOfProfessions(data.professions);
+      ReactSession.remove("slug");
     }
   };
 
@@ -207,6 +210,7 @@ const ApplicationsManager = () => {
   const onContractChange = async (event) => {
     const { value } = event.target;
     setContract([...contract, value]);
+    ReactSession.remove("slug");
   };
 
   // ========== REMOVE CONTRACT TYPE ==========
@@ -226,6 +230,7 @@ const ApplicationsManager = () => {
 
     if (!professions.includes(value)) {
       setProfessions([...professions, value]);
+      ReactSession.remove("slug");
     } else {
       const index = professions.indexOf(value);
 
@@ -273,7 +278,6 @@ const ApplicationsManager = () => {
     if (index !== -1) {
       location.splice(index, 1);
     }
-
     setLocation([...location]);
   };
 
@@ -281,6 +285,7 @@ const ApplicationsManager = () => {
   const onLocationChange = async (event) => {
     const { value } = event.target;
     setLocation([...location, value]);
+    ReactSession.remove("slug");
   };
 
   // ========= CLEAR ALL IN FILTERCARD ===========
@@ -300,6 +305,7 @@ const ApplicationsManager = () => {
     setContract([]);
     setProfessions([]);
     setChecks([]);
+    ReactSession.remove("slug");
   };
 
   // ============== BACKDROP ============== //
@@ -310,74 +316,12 @@ const ApplicationsManager = () => {
     setFilterCard(false);
   };
 
-  // ============= GET APPLICATIONSMANAGER ===============
-  // ============= GET SEARCH FILTER ================
-
   useEffect(() => {
     let isCancelled = false;
-    if (search === "") {
-      sessionStorage.clear();
-    }
 
     // declare the data fetching function
     const fetchData = async () => {
-      setReload(false);
-      const res = await fetch(
-        process.env.REACT_APP_BACKEND_URL +
-          "api/applications/applicationsmanager?" +
-          "contract=" +
-          contract +
-          "&professions=" +
-          professions +
-          "&location=" +
-          location +
-          "&sortBy=" +
-          sort +
-          "&page=" +
-          page +
-          "&email=" +
-          email +
-          "&slug=" +
-          ReactSession.get("slug")
-      );
-      const data = await res.json();
-
-      if (isCancelled === false) {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth",
-        });
-
-        setReload(true);
-        setNoOfCases(data.num);
-        setApplications(data.applications);
-        setCandidates(data.candidates);
-        setPage(data.page);
-        setMaxPage(data.maxPage);
-        setSort(data.sort);
-        setListOfProfessions(data.professions);
-      }
-    };
-    if (isCancelled === false) {
-      // call the function
-      fetchData()
-        // make sure to catch any error
-        .catch(console.error);
-    }
-    return () => {
-      isCancelled = true;
-    };
-  }, [contract, professions, location, page, sort, email, search]);
-
-  useEffect(() => {
-    let isCancelled = false;
-    if (search === "") {
-      sessionStorage.clear();
-    }
-
-    // declare the data fetching function
-    const fetchData = async () => {
-      setReload(false);
+      setIsloaded(false);
       const res = await fetch(
         process.env.REACT_APP_BACKEND_URL +
           "api/applications/getList?" +
@@ -403,8 +347,6 @@ const ApplicationsManager = () => {
           top: 0,
           behavior: "smooth",
         });
-
-        setReload(true);
         setNoOfCases(data.num);
         setListingInfo(data.adPosts);
         setCandidates(data.candidates);
@@ -412,6 +354,8 @@ const ApplicationsManager = () => {
         setMaxPage(data.maxPage);
         setSort(data.sort);
         setListOfProfessions(data.professions);
+        setIsloaded(true);
+        ReactSession.remove("slug");
       }
     };
     if (isCancelled === false) {
@@ -423,7 +367,7 @@ const ApplicationsManager = () => {
     return () => {
       isCancelled = true;
     };
-  }, [contract, professions, location, page, sort, email, search]);
+  }, [contract, professions, location, page, sort]);
 
   const highlight = async (slug) => {
     ReactSession.set("slug", slug);
@@ -445,13 +389,13 @@ const ApplicationsManager = () => {
         email
     );
     const data = await res.json();
-    setReload(true);
     setNoOfCases(data.num);
     setListingInfo(data.adPosts);
     setPage(data.page);
     setMaxPage(data.maxPage);
     setSort(data.sort);
     setCandidates(data.candidates);
+    setReload(true);
   };
 
   const onWithdraw = async (e, slugId, nanoId) => {
@@ -501,6 +445,7 @@ const ApplicationsManager = () => {
       )
       .then((response) => {
         if (response.status === 200) {
+          console.log(response.data.thisAd);
           setNothired(response.data.thisAd);
         }
       });
@@ -555,6 +500,8 @@ const ApplicationsManager = () => {
     let xmas = new Date(expiry);
     let now = new Date();
 
+    console.log(xmas, now);
+
     let timeDiff = xmas.getTime() - now.getTime() - 10 * 60 * 60 * 1000;
 
     let seconds = Math.floor(timeDiff / 1000);
@@ -565,7 +512,7 @@ const ApplicationsManager = () => {
       minimumIntegerDigits: 2,
       useGrouping: false,
     });
-
+    console.log(hoursX);
     return hoursX;
   };
 
@@ -646,8 +593,23 @@ const ApplicationsManager = () => {
                   </button>
                 )}
               </form>
-
-              {noOfCases.length === 0 ? (
+              {!isloaded ? (
+                <div
+                  className="results"
+                  style={{
+                    position: "relative",
+                    display: "block",
+                    transform: "translateY(25%)",
+                  }}
+                >
+                  <ThreeDots
+                    type="ThreeDots"
+                    height={20}
+                    width={40}
+                    color={"gray"}
+                  />
+                </div>
+              ) : noOfCases.length === 0 ? (
                 <div className="results">You have made 0 applications</div>
               ) : noOfCases > 1 ? (
                 <div className="results">
@@ -924,238 +886,258 @@ const ApplicationsManager = () => {
           <section className="listContent container-fluid">
             <div className="wrapper">
               <div className="adList">
-                <div className="wrapper-ads">
-                  {applications.map((apply) => {
-                    return listingInfo.map((list) => {
+                {!isloaded ? (
+                  <div
+                    className="sidebar"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      position: "relative",
+                      alignItems: "center",
+                      height: "604px",
+                    }}
+                  >
+                    <ThreeDots
+                      type="ThreeDots"
+                      height={40}
+                      width={80}
+                      color={"grey"}
+                    />
+                  </div>
+                ) : (
+                  <div className="wrapper-ads">
+                    {listingInfo.map((list) => {
                       return (
-                        list.slug === apply.slugId && (
-                          <div key={apply._id}>
-                            <div className="ads">
-                              <div
-                                className={
-                                  list.isActiveJob === false ||
-                                  list.isDeletedJob === true
-                                    ? "leftmessage inactive"
-                                    : "leftmessage"
-                                }
-                              >
-                                {list.isPaidLocum === false ? (
-                                  list.isActiveJob === false &&
-                                  list.isDeletedJob === false ? (
-                                    <span className={"closed"}>PAUSED</span>
-                                  ) : (
-                                    <span></span>
-                                  )
-                                ) : (
-                                  <span className={"closed"}>COMPLETED</span>
-                                )}
+                        <div className="ads">
+                          <div className={"leftmessage"}>
+                            {list.isPaidLocum === false ? (
+                              list.isActiveJob === false &&
+                              list.isDeletedJob === false ? (
+                                <span className={"closed"}>PAUSED</span>
+                              ) : (
+                                <span></span>
+                              )
+                            ) : (
+                              <span className={"closed"}>COMPLETED</span>
+                            )}
 
-                                {list.isPaidLocum === false ? (
-                                  list.isDeletedJob === true &&
-                                  list.isActiveJob === false ? (
-                                    <span className={"closed"}>EXPIRED</span>
-                                  ) : (
-                                    <span></span>
-                                  )
-                                ) : (
-                                  <span className={"closed"}>COMPLETED</span>
-                                )}
+                            {list.isPaidLocum === false ? (
+                              list.isDeletedJob === true &&
+                              list.isActiveJob === false ? (
+                                <span className={"closed"}>EXPIRED</span>
+                              ) : (
+                                <span></span>
+                              )
+                            ) : (
+                              <span className={"closed"}>COMPLETED</span>
+                            )}
+                            {/* HERE */}
 
-                                {list.isDeletedJob ? (
-                                  <div className="preview-ad inactive">
-                                    View Job
-                                  </div>
-                                ) : (
-                                  <ExternalLink
-                                    href={
-                                      process.env.REACT_APP_BACKEND_URL +
-                                      `api/listings/adPosts/${list.slug}`
-                                    }
-                                    target="_self"
-                                  >
-                                    <div className="preview-ad">View Job</div>
-                                  </ExternalLink>
-                                )}
-                                {ReactSession.get("slug") === list.slug ? (
-                                  <div
-                                    id="chosenOne"
-                                    className="applicants"
-                                    onClick={() => {
-                                      highlight(list.slug);
-                                    }}
-                                  >
-                                    {hired.map((appId) => {
-                                      return (
-                                        appId.slugId === list.slug && (
-                                          <span key={appId._id}>Hired</span>
-                                        )
-                                      );
-                                    })}
-                                    {nothired.map((appId) => {
-                                      return (
-                                        appId.slugId === list.slug && (
-                                          <span key={appId._id}>Rejected</span>
-                                        )
-                                      );
-                                    })}
-                                    {noresponse.map((appId) => {
-                                      return (
-                                        appId.slugId === list.slug && (
-                                          <span key={appId._id}>
-                                            My Application
-                                          </span>
-                                        )
-                                      );
-                                    })}
-                                  </div>
-                                ) : (
-                                  <div
-                                    className="applicants"
-                                    onClick={() => {
-                                      highlight(list.slug);
-                                      myDates(list.slug);
-                                    }}
-                                  >
-                                    {hired.map((appId) => {
-                                      return (
-                                        appId.slugId === list.slug && (
-                                          <span
-                                            style={{
-                                              fontWeight: "300",
-                                            }}
-                                            key={appId._id}
-                                          >
-                                            Hired
-                                          </span>
-                                        )
-                                      );
-                                    })}
-                                    {nothired.map((appId) => {
-                                      return (
-                                        appId.slugId === list.slug && (
-                                          <span
-                                            style={{
-                                              fontWeight: "300",
-                                            }}
-                                            key={appId._id}
-                                          >
-                                            Rejected
-                                          </span>
-                                        )
-                                      );
-                                    })}
-                                    {noresponse.map((appId) => {
-                                      return (
-                                        appId.slugId === list.slug && (
-                                          <span
-                                            style={{
-                                              fontWeight: "300",
-                                            }}
-                                            key={appId._id}
-                                          >
-                                            My Application
-                                          </span>
-                                        )
-                                      );
-                                    })}
-                                  </div>
-                                )}
-                                <h2>
-                                  {list.professions + " "}
-                                  {list.contractType === "Full-Time" ? (
-                                    <span className="highlight_fulltime">
-                                      {list.contractType}
-                                    </span>
-                                  ) : list.contractType === "Part-Time" ? (
-                                    <span className="highlight_parttime">
-                                      {list.contractType}
-                                    </span>
-                                  ) : list.contractType === "Locum" ? (
-                                    <span className="highlight_locum">
-                                      {list.contractType}
-                                    </span>
-                                  ) : (
-                                    <span className="highlight_other">
-                                      {list.contractType}
-                                    </span>
-                                  )}
-                                </h2>
-                                <h3
-                                  style={{
-                                    fontWeight: "200",
-                                    marginTop: "6px",
-                                    marginBottom: "8px",
-                                  }}
-                                >
-                                  Case ID: {list.caseId}
-                                </h3>
+                            {nothired.map((appId) => {
+                              return (
+                                appId.slugId === list.slug && (
+                                  <span className="closed" key={appId._id}>
+                                    REJECTED
+                                  </span>
+                                )
+                              );
+                            })}
 
-                                <h3
-                                  style={{
-                                    height: "20px",
-                                    width: "300px",
-                                    display: "block",
-                                    color: "#2b2b2b",
-                                    marginTop: "6px",
-                                    marginBottom: "8px",
-                                  }}
-                                >
-                                  {list.suburb +
-                                    " " +
-                                    list.state +
-                                    " " +
-                                    list.postalCode}
-                                </h3>
-                                <h3
-                                  style={{
-                                    height: "20px",
-                                    width: "250px",
-                                    display: "block",
-                                    color: "#2b2b2b",
-                                    marginTop: "6px",
-                                    marginBottom: "8px",
-                                  }}
-                                >
-                                  Expiring on: {list.finishDate}
-                                </h3>
-                                {list.contractType === "Locum" ? (
-                                  <h3
-                                    style={{
-                                      height: "20px",
-                                      marginTop: "13px",
-                                    }}
-                                  >
-                                    Need locum from:{" "}
-                                    <span className="highlight">
-                                      {list.startDate}
-                                    </span>{" "}
-                                    to{" "}
-                                    <span className="highlight">
-                                      {list.finishDate}
-                                    </span>
-                                  </h3>
-                                ) : (
-                                  <h3
-                                    style={{
-                                      height: "20px",
-                                      marginTop: "13px",
-                                    }}
-                                  ></h3>
-                                )}
-                                <p>{list.about}</p>
+                            {list.isDeletedJob ? (
+                              <div className="preview-ad inactive">
+                                View Job
                               </div>
-                            </div>
+                            ) : (
+                              <ExternalLink
+                                href={
+                                  process.env.REACT_APP_BACKEND_URL +
+                                  `api/listings/adPosts/${list.slug}`
+                                }
+                                target="_self"
+                              >
+                                <div className="preview-ad">View Job</div>
+                              </ExternalLink>
+                            )}
+                            {ReactSession.get("slug") === list.slug ? (
+                              <div
+                                id="chosenOne"
+                                className="applicants"
+                                onClick={() => {
+                                  highlight(list.slug);
+                                }}
+                              >
+                                {hired.map((appId) => {
+                                  return (
+                                    appId.slugId === list.slug && (
+                                      <span key={appId._id}>Hired</span>
+                                    )
+                                  );
+                                })}
+                                {nothired.map((appId) => {
+                                  return (
+                                    appId.slugId === list.slug && (
+                                      <span key={appId._id}>Rejected</span>
+                                    )
+                                  );
+                                })}
+                                {noresponse.map((appId) => {
+                                  return (
+                                    appId.slugId === list.slug && (
+                                      <span key={appId._id}>
+                                        My Application
+                                      </span>
+                                    )
+                                  );
+                                })}
+                              </div>
+                            ) : (
+                              <div
+                                className="applicants"
+                                onClick={() => {
+                                  highlight(list.slug);
+                                  myDates(list.slug);
+                                }}
+                              >
+                                {hired.map((appId) => {
+                                  return (
+                                    appId.slugId === list.slug && (
+                                      <span
+                                        style={{
+                                          fontWeight: "300",
+                                        }}
+                                        key={appId._id}
+                                      >
+                                        Hired
+                                      </span>
+                                    )
+                                  );
+                                })}
+                                {nothired.map((appId) => {
+                                  return (
+                                    appId.slugId === list.slug && (
+                                      <span
+                                        style={{
+                                          fontWeight: "300",
+                                        }}
+                                        key={appId._id}
+                                      >
+                                        Rejected
+                                      </span>
+                                    )
+                                  );
+                                })}
+                                {noresponse.map((appId) => {
+                                  return (
+                                    appId.slugId === list.slug && (
+                                      <span
+                                        style={{
+                                          fontWeight: "300",
+                                        }}
+                                        key={appId._id}
+                                      >
+                                        My Application
+                                      </span>
+                                    )
+                                  );
+                                })}
+                              </div>
+                            )}
+                            <h2>
+                              {list.professions + " "}
+                              {list.contractType === "Full-Time" ? (
+                                <span className="highlight_fulltime">
+                                  {list.contractType}
+                                </span>
+                              ) : list.contractType === "Part-Time" ? (
+                                <span className="highlight_parttime">
+                                  {list.contractType}
+                                </span>
+                              ) : list.contractType === "Locum" ? (
+                                <span className="highlight_locum">
+                                  {list.contractType}
+                                </span>
+                              ) : (
+                                <span className="highlight_other">
+                                  {list.contractType}
+                                </span>
+                              )}
+                            </h2>
+                            <h3
+                              style={{
+                                fontWeight: "200",
+                                marginTop: "6px",
+                                marginBottom: "8px",
+                              }}
+                            >
+                              Case ID: {list.caseId}
+                            </h3>
+
+                            <h3
+                              style={{
+                                height: "20px",
+                                width: "300px",
+                                display: "block",
+                                color: "#2b2b2b",
+                                marginTop: "6px",
+                                marginBottom: "8px",
+                              }}
+                            >
+                              {list.suburb +
+                                " " +
+                                list.state +
+                                " " +
+                                list.postalCode}
+                            </h3>
+                            <h3
+                              style={{
+                                height: "20px",
+                                width: "250px",
+                                display: "block",
+                                color: "#2b2b2b",
+                                marginTop: "6px",
+                                marginBottom: "8px",
+                              }}
+                            >
+                              Expiring on: {list.finishDate}
+                            </h3>
+                            {list.contractType === "Locum" ? (
+                              <h3
+                                style={{
+                                  height: "20px",
+                                  marginTop: "13px",
+                                }}
+                              >
+                                Need locum from:{" "}
+                                <span className="highlight">
+                                  {list.startDate}
+                                </span>{" "}
+                                to{" "}
+                                <span className="highlight">
+                                  {list.finishDate}
+                                </span>
+                              </h3>
+                            ) : (
+                              <h3
+                                style={{
+                                  height: "20px",
+                                  marginTop: "13px",
+                                }}
+                              ></h3>
+                            )}
+                            <p>{list.about}</p>
                           </div>
-                        )
+                        </div>
                       );
-                    });
-                  })}
-                  {emptyArray === 0 && (
-                    <div className="no-applications">
-                      <h2>No applications found</h2>
-                    </div>
-                  )}
-                </div>
+                    })}
+                    {listingInfo.length === 0 ? (
+                      <div className="no-applications">
+                        <h2>No applications found</h2>
+                      </div>
+                    ) : (
+                      <div></div>
+                    )}
+                  </div>
+                )}
               </div>
               {ReactSession.get("slug") ? (
                 <div
@@ -1836,10 +1818,6 @@ const ApplicationsManager = () => {
             color: white;
           }
 
-          .wrapper-ads .inactive {
-            background-color: #ebebeb;
-          }
-
           .wrapper .closed {
             position: absolute;
             transform: translate(-50%, -180%);
@@ -2009,16 +1987,6 @@ const ApplicationsManager = () => {
             left: 85%;
             transform: translate(-50%, -50%);
             display: block;
-          }
-
-          .preview-ad.inactive {
-            background-color: #ebebeb;
-            cursor: default;
-            border-color: #353f47;
-          }
-
-          .preview-ad.inactive:hover {
-            background-color: #ebebeb;
           }
 
           .applicants {

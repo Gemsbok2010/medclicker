@@ -1,7 +1,7 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
+import LoggedInNavbar from "../components/LoggedInNavbar";
 import Footer from "../components/Footer";
 
 const Calendar = () => {
@@ -189,7 +189,7 @@ const Calendar = () => {
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>
-        <Navbar />
+        <LoggedInNavbar />
         <div className="wrap">
           <div id="container">
             <div id="header">

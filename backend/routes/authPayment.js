@@ -112,8 +112,6 @@ router.post("/nopayment", async (req, res) => {
     jobSeekerEmail: candidate.email,
   });
 
-
-
   const logo = "https://i.ibb.co/1KgVNwJ/medclicker.png";
   const mc = "https://i.ibb.co/TrWvXBB/mc.png";
   const visa = "https://i.ibb.co/zSDYxhX/visa.png";
@@ -289,8 +287,6 @@ router.put("/finalise", async (req, res) => {
     jobSeekerLastName: candidate.lastName,
     jobSeekerEmail: candidate.email,
   });
-
-
 
   const logo = "https://i.ibb.co/1KgVNwJ/medclicker.png";
   const thisyear = moment().format("YYYY");
@@ -719,21 +715,22 @@ router.put("/regFinalise", async (req, res) => {
 
   const fee = (total / 1.1).toFixed(2);
 
-  const dt = new Date();
-  const year = dt.getFullYear();
-  const dag = dt.getDate();
-
   // Generate local timezone for MongoDB
   let now = new Date();
   now = now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
 
   // Generate expireDate
-  const expireIn = req.body.expireIn;
+  const expiry = new Date();
 
-  const expiryDate = new Date();
-  expiryDate.setDate(expiryDate.getDate() + expireIn);
+  expiry.setDate(expiry.getDate() + req.body.expireIn);
+  const dag = expiry.getDate().toString();
+  const year = expiry.getFullYear();
 
-  const finishDate = expiryDate.toString();
+  const finishDate = expiry.toString();
+
+  const storeExp = new Date(req.body.expiryDate);
+
+  storeExp.setDate(storeExp.getDate() + 1);
 
   const jour = finishDate.split(" ")[2];
   const annee = finishDate.split(" ")[3];
@@ -763,7 +760,7 @@ router.put("/regFinalise", async (req, res) => {
     lastName: user.lastName,
     email: user.email,
     phone: user.phone,
-    expiryDate: expiryDate,
+    expiryDate: storeExp,
     finishDate: finish,
   });
 
@@ -931,6 +928,10 @@ router.post("/free", async (req, res) => {
   const mois = finishDate.split(" ")[1];
   const finish = `${jour} ${mois} ${annee}`;
 
+  const storeExp = new Date(req.query.expiryDate);
+
+  storeExp.setDate(storeExp.getDate() + 1);
+
   const list = new Listing({
     isPaid: req.body.isPaid,
     createdAt: now,
@@ -949,12 +950,12 @@ router.post("/free", async (req, res) => {
     longitude: req.body.longitude,
     latitude: req.body.latitude,
     // standard
-    filename: user.filename,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
+    filename: req.body.filename,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
     phone: user.phone,
-    expiryDate: expiryDate,
+    expiryDate: storeExp,
     finishDate: finish,
   });
 
@@ -1068,6 +1069,7 @@ router.post("/free", async (req, res) => {
 
   const subject = `Payment Invoice ${invoice}`;
   const to = `${email}`;
+
   const from = {
     email: "info@medclicker.com.au",
     name: "Medclicker Customer Support",
@@ -1083,7 +1085,6 @@ router.post("/free", async (req, res) => {
   ];
 
   sendEmail(to, from, subject, output, attachments);
-
   await browser.close();
 
   try {
@@ -1139,7 +1140,6 @@ router.get("/invoices", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-  
     try {
       const invoices = await Payment.find(match)
         .sort({ createdAt: sort })
@@ -1219,7 +1219,6 @@ router.get("/sortinvoices", async (req, res) => {
     let maxPage = Math.ceil(num / perPage);
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
-
 
     try {
       const invoices = await Payment.find(match)

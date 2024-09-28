@@ -111,7 +111,10 @@ const Resume = () => {
                     <Link to="/locum_profile"> My Locum Profile</Link>
                   </div>
                   <div>
-                    <Link to="/locum_cv">My Skills & Experiences</Link>
+                    <Link to="/locum_cv">My Experiences</Link>
+                  </div>
+                  <div>
+                    <Link to="/agreements">Locum Contracts</Link>
                   </div>
                   <div>
                     <ExternalLink

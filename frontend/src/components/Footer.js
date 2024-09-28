@@ -19,9 +19,6 @@ const Footer = ({ asx }) => {
   const googleUrlAddress =
     process.env.REACT_APP_BACKEND_URL + `auth/google?dd=${location.pathname}`;
 
-  // const facebookUrlAddress =
-  //   process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
-
   // ============ GET CURRENT YEAR ===============
   useEffect(() => {
     const dt = new Date();
@@ -182,7 +179,6 @@ const Footer = ({ asx }) => {
           />
 
           <figure>
-            {" "}
             <Link to="/">
               <img
                 className="img-fluid"
@@ -301,16 +297,20 @@ const Footer = ({ asx }) => {
       )}
       <div className="wrap">
         <div className="pageBottom container-fluid">
+          <div className="buffer"></div>
           <div className="container">
             <div className="mainTitle">
               <figure>
-                <img
-                  src="/images/medclicker.png"
-                  alt=""
-                  width="150px"
-                  className="pageBottom-logo"
-                />
+                <Link to="/">
+                  <img
+                    src="/images/medclicker.png"
+                    alt=""
+                    width="150px"
+                    className="pageBottom-logo"
+                  />
+                </Link>
               </figure>
+
               <div className="tonBtn">
                 <Link to="/contact">Contact us</Link>
 
@@ -321,15 +321,12 @@ const Footer = ({ asx }) => {
                       <ExternalLink href="/logout" target="_self">
                         Log out
                       </ExternalLink>
-                      <Link to="/dashboard">Hi, {user.firstName}</Link>
                     </>
                   ) : (
                     <>
                       <ExternalLink href="/logout" target="_self">
                         Log out
                       </ExternalLink>
-
-                      <Link to="/dashboard">Hi, {user.firstName}</Link>
                     </>
                   )
                 ) : (
@@ -712,26 +709,36 @@ const Footer = ({ asx }) => {
             </div>
           </div>
         </div>
-
-        <footer className="container-fluid">
-          <div
-            className="container"
-            style={{ display: "flex", justifyContent: "space-between" }}
-          >
-            <Link to="/terms_and_conditions_au">Terms & Conditions</Link>{" "}
-            <Link to="/privacy_au">Privacy Policy</Link>{" "}
-            <Link to="/refund_au">Refund Policy</Link>{" "}
-            <ExternalLink
-              id="fbicon"
-              href="https://www.facebook.com"
-              target="_blank"
+        <div className="sub-footer">
+          <div className="buffer"></div>
+          <footer className="container-footer">
+            <div
+              className="container"
+              style={{ display: "flex", justifyContent: "space-between" }}
             >
-              <img src="/images/facebook.png" alt="" width="18px" /> Facebook
-            </ExternalLink>
-          </div>
-        </footer>
+              <Link to="/terms_and_conditions_au">Terms & Conditions</Link>{" "}
+              <Link to="/privacy_au">Privacy Policy</Link>{" "}
+              <Link to="/refund_au">Refund Policy</Link>{" "}
+              <ExternalLink
+                id="fbicon"
+                href="https://www.facebook.com"
+                target="_blank"
+              >
+                <img src="/images/facebook.png" alt="" width="18px" /> Facebook
+              </ExternalLink>
+            </div>
+          </footer>
+        </div>
       </div>
       <style jsx="true">{`
+        html,
+        body {
+          width: 100%;
+          margin: 0;
+          padding: 0;
+          overflow-x: hidden;
+        }
+
         .wrap .pageBottom {
           padding: 50px 0 25px;
           background: #eeebeb;
@@ -743,6 +750,7 @@ const Footer = ({ asx }) => {
           margin-right: 15px;
           font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
         }
+
         .wrap .pageBottom a:hover {
           color: #14a248;
         }
@@ -783,6 +791,7 @@ const Footer = ({ asx }) => {
         .wrap .pageBottom .bigClass > a:hover {
           color: #14a248;
         }
+
         .wrap .container-fluid {
           margin-left: auto;
           margin-right: auto;
@@ -790,10 +799,15 @@ const Footer = ({ asx }) => {
           padding-left: 0;
           padding-right: 0;
         }
-        .wrap .pageBottom-logo {
-          margin-left: 9px;
-          margin-bottom: 20px;
+
+        .wrap .container-footer {
+          margin-left: auto;
+          margin-right: auto;
+          width: 100%;
+          padding-left: 0;
+          padding-right: 0;
         }
+
         footer {
           padding: 30px 0;
           font-size: 14px;
@@ -853,6 +867,12 @@ const Footer = ({ asx }) => {
           line-height: 25px;
         }
 
+        /* ========= FOOTER LOGO ========== */
+
+        .mainTitle .img-fluid {
+          transform: translateX(0%);
+        }
+
         @media screen and (max-width: 768px) {
           .wrap .pageBottom a {
             margin-right: 0;
@@ -860,14 +880,17 @@ const Footer = ({ asx }) => {
           .wrap .pageBottom .mainTitle {
             -webkit-box-pack: center;
             -ms-flex-pack: center;
-            justify-content: center;
             -ms-flex-wrap: wrap;
             flex-wrap: wrap;
+            text-align: center;
+            display: block;
+            margin-bottom: 20px;
           }
           .wrap .pageBottom .mainTitle .tonBtn {
             display: -webkit-box;
             display: -ms-flexbox;
             display: flex;
+            justify-content: center;
             -ms-flex-wrap: wrap;
             flex-wrap: wrap;
             font-family: "amplitude";
@@ -1131,7 +1154,7 @@ const Footer = ({ asx }) => {
         }
 
         @media only screen and (min-width: 768px) {
-          .container {
+          .wrap .container {
             text-align: left;
           }
 

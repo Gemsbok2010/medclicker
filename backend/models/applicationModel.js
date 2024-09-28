@@ -5,13 +5,11 @@ const applicationSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      required: true,
       min: 2,
       max: 255,
     },
     lastName: {
       type: String,
-      required: true,
       min: 2,
       max: 255,
     },

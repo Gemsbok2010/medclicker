@@ -111,6 +111,7 @@ const ApaymentConsole = () => {
       }
     );
     const data = await res.json();
+    setFreeDays(data.freeDays);
     if (data) {
       setUpdateNote(true);
       window.scrollTo({
@@ -242,6 +243,7 @@ const ApaymentConsole = () => {
       }
     );
     const data = await res.json();
+    setFreeDays(data.freeDays);
     if (data) {
       setUpdateNote(true);
       window.scrollTo({
@@ -627,7 +629,7 @@ const ApaymentConsole = () => {
                         <h4>Payment Management</h4>
                       </Link>
                       <Link to="/admin/security">
-                        <h4>Security Settings</h4>
+                        <h4>Change Password</h4>
                       </Link>
                       <Link to="/sms">
                         <h4>SMS</h4>

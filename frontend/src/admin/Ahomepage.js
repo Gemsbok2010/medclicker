@@ -701,7 +701,7 @@ const Ahomepage = () => {
             outline: none;
             background: none;
             border: 2px solid #dadada;
-            padding: 12px 20px;
+            padding: 12px 10px;
             font-weight: 500;
             width: 260px;
             font-size: 14px;

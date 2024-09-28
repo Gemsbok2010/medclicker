@@ -19,7 +19,7 @@ router.get("/dashboard/:email", async (req, res) => {
       email: req.params.email,
     });
 
-    const total = await Locum.find({}).countDocuments();
+    const total = await Locum.find({ showLocum: true }).countDocuments();
 
     const locum = await Locum.findOne({ email: req.params.email });
 
@@ -55,6 +55,66 @@ router.get("/dashboard/:email", async (req, res) => {
       slugId: slugArr,
     }).countDocuments();
 
+    const who = await User.find({ email: req.params.email });
+
+    let state;
+    if (who.length !== 0) {
+      state = who[0].state;
+    } else {
+      state = "NSW";
+    }
+
+    const nsw = await Listing.find({
+      state: ["NSW", "ACT"],
+      isActiveJob: true,
+      isDeletedJob: false,
+    }).countDocuments();
+
+    const vic = await Listing.find({
+      state: "VIC",
+      isActiveJob: true,
+      isDeletedJob: false,
+    }).countDocuments();
+
+    const qld = await Listing.find({
+      state: "QLD",
+      isActiveJob: true,
+      isDeletedJob: false,
+    }).countDocuments();
+
+    const wa = await Listing.find({
+      state: "WA",
+      isActiveJob: true,
+      isDeletedJob: false,
+    }).countDocuments();
+
+    const sa = await Listing.find({
+      state: "SA",
+      isActiveJob: true,
+      isDeletedJob: false,
+    }).countDocuments();
+
+    const nt = await Listing.find({
+      state: "NT",
+      isActiveJob: true,
+      isDeletedJob: false,
+    }).countDocuments();
+
+    const tas = await Listing.find({
+      state: "TAS",
+      isActiveJob: true,
+      isDeletedJob: false,
+    }).countDocuments();
+
+    const applied = await Pub.find({
+      email: req.params.email,
+    }).countDocuments();
+
+    const seen = await Pub.find({
+      seen: true,
+      email: req.params.email,
+    }).countDocuments();
+
     res.status(200).json({
       user: user,
       locum: locum,
@@ -64,75 +124,6 @@ router.get("/dashboard/:email", async (req, res) => {
       applicants: applicants,
       newApply: newApply,
       error: error,
-    });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
-
-// ============= JOB CASES (from dashboard.js) ================
-router.get("/jobcases", async (req, res, next) => {
-  const who = await User.find({ nanoId: req.query.nanoId });
-
-  let state;
-  if (who.length !== 0) {
-    state = who[0].state;
-  } else {
-    state = "NSW";
-  }
-  try {
-    const nsw = await Listing.find({
-      state: "NSW",
-      isActiveJob: true,
-      isDeletedJob: false,
-    }).countDocuments();
-    const vic = await Listing.find({
-      state: "VIC",
-      isActiveJob: true,
-      isDeletedJob: false,
-    }).countDocuments();
-    const qld = await Listing.find({
-      state: "QLD",
-      isActiveJob: true,
-      isDeletedJob: false,
-    }).countDocuments();
-    const wa = await Listing.find({
-      state: "WA",
-      isActiveJob: true,
-      isDeletedJob: false,
-    }).countDocuments();
-    const sa = await Listing.find({
-      state: "SA",
-      isActiveJob: true,
-      isDeletedJob: false,
-    }).countDocuments();
-    const nt = await Listing.find({
-      state: "NT",
-      isActiveJob: true,
-      isDeletedJob: false,
-    }).countDocuments();
-    const tas = await Listing.find({
-      state: "TAS",
-      isActiveJob: true,
-      isDeletedJob: false,
-    }).countDocuments();
-
-    const act = await Listing.find({
-      state: "ACT",
-      isActiveJob: true,
-      isDeletedJob: false,
-    }).countDocuments();
-
-    const applied = await Pub.find({
-      nanoId: req.query.nanoId,
-    }).countDocuments();
-
-    const seen = await Pub.find({
-      seen: true,
-      nanoId: req.query.nanoId,
-    }).countDocuments();
-
-    res.status(200).json({
       applied: applied,
       seen: seen,
       nsw: nsw,
@@ -142,15 +133,13 @@ router.get("/jobcases", async (req, res, next) => {
       wa: wa,
       tas: tas,
       nt: nt,
-      act: act,
-      state: state,
     });
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
-// ================ HIDE ME AS LOCUM (From dashboard.js) ============
+// ========== HIDE ME AS LOCUM (From dashboard.js) ==========
 router.put("/hideme/:id", async (req, res) => {
   const locum = await Locum.findOne({ locumId: req.params.id });
 

@@ -5,12 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { ReactSession } from "react-client-session";
 import Footer from "../components/Footer";
 import LoggedInNavbar from "../components/LoggedInNavbar";
-import axios from "axios";
 import { useSelector } from "react-redux";
+import { RotatingLines } from "react-loader-spinner";
+import { ThreeDots } from "react-loader-spinner";
 
 const Step3 = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.userInfo.value);
+  const [isloading, setIsloading] = useState(false);
+  const [readyToShow, setReadyToShow] = useState(false);
   ReactSession.setStoreType("sessionStorage");
   const [phone, setPhone] = useState("");
   const [profession, setProfession] = useState("");
@@ -20,21 +23,6 @@ const Step3 = () => {
   const [resume, setResume] = useState("");
   const [honourTitle, setHonourTitle] = useState("");
   const [honourAwards, setHonourAwards] = useState("");
-  const [skillOne, setSkillOne] = useState("");
-  const [skillOne1, setSkillOne1] = useState("");
-  const [skillOne2, setSkillOne2] = useState("");
-  const [skillOne3, setSkillOne3] = useState("");
-  const [experience, setExperience] = useState({});
-  const [skillTwo, setSkillTwo] = useState("");
-  const [skillTwo1, setSkillTwo1] = useState("");
-  const [skillTwo2, setSkillTwo2] = useState("");
-  const [skillTwo3, setSkillTwo3] = useState("");
-  const [clinical, setClinical] = useState({});
-  const [skillThree, setSkillThree] = useState("");
-  const [skillThree1, setSkillThree1] = useState("");
-  const [skillThree2, setSkillThree2] = useState("");
-  const [skillThree3, setSkillThree3] = useState("");
-  const [pharma, setPharma] = useState({});
   const [languages, setLanguages] = useState("");
   const [linguistics, setLinguistics] = useState({});
   const [row, setRow] = useState([]);
@@ -60,7 +48,6 @@ const Step3 = () => {
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
   const [postalCode, setPostalCode] = useState("");
-  const [userInfo, setUserInfo] = useState({});
 
   // =========== POPULATE SESSION DATA ==============
   useEffect(() => {
@@ -96,37 +83,7 @@ const Step3 = () => {
     } else {
       setAhpra(ReactSession.get("locum_ahpra"));
     }
-    setSkillOne(ReactSession.get("skillOne"));
-    setSkillOne1(ReactSession.get("skillOne1"));
-    setSkillOne2(ReactSession.get("skillOne2"));
-    setSkillOne3(ReactSession.get("skillOne3"));
-    setExperience({
-      ...experience,
-      skill1Level1: ReactSession.get("skillProf1"),
-      skill1Level2: ReactSession.get("skillProf2"),
-      skill1Level3: ReactSession.get("skillProf3"),
-    });
-    setSkillTwo(ReactSession.get("skillTwo"));
-    setSkillTwo1(ReactSession.get("skillTwo1"));
-    setSkillTwo2(ReactSession.get("skillTwo2"));
-    setSkillTwo3(ReactSession.get("skillTwo3"));
-    setClinical({
-      ...clinical,
-      skill2Level1: ReactSession.get("skillComp1"),
-      skill2Level2: ReactSession.get("skillComp2"),
-      skill2Level3: ReactSession.get("skillComp3"),
-    });
 
-    setSkillThree(ReactSession.get("skillThree"));
-    setSkillThree1(ReactSession.get("skillThree1"));
-    setSkillThree2(ReactSession.get("skillThree2"));
-    setSkillThree3(ReactSession.get("skillThree3"));
-    setPharma({
-      ...pharma,
-      skill3Level1: ReactSession.get("skillPharma1"),
-      skill3Level2: ReactSession.get("skillPharma2"),
-      skill3Level3: ReactSession.get("skillPharma3"),
-    });
     setLanguages(ReactSession.get("languages"));
     setRow(ReactSession.get("row"));
     setActiveButton(ReactSession.get("activeButton"));
@@ -152,33 +109,66 @@ const Step3 = () => {
     setFinish1(ReactSession.get("finish1"));
     setFinish2(ReactSession.get("finish2"));
     setFinish3(ReactSession.get("finish3"));
-    // ============ PROFILE DATA ===========
-    axios
-      .get(
-        process.env.REACT_APP_BACKEND_URL +
-          "api/users/allusers/" +
-          localStorage.getItem("userId")
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          setUserInfo(response.data);
-        }
-      });
+    setReadyToShow(true);
   }, []);
+
+  // ======= CLEAR SESSION STORAGE ========= //
+  const clearLocumData = () => {
+    ReactSession.remove("finish3");
+    ReactSession.remove("finish2");
+    ReactSession.remove("finish1");
+    ReactSession.remove("start1");
+    ReactSession.remove("start2");
+    ReactSession.remove("start3");
+    ReactSession.remove("university1");
+    ReactSession.remove("university2");
+    ReactSession.remove("university3");
+    ReactSession.remove("degree1");
+    ReactSession.remove("degree2");
+    ReactSession.remove("degree3");
+    ReactSession.remove("education");
+    ReactSession.remove("activeButton");
+    ReactSession.remove("row");
+    ReactSession.remove("languages");
+    ReactSession.remove("locum_firstName");
+    ReactSession.remove("locum_lastName");
+    ReactSession.remove("locum_country");
+    ReactSession.remove("locum_state");
+    ReactSession.remove("locum_suburb");
+    ReactSession.remove("locum_street");
+    ReactSession.remove("locum_streetNo");
+    ReactSession.remove("locum_postalCode");
+    ReactSession.remove("locum_latitude");
+    ReactSession.remove("locum_longitude");
+    ReactSession.remove("resume");
+    ReactSession.remove("locum_phone");
+    ReactSession.remove("locum_drivers");
+    ReactSession.remove("locum_profession");
+    ReactSession.remove("locum_ahpra");
+    ReactSession.remove("honourTitle");
+    ReactSession.remove("workhistory");
+    ReactSession.remove("whichlanguage0");
+    ReactSession.remove("whichlanguage1");
+    ReactSession.remove("whichlanguage2");
+    ReactSession.remove("languageLvl0");
+    ReactSession.remove("languageLvl1");
+    ReactSession.remove("languageLvl2");
+    ReactSession.remove("honourAwards");
+  };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const isLocum = true;
+    setIsloading(true);
     fetch(process.env.REACT_APP_BACKEND_URL + "api/locums/step3", {
       method: "PUT",
       credentials: "include",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
-        isLocum: isLocum,
-        nanoId: userInfo.nanoId,
-        email: userInfo.email,
-        firstName: userInfo.firstName,
-        lastName: userInfo.lastName,
+        isLocum: true,
+        nanoId: user.nanoId,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
         resume: resume,
         workhistory: workhistory,
         honourAwards: honourAwards,
@@ -195,27 +185,6 @@ const Step3 = () => {
         latitude: latitude,
         longitude: longitude,
         postalCode: postalCode,
-        skillOne: skillOne,
-        skillOne1: skillOne1,
-        skillOne2: skillOne2,
-        skillOne3: skillOne3,
-        skillProf1: experience.skill1Level1,
-        skillProf2: experience.skill1Level2,
-        skillProf3: experience.skill1Level3,
-        skillTwo: skillTwo,
-        skillTwo1: skillTwo1,
-        skillTwo2: skillTwo2,
-        skillTwo3: skillTwo3,
-        skillComp1: clinical.skill2Level1,
-        skillComp2: clinical.skill2Level2,
-        skillComp3: clinical.skill2Level3,
-        skillThree: skillThree,
-        skillThree1: skillThree1,
-        skillThree2: skillThree2,
-        skillThree3: skillThree3,
-        skillPharma1: pharma.skill3Level1,
-        skillPharma2: pharma.skill3Level2,
-        skillPharma3: pharma.skill3Level3,
         education: education,
         degree1: degree1,
         university1: university1,
@@ -244,18 +213,55 @@ const Step3 = () => {
         languageLvl0: linguistics.languageLvl0 ? linguistics.languageLvl0 : "",
         languageLvl1: linguistics.languageLvl1 ? linguistics.languageLvl1 : "",
         languageLvl2: linguistics.languageLvl2 ? linguistics.languageLvl2 : "",
-        _id: userInfo._id,
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        sessionStorage.clear();
+        setIsloading(false);
+        clearLocumData();
         navigate("/step4");
       })
       .catch((err) => {
         console.error(err);
       });
   };
+
+  if (readyToShow === false)
+    return (
+      <div
+        style={{
+          backgroundColor: "#14a248",
+          top: "0",
+          left: "0",
+          height: "100%",
+          width: "100%",
+          zIndex: "2500",
+          display: "block",
+          position: "fixed",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            position: "absolute",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <RotatingLines
+            strokeColor="white"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
+            visible={true}
+          />
+        </div>
+      </div>
+    );
 
   return (
     <>
@@ -352,210 +358,6 @@ const Step3 = () => {
                       <h2>DRIVER'S LICENSE</h2>
                       <p>{driverslicense}</p>
                     </>
-                  )}
-                </div>
-
-                <div className="candidate-skills">
-                  {ReactSession.get("skillOne1") ||
-                  ReactSession.get("skillOne2") ||
-                  ReactSession.get("skillOne3") ? (
-                    <h2>{ReactSession.get("skillOne")}</h2>
-                  ) : (
-                    ""
-                  )}
-
-                  <p>{ReactSession.get("skillOne1")}</p>
-
-                  {ReactSession.get("skillProf1") ? (
-                    ReactSession.get("skillProf1") === "Specialised" ? (
-                      <div className="bar">
-                        <div className="level-excellent"></div>
-                      </div>
-                    ) : ReactSession.get("skillProf1") === "Experienced" ? (
-                      <div className="bar">
-                        <div className="level-int"></div>
-                      </div>
-                    ) : (
-                      <div className="bar">
-                        <div className="level-deb"></div>
-                      </div>
-                    )
-                  ) : (
-                    <p></p>
-                  )}
-
-                  <p>{ReactSession.get("skillOne2")}</p>
-                  {ReactSession.get("skillProf2") ? (
-                    ReactSession.get("skillProf2") === "Specialised" ? (
-                      <div className="bar">
-                        <div className="level-excellent"></div>
-                      </div>
-                    ) : ReactSession.get("skillProf2") === "Experienced" ? (
-                      <div className="bar">
-                        <div className="level-int"></div>
-                      </div>
-                    ) : (
-                      <div className="bar">
-                        <div className="level-deb"></div>
-                      </div>
-                    )
-                  ) : (
-                    <p></p>
-                  )}
-
-                  <p>{ReactSession.get("skillOne3")}</p>
-
-                  {ReactSession.get("skillProf3") ? (
-                    ReactSession.get("skillProf3") === "Specialised" ? (
-                      <div className="bar">
-                        <div className="level-excellent"></div>
-                      </div>
-                    ) : ReactSession.get("skillProf3") === "Experienced" ? (
-                      <div className="bar">
-                        <div className="level-int"></div>
-                      </div>
-                    ) : (
-                      <div className="bar">
-                        <div className="level-deb"></div>
-                      </div>
-                    )
-                  ) : (
-                    <p></p>
-                  )}
-                </div>
-
-                <div className="candidate-clinical">
-                  {ReactSession.get("skillTwo1") ||
-                  ReactSession.get("skillTwo2") ||
-                  ReactSession.get("skillTwo3") ? (
-                    <h2>{ReactSession.get("skillTwo")}</h2>
-                  ) : (
-                    ""
-                  )}
-
-                  <p>{ReactSession.get("skillTwo1")}</p>
-
-                  {ReactSession.get("skillComp1") ? (
-                    ReactSession.get("skillComp1") === "Specialised" ? (
-                      <div className="bar">
-                        <div className="level-excellent"></div>
-                      </div>
-                    ) : ReactSession.get("skillComp1") === "Experienced" ? (
-                      <div className="bar">
-                        <div className="level-int"></div>
-                      </div>
-                    ) : (
-                      <div className="bar">
-                        <div className="level-deb"></div>
-                      </div>
-                    )
-                  ) : (
-                    <p></p>
-                  )}
-
-                  <p>{ReactSession.get("skillTwo2")}</p>
-                  {ReactSession.get("skillComp2") ? (
-                    ReactSession.get("skillComp2") === "Specialised" ? (
-                      <div className="bar">
-                        <div className="level-excellent"></div>
-                      </div>
-                    ) : ReactSession.get("skillComp2") === "Experienced" ? (
-                      <div className="bar">
-                        <div className="level-int"></div>
-                      </div>
-                    ) : (
-                      <div className="bar">
-                        <div className="level-deb"></div>
-                      </div>
-                    )
-                  ) : (
-                    <p></p>
-                  )}
-
-                  <p>{ReactSession.get("skillTwo3")}</p>
-                  {ReactSession.get("skillComp3") ? (
-                    ReactSession.get("skillComp3") === "Specialised" ? (
-                      <div className="bar">
-                        <div className="level-excellent"></div>
-                      </div>
-                    ) : ReactSession.get("skillComp3") === "Experienced" ? (
-                      <div className="bar">
-                        <div className="level-int"></div>
-                      </div>
-                    ) : (
-                      <div className="bar">
-                        <div className="level-deb"></div>
-                      </div>
-                    )
-                  ) : (
-                    <p></p>
-                  )}
-                </div>
-
-                <div className="candidate-pharmacoth">
-                  {ReactSession.get("skillThree1") ||
-                  ReactSession.get("skillThree2") ||
-                  ReactSession.get("skillThree3") ? (
-                    <h2>{ReactSession.get("skillThree")}</h2>
-                  ) : (
-                    ""
-                  )}
-
-                  <p>{ReactSession.get("skillThree1")}</p>
-                  {ReactSession.get("skillPharma1") ? (
-                    ReactSession.get("skillPharma1") === "Specialised" ? (
-                      <div className="bar">
-                        <div className="level-excellent"></div>
-                      </div>
-                    ) : ReactSession.get("skillPharma1") === "Experienced" ? (
-                      <div className="bar">
-                        <div className="level-int"></div>
-                      </div>
-                    ) : (
-                      <div className="bar">
-                        <div className="level-deb"></div>
-                      </div>
-                    )
-                  ) : (
-                    <p></p>
-                  )}
-
-                  <p>{ReactSession.get("skillThree2")}</p>
-                  {ReactSession.get("skillPharma2") ? (
-                    ReactSession.get("skillPharma2") === "Specialised" ? (
-                      <div className="bar">
-                        <div className="level-excellent"></div>
-                      </div>
-                    ) : ReactSession.get("skillPharma2") === "Experienced" ? (
-                      <div className="bar">
-                        <div className="level-int"></div>
-                      </div>
-                    ) : (
-                      <div className="bar">
-                        <div className="level-deb"></div>
-                      </div>
-                    )
-                  ) : (
-                    <p></p>
-                  )}
-
-                  <p>{ReactSession.get("skillThree3")}</p>
-                  {ReactSession.get("skillPharma3") ? (
-                    ReactSession.get("skillPharma3") === "Specialised" ? (
-                      <div className="bar">
-                        <div className="level-excellent"></div>
-                      </div>
-                    ) : ReactSession.get("skillPharma3") === "Experienced" ? (
-                      <div className="bar">
-                        <div className="level-int"></div>
-                      </div>
-                    ) : (
-                      <div className="bar">
-                        <div className="level-deb"></div>
-                      </div>
-                    )
-                  ) : (
-                    <p></p>
                   )}
                 </div>
 
@@ -712,9 +514,20 @@ const Step3 = () => {
               <button className="btn-previous">
                 <Link to="/step2">Go Back</Link>
               </button>
-              <button className="btn-next" type="submit">
-                Confirm
-              </button>
+              {!isloading ? (
+                <button className="btn-next" type="submit">
+                  Confirm
+                </button>
+              ) : (
+                <button className="btn-next">
+                  <ThreeDots
+                    type="ThreeDots"
+                    height={40}
+                    width={80}
+                    color={"white"}
+                  />
+                </button>
+              )}
             </div>
           </form>
           <Footer />
@@ -737,7 +550,7 @@ const Step3 = () => {
             -ms-flex-align: center;
             align-items: center;
             padding: 0;
-            background-color: #333;
+            background-color: #f4f5f6;
           }
           @media screen and (max-width: 768px) {
             .wrap {
@@ -843,26 +656,6 @@ const Step3 = () => {
           .candidate-dl p {
             color: #fff;
             font-family: sans-serif;
-          }
-
-          .candidate-skills {
-            position: relative;
-            padding: 5px 26px 0px 30px;
-            top: 13%;
-            text-align: left;
-          }
-          .candidate-skills h2 {
-            color: #fff;
-            font-size: 16px;
-            font-family: sans-serif;
-            margin-bottom: 12px;
-          }
-          .candidate-skills p {
-            margin-top: 12px;
-            font-weight: 500;
-            font-size: 14px;
-            margin-bottom: 5px;
-            color: white;
           }
 
           .sidebar .bar {
@@ -1049,12 +842,6 @@ const Step3 = () => {
               padding: 5px 46px 0px 50px;
             }
 
-            .candidate-skills {
-              padding: 5px 46px 10px 50px;
-            }
-            .candidate-skills h2 {
-              font-size: 20px;
-            }
             .candidate-languages {
               padding: 5px 46px 10px 50px;
             }
@@ -1106,7 +893,11 @@ const Step3 = () => {
             padding: 0;
             margin: 0px auto 30px;
             box-shadow: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
+
           .btn-previous a,
           .btn-next a {
             color: white;

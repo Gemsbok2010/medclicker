@@ -18,7 +18,6 @@ const Question1 = () => {
   function clearSession() {
     sessionStorage.clear();
   }
-
   const [customerId, setCustomerId] = useState("");
   const [contractType, setContractType] = useState("");
   const [, setActive] = useState("");
@@ -36,12 +35,6 @@ const Question1 = () => {
       action: "Question 1",
     });
     navigate("/question2");
-  };
-
-  // ============= CLEAR CUSTOMER ID ================
-  const clearId = () => {
-    sessionStorage.clear();
-    navigate("/admin/users");
   };
 
   return (
@@ -62,7 +55,6 @@ const Question1 = () => {
                     src="/images/medclicker.png"
                     alt="LOGO"
                     className="img-fluid"
-                    onClick={clearId}
                   />
                 </Link>
               </figure>

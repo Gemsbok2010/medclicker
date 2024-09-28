@@ -12,6 +12,7 @@ const Adashboard = () => {
   const [, setIsloaded] = useState(false);
   const [close, setClose] = useState(false);
   const [applications, setApplications] = useState("");
+
   const [nsw, setNSW] = useState("");
   const [vic, setVIC] = useState("");
   const [qld, setQLD] = useState("");
@@ -20,10 +21,12 @@ const Adashboard = () => {
   const [act, setACT] = useState("");
   const [nt, setNT] = useState("");
   const [tas, setTAS] = useState("");
+
   const [noOfLocums, setNoOfLocums] = useState("");
   const [inactiveList, setInactiveList] = useState("");
   const [activeList, setActiveList] = useState("");
   const [expired, setExpired] = useState("");
+
   const [nswLocum, setNSWLocum] = useState("");
   const [vicLocum, setVICLocum] = useState("");
   const [qldLocum, setQLDLocum] = useState("");
@@ -170,7 +173,7 @@ const Adashboard = () => {
                         <h4>Payment Management</h4>
                       </Link>
                       <Link to="/admin/security">
-                        <h4>Security Settings</h4>
+                        <h4>Change Password</h4>
                       </Link>
                       <Link to="/sms">
                         <h4>SMS</h4>
@@ -251,13 +254,13 @@ const Adashboard = () => {
                 </Link>
                 <Link to="/admin/security">
                   <span className="material-icons-sharp">settings</span>
-                  <h4>Security Settings</h4>
+                  <h4>Change Password</h4>
                 </Link>
                 <Link to="/sms">
                   <span className="material-symbols-outlined">sms</span>
                   <h4>SMS</h4>
                 </Link>
-                <ExternalLink href="/signout">
+                <ExternalLink href="/signout" target="_self">
                   <span className="material-icons-sharp">logout</span>
                   <h4>Log Out</h4>
                 </ExternalLink>

@@ -5,13 +5,13 @@ import { useState, useEffect } from "react";
 import { ReactSession } from "react-client-session";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import { ExternalLink } from "react-external-link";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/userInfo";
-import { RotatingLines } from "react-loader-spinner";
+import { ExternalLink } from "react-external-link";
 
 // Three dots
 import { ThreeDots } from "react-loader-spinner";
+import { RotatingLines } from "react-loader-spinner";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -23,34 +23,16 @@ const Dashboard = () => {
   const [backdrop, setBackdrop] = useState(false);
   const [readyToShow, setReadyToShow] = useState(false);
   const [contractType, setContractType] = useState("");
-  const [userInfo, setUserInfo] = useState({});
-  const [locum, setLocum] = useState({});
-  const [locumNo, setLocumNo] = useState("");
-  const [dropdown, setDropdown] = useState(false);
-  const [blacklist, setBlacklist] = useState(false);
+  const [, setProfessions] = useState("");
+  const [locum, setLocum] = useState("");
+
   const [show, setShow] = useState(false);
   const [close, setClose] = useState(false);
-  const [currentState, setCurrentstate] = useState("");
-  const [nsw, setNSW] = useState("");
-  const [vic, setVictoria] = useState("");
-  const [qld, setQLD] = useState("");
-  const [sa, setSA] = useState("");
-  const [wa, setWA] = useState("");
-  const [act, setACT] = useState("");
-  const [nt, setNT] = useState("");
-  const [tas, setTAS] = useState("");
-  const [noOfCases, setNoOfCases] = useState("");
-  const [applicants, setApplicants] = useState("");
-  const [myListings, setMylistings] = useState("");
-  const [newApply, setNewApply] = useState("");
-  const [applied, setApplied] = useState("");
-  const [seen, setSeen] = useState("");
-  const [isloaded, setIsloaded] = useState(false);
 
-  // ============ LOCUM DATA ===========
-  useEffect(() => {
-    setIsloaded(false);
+  // ============ FETCH DATA ===========
+  const fetchBigData = async () => {
     setContractType(ReactSession.get("contractType"));
+    setProfessions(ReactSession.get("professions"));
     axios
       .get(
         process.env.REACT_APP_BACKEND_URL +
@@ -62,14 +44,13 @@ const Dashboard = () => {
           if (response.data.locum !== null) {
             setShow(response.data.locum.showLocum);
           }
-          setUserInfo(response.data.user);
+
           setLocum(response.data.locum);
-          setLocumNo(response.data.total);
-          setNoOfCases(response.data.num);
-          setApplicants(response.data.applicants);
-          setMylistings(response.data.mylistings);
-          setNewApply(response.data.newApply);
-          setIsloaded(true);
+          ReactSession.set("locumNo", response.data.total);
+          ReactSession.set("noOfCases", response.data.num);
+          ReactSession.set("applicants", response.data.applicants);
+          ReactSession.set("mylistings", response.data.mylistings);
+          ReactSession.set("newApply", response.data.newApply);
           dispatch(
             login({
               firstName: response.data.user.firstName,
@@ -84,36 +65,22 @@ const Dashboard = () => {
               completeAccess: response.data.user.survey !== "" ? true : false,
             })
           );
-        }
-      });
-  }, []);
 
-  // ========== LOGGEDIN APPLICANT APPLIED =========
-  useEffect(() => {
-    setReadyToShow(false);
-    axios
-      .get(
-        process.env.REACT_APP_BACKEND_URL +
-          "api/dashboard/jobcases?nanoId=" +
-          user.nanoId
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          setApplied(response.data.applied);
-          setSeen(response.data.seen);
-          setCurrentstate(response.data.state);
-          setNSW(response.data.nsw);
-          setVictoria(response.data.vic);
-          setQLD(response.data.qld);
-          setACT(response.data.act);
-          setTAS(response.data.tas);
-          setNT(response.data.nt);
-          setSA(response.data.sa);
-          setWA(response.data.wa);
+          ReactSession.set("applied", response.data.applied);
+          ReactSession.set("seen", response.data.seen);
+          ReactSession.set("currentState", response.data.state);
+          ReactSession.set("nsw", response.data.nsw);
+          ReactSession.set("vic", response.data.vic);
+          ReactSession.set("qld", response.data.qld);
+          ReactSession.set("nt", response.data.nt);
+          ReactSession.set("tas", response.data.tas);
+          ReactSession.set("sa", response.data.sa);
+          ReactSession.set("wa", response.data.wa);
+          ReactSession.set("readyToShow", true);
           setReadyToShow(true);
         }
       });
-  }, []);
+  };
 
   const hideMe = async (e, id) => {
     e.preventDefault();
@@ -131,7 +98,7 @@ const Dashboard = () => {
       );
       const data = await res.json();
       if (data) {
-        setLocumNo(data.num);
+        ReactSession.set("locumNo", data.num);
         setBackdrop(false);
       }
     }
@@ -148,7 +115,7 @@ const Dashboard = () => {
       );
       const data = await res.json();
       if (data) {
-        setLocumNo(data.num);
+        ReactSession.set("locumNo", data.num);
         setBackdrop(false);
       }
     }
@@ -159,7 +126,6 @@ const Dashboard = () => {
   const [messageOn, setMessageOn] = useState(false);
 
   const fetchData = async () => {
-    setIsloaded(false);
     axios
       .get(process.env.REACT_APP_BACKEND_URL + "api/admin/homepage")
       .then((response) => {
@@ -167,16 +133,18 @@ const Dashboard = () => {
           setMessageToAll(response.data.plans.messageToAll);
           setMessageOn(response.data.plans.messageOn);
           setTitleOfMessage(response.data.plans.titleOfMessage);
-          setIsloaded(true);
         }
       });
   };
 
   useEffect(() => {
+    if (!readyToShow) {
+      fetchBigData();
+    }
     fetchData();
   }, []);
 
-  if (readyToShow === false)
+  if (readyToShow === false && !ReactSession.get("readyToShow"))
     return (
       <div
         style={{
@@ -242,198 +210,8 @@ const Dashboard = () => {
         </Helmet>
         <nav>
           <div className="dashboard">
-            <Link to="/">
-              <div className="logo">
-                <img src="/images/medclicker.png" className="logo" alt="" />
-              </div>
-            </Link>
-
-            <div className="profile-area">
-              <div className="nav-box">
-                <figure
-                  className="smallPhoto"
-                  onClick={() => {
-                    userInfo.isActive
-                      ? setDropdown(!dropdown)
-                      : setBlacklist(!blacklist);
-                  }}
-                >
-                  <img src={user.filename} alt="" />
-                </figure>
-                {userInfo.isActive === false && blacklist ? (
-                  <div id="dropItem">
-                    <div className="dropwrap">
-                      <Link to="/securitySettings">
-                        <h4>Security Settings</h4>
-                      </Link>
-                      <ExternalLink href="/logout" target="_self">
-                        <h4>Log Out</h4>
-                      </ExternalLink>
-                    </div>
-                  </div>
-                ) : (
-                  ""
-                )}
-
-                {dropdown ? (
-                  <div id="dropItem">
-                    <div className="dropwrap">
-                      <Link to={"/dashboard"}>
-                        <h4>Dashboard Home</h4>
-                      </Link>
-                      <Link to={"/personal-details"}>
-                        <h4>Personal Details</h4>
-                      </Link>
-
-                      {userInfo.isLocum ? (
-                        <Link
-                          to={
-                            user.completeAccess === false
-                              ? "#"
-                              : "/locum_profile"
-                          }
-                        >
-                          <h4
-                            className={
-                              user.completeAccess === false ? "disabled" : ""
-                            }
-                          >
-                            Locum Profile
-                          </h4>
-                        </Link>
-                      ) : (
-                        <Link
-                          to={user.completeAccess === false ? "#" : "/step1"}
-                        >
-                          <h4
-                            className={
-                              user.completeAccess === false ? "disabled" : ""
-                            }
-                          >
-                            Register as a Locum
-                          </h4>
-                        </Link>
-                      )}
-                      <Link
-                        to={user.completeAccess === false ? "#" : "/calendar"}
-                      >
-                        <h4
-                          className={
-                            user.completeAccess === false ? "disabled" : ""
-                          }
-                        >
-                          My Calendar
-                        </h4>
-                      </Link>
-                      <Link
-                        to={user.completeAccess === false ? "#" : "/searchlist"}
-                      >
-                        <h4
-                          className={
-                            user.completeAccess === false ? "disabled" : ""
-                          }
-                        >
-                          Search Positions
-                        </h4>
-                      </Link>
-                      <Link
-                        to={
-                          user.completeAccess === false
-                            ? "#"
-                            : "/applicationsManager"
-                        }
-                      >
-                        <h4
-                          className={
-                            user.completeAccess === false ? "disabled" : ""
-                          }
-                        >
-                          Applications Manager
-                        </h4>
-                      </Link>
-                      <Link
-                        to={
-                          user.completeAccess === false ? "#" : "/locumdatabase"
-                        }
-                      >
-                        <h4
-                          className={
-                            user.completeAccess === false ? "disabled" : ""
-                          }
-                        >
-                          Locums Database
-                        </h4>
-                      </Link>
-                      {!contractType ? (
-                        <Link
-                          to={
-                            user.completeAccess === false ? "#" : "/question1"
-                          }
-                        >
-                          <h4
-                            className={
-                              user.completeAccess === false ? "disabled" : ""
-                            }
-                          >
-                            Create Listing
-                          </h4>
-                        </Link>
-                      ) : (
-                        <Link
-                          to={
-                            user.completeAccess === false
-                              ? "#"
-                              : "/question_continue"
-                          }
-                        >
-                          <h4
-                            className={
-                              user.completeAccess === false ? "disabled" : ""
-                            }
-                          >
-                            Create Listing
-                          </h4>
-                        </Link>
-                      )}
-                      <Link
-                        to={
-                          user.completeAccess === false
-                            ? "#"
-                            : "/listingManager"
-                        }
-                      >
-                        <h4
-                          className={
-                            user.completeAccess === false ? "disabled" : ""
-                          }
-                        >
-                          Listing Manager
-                        </h4>
-                      </Link>
-
-                      <Link to="/securitySettings">
-                        <h4>Security Settings</h4>
-                      </Link>
-                      <Link to="/invoices">
-                        <h4>Invoices</h4>
-                      </Link>
-                      {user.isLocum === true ? (
-                        <Link to="/agreements">
-                          <h4>Locum Agreements</h4>
-                        </Link>
-                      ) : (
-                        ""
-                      )}
-
-                      <ExternalLink href="/logout" target="_self">
-                        <h4>Log Out</h4>
-                      </ExternalLink>
-                    </div>
-                  </div>
-                ) : (
-                  ""
-                )}
-              </div>
+            <div className="logo">
+              <div id="hamburger" onClick={() => setClose(false)}></div>
             </div>
           </div>
         </nav>
@@ -452,36 +230,54 @@ const Dashboard = () => {
 
         <div className="wrap">
           <main>
+            <div></div>
             <aside className={close ? "moveback" : "movehere"}>
               {close ? (
-                <button id="close-btn" onClick={() => setClose(false)}>
-                  <span className="material-icons-sharp">menu_open</span>
-                </button>
+                <>
+                  <div
+                    className="logo"
+                    style={{ marginLeft: "20px", marginBottom: "1rem" }}
+                  >
+                    <img
+                      src="/images/medclicker-white.png"
+                      className="logo"
+                      alt=""
+                    />
+                  </div>
+
+                  <button id="close-btn" onClick={() => setClose(false)}>
+                    <span
+                      style={{ color: "white" }}
+                      className="material-icons-sharp"
+                    >
+                      menu_open
+                    </span>
+                  </button>
+                </>
               ) : (
-                <button id="close-btn" onClick={() => setClose(true)}>
-                  <span className="material-icons-sharp">close</span>
-                </button>
+                <>
+                  <div
+                    className="logo"
+                    style={{ marginLeft: "20px", marginBottom: "1rem" }}
+                  >
+                    <img
+                      src="/images/medclicker-white.png"
+                      className="logo"
+                      alt=""
+                    />
+                  </div>
+                  <button id="close-btn" onClick={() => setClose(true)}>
+                    <span
+                      style={{ color: "white" }}
+                      className="material-icons-sharp"
+                    >
+                      close
+                    </span>
+                  </button>
+                </>
               )}
-              {!isloaded ? (
-                <div
-                  className="sidebar"
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    position: "relative",
-                    alignItems: "center",
-                    height: "604px",
-                  }}
-                >
-                  <ThreeDots
-                    type="ThreeDots"
-                    height={40}
-                    width={80}
-                    color={"grey"}
-                  />
-                </div>
-              ) : userInfo.isActive === false ||
-                user.completeAccess === false ? (
+
+              {user.isActive === false || user.completeAccess === false ? (
                 <div className="sidebar">
                   <Link to="/dashboard" className="active disabled">
                     <span className="material-icons-sharp">dashboard</span>
@@ -491,20 +287,21 @@ const Dashboard = () => {
                     <span className="material-icons-sharp">person</span>
                     <h4>Personal Details</h4>
                   </Link>
-                  <div
-                    style={{
-                      textAlign: "center",
-                      fontSize: "13px",
-                      color: "#fff",
-                      fontWeight: "500",
-                      height: "30px",
-                      lineHeight: "30px",
-                      backgroundColor: "#14a248",
-                    }}
-                  >
-                    For Job Seekers
+                  <div style={{ borderBottom: "2px solid #1A1A1A" }}>
+                    <h3
+                      style={{
+                        fontSize: "15px",
+                        color: "#fff",
+                        fontWeight: "500",
+                        height: "30px",
+                        lineHeight: "30px",
+                        transform: "translateX(5%)",
+                      }}
+                    >
+                      For Job Seekers
+                    </h3>
                   </div>
-                  {userInfo.isLocum ? (
+                  {user.isLocum ? (
                     <Link to="#" className="disabled">
                       <span className="material-icons-sharp">person</span>
                       <h4>Locum Profile</h4>
@@ -529,18 +326,19 @@ const Dashboard = () => {
                     <span className="material-icons-sharp">search</span>
                     <h4>Applications Manager</h4>
                   </Link>
-                  <div
-                    style={{
-                      textAlign: "center",
-                      fontSize: "13px",
-                      color: "#fff",
-                      fontWeight: "500",
-                      height: "30px",
-                      lineHeight: "30px",
-                      backgroundColor: "#14a248",
-                    }}
-                  >
-                    For Employers
+                  <div style={{ borderBottom: "2px solid #1A1A1A" }}>
+                    <h3
+                      style={{
+                        fontSize: "15px",
+                        color: "#fff",
+                        fontWeight: "500",
+                        height: "30px",
+                        lineHeight: "30px",
+                        transform: "translateX(5%)",
+                      }}
+                    >
+                      For Employers
+                    </h3>
                   </div>
                   <Link to="#" className="disabled">
                     <span className="material-icons-sharp">person_search</span>
@@ -556,34 +354,21 @@ const Dashboard = () => {
                     <span className="material-icons-sharp">person_search</span>
 
                     <h4>
-                      {newApply === 0 ? (
-                        ""
-                      ) : !isloaded ? (
+                      Listing Manager
+                      {ReactSession.get("newApply") === 0 ? (
                         ""
                       ) : (
-                        <span className={newApply !== 0 ? "alertCircle" : ""}>
-                          {newApply}
+                        <span
+                          className={
+                            ReactSession.get("newApply") !== 0
+                              ? "alertCircle"
+                              : ""
+                          }
+                        >
+                          {ReactSession.get("newApply")}
                         </span>
                       )}
-                      Listing Manager
                     </h4>
-                  </Link>
-                  <div
-                    style={{
-                      textAlign: "center",
-                      fontSize: "13px",
-                      color: "#fff",
-                      fontWeight: "500",
-                      height: "30px",
-                      lineHeight: "30px",
-                      backgroundColor: "#14a248",
-                    }}
-                  >
-                    Console Management & Other
-                  </div>
-                  <Link to="/securitysettings">
-                    <span className="material-icons-sharp">settings</span>
-                    <h4>Security Settings</h4>
                   </Link>
                   <Link to="/invoices">
                     <span className="material-symbols-outlined">
@@ -591,16 +376,28 @@ const Dashboard = () => {
                     </span>
                     <h4>Invoices</h4>
                   </Link>
-                  {user.isLocum === true ? (
-                    <Link to="/agreements">
-                      <span className="material-symbols-outlined">
-                        fact_check
-                      </span>
-                      <h4>Locum Agreements</h4>
-                    </Link>
-                  ) : (
-                    ""
-                  )}
+                  <div style={{ borderBottom: "2px solid #1A1A1A" }}>
+                    <h3
+                      style={{
+                        fontSize: "15px",
+                        color: "#fff",
+                        fontWeight: "500",
+                        height: "30px",
+                        lineHeight: "30px",
+                        transform: "translateX(5%)",
+                      }}
+                    >
+                      Security Settings
+                    </h3>
+                  </div>
+                  <Link to="/securitysettings">
+                    <span className="material-icons-sharp">settings</span>
+                    <h4>Change Password</h4>
+                  </Link>
+                  <ExternalLink href="/logout" target="_self">
+                    <span className="material-icons-sharp">logout</span>
+                    <h4>Log Out</h4>
+                  </ExternalLink>
                 </div>
               ) : (
                 <div className="sidebar">
@@ -612,20 +409,21 @@ const Dashboard = () => {
                     <span className="material-icons-sharp">person</span>
                     <h4>Personal Details</h4>
                   </Link>
-                  <div
-                    style={{
-                      textAlign: "center",
-                      fontSize: "13px",
-                      color: "#fff",
-                      fontWeight: "500",
-                      height: "30px",
-                      lineHeight: "30px",
-                      backgroundColor: "#14a248",
-                    }}
-                  >
-                    For Job Seekers
+                  <div style={{ borderBottom: "2px solid #1A1A1A" }}>
+                    <h3
+                      style={{
+                        fontSize: "15px",
+                        color: "#fff",
+                        fontWeight: "500",
+                        height: "30px",
+                        lineHeight: "30px",
+                        transform: "translateX(5%)",
+                      }}
+                    >
+                      For Job Seekers
+                    </h3>
                   </div>
-                  {userInfo.isLocum ? (
+                  {user.isLocum ? (
                     <Link to="/locum_profile">
                       <span className="material-icons-sharp">person</span>
                       <h4>Locum Profile</h4>
@@ -650,18 +448,19 @@ const Dashboard = () => {
                     <span className="material-icons-sharp">search</span>
                     <h4>Applications Manager</h4>
                   </Link>
-                  <div
-                    style={{
-                      textAlign: "center",
-                      fontSize: "13px",
-                      color: "#fff",
-                      fontWeight: "500",
-                      height: "30px",
-                      lineHeight: "30px",
-                      backgroundColor: "#14a248",
-                    }}
-                  >
-                    For Employers
+                  <div style={{ borderBottom: "2px solid #1A1A1A" }}>
+                    <h3
+                      style={{
+                        fontSize: "15px",
+                        color: "#fff",
+                        fontWeight: "500",
+                        height: "30px",
+                        lineHeight: "30px",
+                        transform: "translateX(5%)",
+                      }}
+                    >
+                      For Employers
+                    </h3>
                   </div>
                   <Link to="/locumdatabase">
                     <span className="material-icons-sharp">person_search</span>
@@ -687,34 +486,21 @@ const Dashboard = () => {
                     <span className="material-icons-sharp">person_search</span>
 
                     <h4>
-                      {newApply === 0 ? (
-                        ""
-                      ) : !isloaded ? (
+                      Listing Manager
+                      {ReactSession.get("newApply") === 0 ? (
                         ""
                       ) : (
-                        <span className={newApply !== 0 ? "alertCircle" : ""}>
-                          {newApply}
+                        <span
+                          className={
+                            ReactSession.get("newApply") !== 0
+                              ? "alertCircle"
+                              : ""
+                          }
+                        >
+                          {ReactSession.get("newApply")}
                         </span>
                       )}
-                      Listing Manager
                     </h4>
-                  </Link>
-                  <div
-                    style={{
-                      textAlign: "center",
-                      fontSize: "13px",
-                      color: "#fff",
-                      fontWeight: "500",
-                      height: "30px",
-                      lineHeight: "30px",
-                      backgroundColor: "#14a248",
-                    }}
-                  >
-                    Console Management & Other
-                  </div>
-                  <Link to="/securitysettings">
-                    <span className="material-icons-sharp">settings</span>
-                    <h4>Security Settings</h4>
                   </Link>
                   <Link to="/invoices">
                     <span className="material-symbols-outlined">
@@ -722,16 +508,30 @@ const Dashboard = () => {
                     </span>
                     <h4>Invoices</h4>
                   </Link>
-                  {user.isLocum === true ? (
-                    <Link to="/agreements">
-                      <span className="material-symbols-outlined">
-                        fact_check
-                      </span>
-                      <h4>Locum Agreements</h4>
-                    </Link>
-                  ) : (
-                    ""
-                  )}
+
+                  <div style={{ borderBottom: "2px solid #1A1A1A" }}>
+                    <h3
+                      style={{
+                        fontSize: "15px",
+                        color: "#fff",
+                        fontWeight: "500",
+                        height: "30px",
+                        lineHeight: "30px",
+                        transform: "translateX(5%)",
+                      }}
+                    >
+                      Security Settings
+                    </h3>
+                  </div>
+                  <Link to="/securitysettings">
+                    <span className="material-icons-sharp">settings</span>
+                    <h4>Change Password</h4>
+                  </Link>
+
+                  <ExternalLink href="/logout" target="_self">
+                    <span className="material-icons-sharp">logout</span>
+                    <h4>Log Out</h4>
+                  </ExternalLink>
                 </div>
               )}
               {/* END OF SIDEBAR */}
@@ -787,12 +587,12 @@ const Dashboard = () => {
               )}
               <div className="myaccountbox">
                 <div className="leftBox">
-                  {userInfo.isActive ? "" : <div className="blockfilter"></div>}
+                  {user.isActive ? "" : <div className="blockfilter"></div>}
 
                   <div className="topBox">
                     <div>
                       <h2>Member Profile</h2>
-                      <h4>Member ID: {userInfo.nanoId}</h4>
+                      <h4>Member ID: {user.nanoId}</h4>
                       <h3>Name</h3>
 
                       <p>
@@ -800,7 +600,7 @@ const Dashboard = () => {
                       </p>
                     </div>
                     <div className="controlButton">
-                      {userInfo.isAdmin ? (
+                      {user.isAdmin ? (
                         <button className="controlpanel">
                           <Link
                             style={{ wdith: "100px" }}
@@ -830,31 +630,20 @@ const Dashboard = () => {
                         <h4>Locum ID: {locum.locumId}</h4>
                         <h3>Name</h3>
 
-                        {!isloaded ? (
-                          <span>
-                            <ThreeDots
-                              type="ThreeDots"
-                              height={40}
-                              width={80}
-                              color={"grey"}
-                            />
-                          </span>
-                        ) : (
-                          <p>
-                            {locum.firstName} {locum.lastName}
-                          </p>
-                        )}
+                        <p>
+                          {user.firstName} {user.lastName}
+                        </p>
                       </div>
                       <div>
                         <div className="slideKeyComponent">
                           <div className="checkbox-btn">
-                            {locum.showLocum ? (
+                            {show ? (
                               <input
                                 type="checkbox"
                                 checked={show ? true : false}
                                 id="ipt_profile_toggle"
                                 onChange={(e) => {
-                                  hideMe(e, locum.locumId);
+                                  hideMe(e, ReactSession.get("locumId"));
                                   setShow(!show);
                                 }}
                               />
@@ -864,7 +653,7 @@ const Dashboard = () => {
                                 checked={show ? true : false}
                                 id="ipt_profile_toggle"
                                 onChange={(e) => {
-                                  hideMe(e, locum.locumId);
+                                  hideMe(e, ReactSession.get("locumId"));
                                   setShow(!show);
                                 }}
                               />
@@ -884,11 +673,7 @@ const Dashboard = () => {
                 </div>
                 <div className="gridBox">
                   <div className="grid">
-                    {userInfo.isActive ? (
-                      ""
-                    ) : (
-                      <div className="blockfilter"></div>
-                    )}
+                    {user.isActive ? "" : <div className="blockfilter"></div>}
                     <Link to="/searchlist">
                       <h3>Job Cases</h3>
                       <div
@@ -900,24 +685,22 @@ const Dashboard = () => {
                           position: "relative",
                         }}
                       >
-                        {currentState === "TAS" ? (
+                        {ReactSession.get("currentState") === "TAS" ? (
                           <>
                             <div>
                               <p>TAS</p>
                               <p>VIC</p>
-                              <p>NSW</p>
+                              <p>NSW & ACT</p>
                               <p>Australia</p>
                             </div>
                             <div>
-                              <p>{tas}</p>
-                              <p>{vic}</p>
-                              <p>{nsw}</p>
-                              <p>
-                                {nsw + vic + qld + act + tas + wa + sa + nt}
-                              </p>
+                              <p>{ReactSession.get("tas")}</p>
+                              <p>{ReactSession.get("vic")}</p>
+                              <p>{ReactSession.get("nsw")}</p>
+                              <p>{ReactSession.get("noOfCases")}</p>
                             </div>
                           </>
-                        ) : currentState === "WA" ? (
+                        ) : ReactSession.get("currentState") === "WA" ? (
                           <>
                             <div>
                               <p>WA</p>
@@ -926,61 +709,40 @@ const Dashboard = () => {
                               <p>Australia</p>
                             </div>
                             <div>
-                              <p>{wa}</p>
-                              <p>{sa}</p>
-                              <p>{nt}</p>
-                              <p>
-                                {nsw + vic + qld + act + tas + wa + sa + nt}
-                              </p>
+                              <p>{ReactSession.get("wa")}</p>
+                              <p>{ReactSession.get("sa")}</p>
+                              <p>{ReactSession.get("nt")}</p>
+                              <p>{ReactSession.get("noOfCases")}</p>
                             </div>
                           </>
-                        ) : currentState === "SA" ? (
+                        ) : ReactSession.get("currentState") === "SA" ? (
                           <>
                             <div>
                               <p>SA</p>
                               <p>VIC</p>
-                              <p>NSW</p>
+                              <p>NSW & ACT</p>
                               <p>Australia</p>
                             </div>
                             <div>
-                              <p>{sa}</p>
-                              <p>{vic}</p>
-                              <p>{nsw}</p>
-                              <p>
-                                {nsw + vic + qld + act + tas + wa + sa + nt}
-                              </p>
-                            </div>
-                          </>
-                        ) : currentState === "ACT" ? (
-                          <>
-                            <div>
-                              <p>ACT</p>
-                              <p>NSW</p>
-                              <p>VIC</p>
-                              <p>Australia</p>
-                            </div>
-                            <div>
-                              <p>{act}</p>
-                              <p>{nsw}</p>
-                              <p>{vic}</p>
-                              <p>
-                                {nsw + vic + qld + act + tas + wa + sa + nt}
-                              </p>
+                              <p>{ReactSession.get("sa")}</p>
+                              <p>{ReactSession.get("vic")}</p>
+                              <p>{ReactSession.get("nsw")}</p>
+                              <p>{ReactSession.get("noOfCases")}</p>
                             </div>
                           </>
                         ) : (
                           <>
                             <div>
-                              <p>NSW</p>
+                              <p>NSW & ACT</p>
                               <p>VIC</p>
                               <p>QLD</p>
                               <p>Australia</p>
                             </div>
                             <div>
-                              <p>{nsw}</p>
-                              <p>{vic}</p>
-                              <p>{qld}</p>
-                              <p>{noOfCases}</p>
+                              <p>{ReactSession.get("nsw")}</p>
+                              <p>{ReactSession.get("vic")}</p>
+                              <p>{ReactSession.get("qld")}</p>
+                              <p>{ReactSession.get("noOfCases")}</p>
                             </div>
                           </>
                         )}
@@ -988,34 +750,24 @@ const Dashboard = () => {
                     </Link>
                   </div>
                   <div className="grid">
-                    {userInfo.isActive ? (
-                      ""
-                    ) : (
-                      <div className="blockfilter"></div>
-                    )}
+                    {user.isActive ? "" : <div className="blockfilter"></div>}
                     <Link to="/locumdatabase">
                       <h3>No. of Locums</h3>
-                      {locumNo <= 1 ? (
+                      {ReactSession.get("locumNo") <= 1 ? (
                         <p>
-                          {locumNo}
-
+                          {ReactSession.get("locumNo")}
                           <span> locum</span>
                         </p>
                       ) : (
                         <p>
-                          {locumNo}
-
+                          {ReactSession.get("locumNo")}
                           <span> locums</span>
                         </p>
                       )}
                     </Link>
                   </div>
                   <div className="grid">
-                    {userInfo.isActive ? (
-                      ""
-                    ) : (
-                      <div className="blockfilter"></div>
-                    )}
+                    {user.isActive ? "" : <div className="blockfilter"></div>}
                     <Link to="/applicationsManager">
                       <h3>My Applications</h3>
                       <div
@@ -1032,18 +784,14 @@ const Dashboard = () => {
                           <p className="seen">Seen</p>
                         </div>
                         <div>
-                          <p>{applied}</p>
-                          <p>{seen}</p>
+                          <p>{ReactSession.get("applied")}</p>
+                          <p>{ReactSession.get("seen")}</p>
                         </div>
                       </div>
                     </Link>
                   </div>
                   <div className="grid">
-                    {userInfo.isActive ? (
-                      ""
-                    ) : (
-                      <div className="blockfilter"></div>
-                    )}
+                    {user.isActive ? "" : <div className="blockfilter"></div>}
                     <Link to="/listingmanager">
                       <h3>My Listings</h3>
                       <div
@@ -1060,8 +808,8 @@ const Dashboard = () => {
                           <p className="seen">Applicants</p>
                         </div>
                         <div>
-                          <p>{myListings}</p>
-                          <p>{applicants}</p>
+                          <p>{ReactSession.get("mylistings")}</p>
+                          <p>{ReactSession.get("applicants")}</p>
                         </div>
                       </div>
                     </Link>
@@ -1232,161 +980,77 @@ const Dashboard = () => {
             display: block;
           }
 
+          nav #hamburger {
+            background: url("/images/menu-black.png");
+            background-repeat: no-repeat;
+            background-size: 45%;
+            background-position: center;
+            cursor: pointer;
+            position: absolute;
+            height: 65px;
+            width: 60px;
+            display: block;
+            transform: translate(-50%, -20%);
+            top: 65%;
+            left: 5%;
+          }
+
           nav .logo.active {
             display: block;
-          }
-
-          nav .profile-area {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 4rem;
-          }
-          nav .profile-area .profile-photo {
-            display: block;
-            width: 3rem;
-            height: 3rem;
-            border-radius: 50%;
-            overflow: hidden;
-          }
-
-          nav .profile-area button {
-            display: none;
-          }
-
-          nav .profile-area .theme-btn {
-            display: flex;
-            background: var(--color-light);
-            width: 5rem;
-            height: 2rem;
-            cursor: pointer;
-            border-radius: var(--border-radius-2);
-          }
-
-          nav .profile-area .theme-btn span {
-            width: 50%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-          }
-          nav .profile-area .theme-btn .active {
-            background: var(--color-dark);
-            border-radius: var(--border-radius-2);
-            color: var(--color-white);
-          }
-
-          nav .profile-area .profile {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-          }
-
-          .nav-box {
-            width: 35px;
-            height: 35px;
-            left: 90%;
-            top: 50%;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 1000;
-          }
-          nav > figure {
-            width: 200px;
-            position: absolute;
-            transform: translate(-50%, -50%);
-            left: 10%;
-            top: 50%;
-          }
-          .smallPhoto {
-            overflow: hidden;
-            position: relative;
-            border-radius: 50%;
-            width: 39px;
-            height: 39px;
-            background: #eee;
-            border: 2px solid white;
-            cursor: pointer;
-          }
-          .smallPhoto img {
-            position: absolute;
-            width: 48px;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            transform: translate(-50%, -50%);
-            top: 50%;
-            left: 50%;
-          }
-          .nav-box #dropItem {
-            width: 280px;
-            background: var(--color-white);
-            position: absolute;
-            border: 1px solid #ebebeb;
-            border-top: none;
-            transform: translateX(-84%);
-            display: block;
-          }
-
-          .nav-box #dropItem.open {
-            display: block;
-          }
-          #dropItem .disabled {
-            background-color: #ddd;
-            color: #888;
-            cursor: default;
-            border: #ddd;
-          }
-
-          .nav-box .dropwrap {
-            padding-bottom: 0px;
-            width: 88%;
-            background: var(--color-white);
-            margin-top: 3%;
-            margin-left: 6%;
-          }
-
-          .nav-box .dropwrap a {
-            color: #777;
-            font-weight: 500;
-            font-size: 13px;
-            font-family: "Noto Sans TC", sans-serif;
-            height: 45px;
-            line-height: 45px;
-            width: 100%;
-            position: relative;
-            display: block;
-          }
-          .nav-box .dropwrap a h4 {
-            margin-bottom: 0px;
-            width: 100%;
-            position: relative;
-            display: block;
-            height: 45px;
-            line-height: 45px;
-          }
-
-          .nav-box .dropwrap a:hover {
-            border-bottom: 1px solid #484848;
           }
 
           /* ============ ASIDE & SIDEBAR ============ */
           main {
             display: grid;
-            grid-template-columns: 18rem auto 30rem;
+            grid-template-columns: 22rem 30rem;
             gap: 2rem;
             width: 96%;
             margin: 1rem auto 4rem;
           }
 
-          main aside {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 88vh;
-            transform: translateX(0%);
+          .wrap .logo {
+            margin-top: 5px;
+            margin-btoom: 3px;
+            height: 21px;
           }
+
+          .wrap .container {
+            max-width: 1080px;
+            margin-right: 80px;
+          }
+          .wrap .buffer {
+            display: block;
+            width: 310px;
+            height: 100%;
+          }
+
+          .wrap .container-fluid {
+            display: grid;
+            grid-template-columns: 25% 75%;
+            width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+          }
+
+          .wrap .sub-footer {
+            display: grid;
+            grid-template-columns: 25% 75%;
+            width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+            background-color: #fff;
+          }
+
+          main aside {
+            position: fixed;
+            top: 0;
+            background-color: #000;
+            height: 100vh;
+            z-index: 1000;
+            width: 25rem;
+            transform: translateX(-10%);
+          }
+
           main .sidebar .alertCircle {
             height: 20px;
             width: 20px;
@@ -1395,9 +1059,9 @@ const Dashboard = () => {
             font-size: 12px;
             border-radius: 50%;
             text-align: center;
-            line-height: 18px;
+            line-height: 20px;
             position: absolute;
-            transform: translate(-450%, -20%);
+            transform: translate(-80%, -20%);
           }
 
           /* will be shown only on mobile and tablets */
@@ -1414,18 +1078,15 @@ const Dashboard = () => {
             align-items: center;
             gap: 1.2rem;
             height: 4.2rem;
-            color: var(--color-gray-light);
+            color: #fff;
             position: relative;
           }
-          main aside .sidebar {
-            background-color: white;
-            -webkit-box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
-              0 1px 3px rgba(0, 0, 0, 0.28);
-            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11),
-              0 1px 3px rgba(0, 0, 0, 0.28);
-          }
+
           main aside .sidebar a:hover {
-            background-color: var(--color-light);
+            background-color: #1a1a1a;
+            border-radius: 30px;
+            text-align: center;
+            width: 90%;
           }
 
           main aside .sidebar a span {
@@ -1435,7 +1096,7 @@ const Dashboard = () => {
           }
 
           main aside .sidebar a.active {
-            background: var(--color-white);
+            background: #000;
             color: var(--color-primary);
           }
 
@@ -1448,7 +1109,7 @@ const Dashboard = () => {
           }
 
           main aside .sidebar a:hover {
-            color: var(--color-primary);
+            color: white;
           }
 
           main aside .sidebar a:hover span {
@@ -1519,6 +1180,10 @@ const Dashboard = () => {
           .leftBox p {
             font-size: 28px;
             font-weight: 600;
+          }
+
+          main section {
+            width: 880px;
           }
 
           main section.midde .header {
@@ -1598,6 +1263,13 @@ const Dashboard = () => {
           main section.middle .card .middle {
             display: flex;
             justify-content: space-between;
+          }
+
+          main section.middle .container-fluid {
+            width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+            display: block;
           }
 
           main section.middle .card .middle .chip {
@@ -1895,7 +1567,7 @@ const Dashboard = () => {
             transform: translateX(76px);
           }
           .checkbox-btn .slidekey:before {
-            content: "Active";
+            content: "Live";
             position: absolute;
             height: 100%;
             width: 76px;
@@ -1909,7 +1581,7 @@ const Dashboard = () => {
             font-weight: bold;
           }
           .checkbox-btn .slidekey:after {
-            content: "Dormant";
+            content: "Hidden";
             background-color: #2b2b2b;
             color: white;
             position: absolute;
@@ -1923,19 +1595,44 @@ const Dashboard = () => {
             font-weight: bold;
           }
 
-          @media screen and (max-width: 768px) {
-            .checkbox-btn {
-              transform: translate(0%, 16%);
-            }
-          }
-
           /* ============ MEDIA QUERIES FOR TABLETS =========*/
           @media screen and (max-width: 1024px) {
             nav .search-bar {
               display: none;
             }
-            nav .profile-area {
-              gap: 2rem;
+
+            .wrap .buffer {
+              display: none;
+            }
+            .wrap .container-fluid {
+              display: block;
+              margin-left: auto;
+              margin-right: auto;
+              grid-template-columns: 100%;
+              width: 100%;
+              padding-left: 0;
+              padding-right: 0;
+            }
+
+            main section.middle .container-fluid {
+              width: 490px;
+              margin: 0px;
+            }
+
+            .wrap .sub-footer {
+              display: block;
+              margin-left: auto;
+              margin-right: auto;
+              grid-template-columns: 100%;
+              width: 100%;
+              padding-left: 0;
+              padding-right: 0;
+            }
+
+            .wrap .logo {
+              margin-top: 5px;
+              margin-btoom: 3px;
+              height: 21px;
             }
 
             .myaccountbox {
@@ -1953,23 +1650,23 @@ const Dashboard = () => {
             }
 
             main .moveback {
-              transform: translateX(-80%);
+              transform: translateX(-100%);
               transition: all 300ms ease;
+              background-color: #000;
             }
             main .movehere {
               transform: translateX(0%);
               transition: all 300ms ease;
+              background-color: #000;
+              width: 100%;
             }
             main aside {
               position: fixed;
               top: 0;
               left: -100%;
               z-index: 1000;
-              background: var(--color-white);
               width: 22rem;
               height: 100vh;
-              box-shadow: 2rem 0 2rem var(--color-primary-light);
-              display: none;
               animation: showSidebar 500ms ease-in forwards;
             }
 
@@ -1995,7 +1692,7 @@ const Dashboard = () => {
             }
 
             main aside .sidebar {
-              margin-top: 4rem;
+              margin-top: 1rem;
             }
 
             main aside .updates {
@@ -2025,9 +1722,25 @@ const Dashboard = () => {
             footer .font-weight-light {
               display: none !important;
             }
+            .wrap .buffer {
+              display: none;
+            }
+            .wrap .container-fluid {
+              margin-left: auto;
+              margin-right: auto;
+              width: 100%;
+              grid-template-columns: 100%;
+              padding-left: 0;
+              padding-right: 0;
+              display: block;
+            }
+            main section.middle .container-fluid {
+              width: 490px;
+              margin: 0px;
+            }
 
             main .moveback {
-              transform: translateX(-80%);
+              transform: translateX(-100%);
               transition: all 300ms ease;
             }
             main .movehere {
@@ -2035,9 +1748,6 @@ const Dashboard = () => {
               transition: all 300ms ease;
             }
 
-            nav .profile-area {
-              gap: 2.6rem;
-            }
             nav .profile h5,
             nav .profile span {
               display: none;
@@ -2049,12 +1759,13 @@ const Dashboard = () => {
 
             .ad-banner {
               height: 180px;
-              width: 100%;
+              width: 440px;
               position: relative;
               margin-top: 20px;
               background: url("/images/tutors.jpg") no-repeat center center;
               background-size: cover;
               background-position: 0px 0px;
+              margin-left: 40px;
             }
           }
         `}</style>

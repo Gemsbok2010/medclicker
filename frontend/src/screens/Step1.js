@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { ReactSession } from "react-client-session";
 import { ExternalLink } from "react-external-link";
 import Footer from "../components/Footer";
+import { useSelector } from "react-redux";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 import { RotatingLines } from "react-loader-spinner";
 import {
@@ -123,6 +124,7 @@ function Plan({ address, latitude, longitude, geoLocate }) {
 const Step1 = () => {
   const navigate = useNavigate();
   ReactSession.setStoreType("sessionStorage");
+  const user = useSelector((state) => state.userInfo.value);
   const [listOfProfessions, setListOfProfessions] = useState([]);
   const [phone, setPhone] = useState("");
   const [ahpra, setAhpra] = useState("");
@@ -139,7 +141,7 @@ const Step1 = () => {
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
   const [userInfo, setUserInfo] = useState({});
-  const [resume, setResume] = useState("");
+  const [readyToShow, setReadyToShow] = useState(false);
 
   // ============ PROFESSION (Disable and enable submit) =========
 
@@ -226,7 +228,6 @@ const Step1 = () => {
       setLongitude(ReactSession.get("locum_longitude"));
     }
 
-    setResume(ReactSession.get("resume"));
     // ============ PROFILE DATA ===========
     axios
       .get(
@@ -239,6 +240,7 @@ const Step1 = () => {
           setFirstName(response.data.firstName);
           setLastName(response.data.lastName);
           setUserInfo(response.data);
+          setReadyToShow(true);
         }
       });
   }, []);
@@ -300,8 +302,8 @@ const Step1 = () => {
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
         phone: phone,
-        firstName: userInfo.firstName,
-        lastName: userInfo.lastName,
+        firstName: user.firstName,
+        lastName: user.lastName,
         driverslicense: driverslicense,
         profession: profession,
         ahpra: ahpra,
@@ -485,43 +487,42 @@ const Step1 = () => {
     libraries: libraries,
   });
 
-  if (!isLoaded)
+  if (readyToShow === false)
     return (
       <div
         style={{
-          backgroundColor: "rgba(33, 40, 46, 0.8)",
+          backgroundColor: "#14a248",
           top: "0",
           left: "0",
           height: "100%",
           width: "100%",
           zIndex: "2500",
-          justifyContent: "center",
-          alignItems: "center",
           display: "block",
           position: "fixed",
-          color: "white",
         }}
       >
         <div
           style={{
             textAlign: "center",
             position: "absolute",
-            transform: "translate(50%,50%)",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
           }}
         >
           <RotatingLines
             strokeColor="white"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="76"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
             visible={true}
           />
-          {"  "}
-          Loading...
         </div>
       </div>
     );
-
   return (
     <>
       <HelmetProvider>
@@ -564,9 +565,9 @@ const Step1 = () => {
                 <Link
                   style={{
                     fontWeight: "bold",
-                    cursor: resume ? "pointer" : "default",
+                    cursor: ReactSession.get("resume") ? "pointer" : "default",
                   }}
-                  to={resume ? "/step3" : "#"}
+                  to={ReactSession.get("resume") ? "/step3" : "#"}
                 >
                   <span className="badge">3</span>
                   <span>Review CV</span>
@@ -591,9 +592,12 @@ const Step1 = () => {
               <div className="alert">
                 <img
                   src="/images/cross-black.png"
-                  style={{ width: "12px" }}
+                  style={{ width: "12px", cursor: "pointer" }}
                   alt=""
-                />
+                  onClick={() => {
+                    setAlert(false);
+                  }}
+                />{" "}
                 <span dangerouslySetInnerHTML={{ __html: alertMsg }}></span>
               </div>
             ) : (
@@ -965,7 +969,7 @@ const Step1 = () => {
             -ms-flex-align: center;
             align-items: center;
             padding: 0;
-            background-color: #333;
+            background-color: #f4f5f6;
           }
           .wrap .alert {
             background-color: #fcebcd;
@@ -1126,7 +1130,7 @@ const Step1 = () => {
             font-size: 24px;
             font-weight: 800;
             transform: translate(10%, -260%);
-            color: white;
+            color: #2b2b2b;
           }
           .bottomQuestionCard #address {
             width: 100%;
@@ -1136,7 +1140,7 @@ const Step1 = () => {
             display: -webkit-box;
             display: -ms-flexbox;
             display: flex;
-            background-color: #333;
+            background-color: #f4f5f6;
             width: 80%;
             margin: 30px auto 30px;
             text-align: center;

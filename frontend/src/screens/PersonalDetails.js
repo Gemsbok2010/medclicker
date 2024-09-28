@@ -284,23 +284,23 @@ const PersonalDetails = () => {
   // ========== ALERT MESSAGE ===============
   const [updateNote, setUpdateNote] = useState(false);
   const [alert, setAlert] = useState(false);
-  const [alertTop, setAlertTop] = useState(false);
   const [alertMsg, setAlertMsg] = useState("");
 
-  function outPutErrorMessagesInAllusers(errorMessage) {
-    setAlertTop(true);
-    setAlert(false);
-    setUpdateNote(false);
+  const [updatePhoto, setUpdatePhoto] = useState(false);
+  const [alertPhoto, setAlertPhoto] = useState(false);
+
+  function outPutErrorMessagePhoto(errorMessage) {
+    setAlertPhoto(true);
+    setImageHere("");
     window.scrollTo({
-      top: 60,
+      top: 0,
       behavior: "smooth",
     });
     setAlertMsg(errorMessage);
   }
 
-  function outPutErrorMessages(errorMessage) {
+  function outPutErrorMessagesInAllusers(errorMessage) {
     setAlert(true);
-    setAlertTop(false);
     setUpdateNote(false);
     window.scrollTo({
       top: 200,
@@ -389,7 +389,7 @@ const PersonalDetails = () => {
     fetch(
       process.env.REACT_APP_BACKEND_URL +
         "api/users/upload?email=" +
-        userInfo.email,
+        user.email,
       {
         method: "POST",
         body: formData,
@@ -398,12 +398,13 @@ const PersonalDetails = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.invalid) {
-          outPutErrorMessagesInAllusers(data.invalid);
+          outPutErrorMessagePhoto(data.invalid);
         } else {
-          setUpdateNote(true);
+          setUpdatePhoto(true);
           setAlert(false);
-          setAlertTop(false);
+          setAlertPhoto(false);
           setIdPhoto(data.newImage);
+
           dispatch(
             login({
               firstName: data.storedUser.firstName,
@@ -419,7 +420,7 @@ const PersonalDetails = () => {
             })
           );
           setTimeout(function () {
-            setUpdateNote(false);
+            setUpdatePhoto(false);
           }, 2000);
         }
       })
@@ -437,9 +438,9 @@ const PersonalDetails = () => {
       credentials: "include",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
-        firstName: userInfo.firstName,
-        lastName: userInfo.lastName,
-        email: userInfo.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
         phone: userInfo.phone,
         profession: userInfo.profession,
         survey: userInfo.survey,
@@ -457,15 +458,15 @@ const PersonalDetails = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.invalid) {
-          outPutErrorMessages(data.invalid);
+          outPutErrorMessagesInAllusers(data.invalid);
           setIsloading(false);
         } else {
           setUpdateNote(true);
           setIsloading(false);
           setAlert(false);
-          setAlertTop(false);
+
           window.scrollTo({
-            top: 0,
+            top: 200,
             behavior: "smooth",
           });
           setUserInfo(data);
@@ -734,7 +735,7 @@ const PersonalDetails = () => {
         )}
 
         <div className="wrap">
-          <div className="personContent">
+          {/* <div className="personContent">
             {updateNote ? (
               <section className="updateNote container-fluid">
                 <div className="container-fluid ">
@@ -763,13 +764,40 @@ const PersonalDetails = () => {
             ) : (
               ""
             )}
-          </div>
+          </div> */}
 
           <form id="formZero" onSubmit={handleSubmit}>
             <div className="personContent">
               <section className="questionCard container-fluid">
                 <h2>Photo</h2>
                 <div className="container-fluid regCon">
+                  <div className="errorMessageHere">
+                    {updatePhoto && (
+                      <section className="updateNote container-fluid">
+                        <div className="container-fluid ">
+                          <img src="/images/tick.png" width="12px" alt="" />
+                          <span>Updated successfully.</span>
+                        </div>
+                      </section>
+                    )}
+                    {alertPhoto ? (
+                      <div className="alert">
+                        <img
+                          onClick={() => {
+                            setAlertPhoto(false);
+                          }}
+                          style={{ cursor: "pointer", width: "12px" }}
+                          src="/images/cross-black.png"
+                          alt=""
+                        />{" "}
+                        <span
+                          dangerouslySetInnerHTML={{ __html: alertMsg }}
+                        ></span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
                   <div className="bigHead">
                     <figure id="imagePreview">
                       <div id="bin" onClick={() => deletePhoto(userInfo._id)}>
@@ -857,13 +885,24 @@ const PersonalDetails = () => {
                 <h2>My Details</h2>
                 <div className="container-fluid regCon">
                   <div className="errorMessageHere">
+                    {updateNote && (
+                      <section className="updateNote container-fluid">
+                        <div className="container-fluid ">
+                          <img src="/images/tick.png" width="12px" alt="" />
+                          <span>Updated successfully.</span>
+                        </div>
+                      </section>
+                    )}
                     {alert ? (
                       <div className="alert">
                         <img
+                          onClick={() => {
+                            setAlert(false);
+                          }}
                           src="/images/cross-black.png"
-                          style={{ width: "12px" }}
+                          style={{ width: "12px", cursor: "pointer" }}
                           alt=""
-                        />
+                        />{" "}
                         <span
                           dangerouslySetInnerHTML={{ __html: alertMsg }}
                         ></span>
@@ -888,7 +927,7 @@ const PersonalDetails = () => {
                             id="firstName"
                             name="firstName"
                             autoComplete="none"
-                            value={userInfo.firstName ? userInfo.firstName : ""}
+                            value={user.firstName ? user.firstName : ""}
                             onChange={handleOnChange}
                           />
                         </div>
@@ -907,7 +946,7 @@ const PersonalDetails = () => {
                             id="lastName"
                             name="lastName"
                             autoComplete="none"
-                            value={userInfo.lastName ? userInfo.lastName : ""}
+                            value={user.lastName ? user.lastName : ""}
                             onChange={handleOnChange}
                           />
                         </div>
@@ -925,7 +964,7 @@ const PersonalDetails = () => {
                             className="form-control-lg"
                             id="email"
                             disabled
-                            defaultValue={userInfo.email}
+                            defaultValue={user.email}
                           />
                         </div>
                       </div>
@@ -1224,8 +1263,8 @@ const PersonalDetails = () => {
 
             <div className="personContent">
               <section className="buttonCard container-fluid">
-                {userInfo.lastName &&
-                userInfo.firstName &&
+                {user.lastName &&
+                user.firstName &&
                 userInfo.profession &&
                 userInfo.phone &&
                 userInfo.survey &&
@@ -1367,7 +1406,7 @@ const PersonalDetails = () => {
             position: relative;
           }
           .wrap .updateNote {
-            width: 80%;
+            width: 90%;
             background-color: #bff4f2;
             margin-bottom: 8px;
             height: 40px;
@@ -1383,7 +1422,7 @@ const PersonalDetails = () => {
             background-color: #fcebcd;
             margin: 5px auto 12px;
             padding: 7px;
-            width: 80%;
+            width: 90%;
           }
 
           /* ========= ID Photo =========== */
@@ -1426,7 +1465,6 @@ const PersonalDetails = () => {
             -ms-flex-align: center;
             align-items: center;
             padding-bottom: 20px;
-            border-bottom: 1px solid #ebebeb;
           }
           .bigHead #savePhoto {
             background-color: #ddd;

@@ -6,7 +6,7 @@ const locumSchema = new mongoose.Schema(
     nanoId: {
       type: String,
     },
- 
+
     locumId: {
       type: String,
     },
@@ -63,27 +63,7 @@ const locumSchema = new mongoose.Schema(
     country: {
       type: String,
     },
-    skillThree: {
-      type: String,
-    },
-    skillThree1: {
-      type: String,
-    },
-    skillThree2: {
-      type: String,
-    },
-    skillThree3: {
-      type: String,
-    },
-    skillPharma1: {
-      type: String,
-    },
-    skillPharma2: {
-      type: String,
-    },
-    skillPharma3: {
-      type: String,
-    },
+
     languages: {
       type: String,
     },
@@ -105,48 +85,7 @@ const locumSchema = new mongoose.Schema(
     languageLvl2: {
       type: String,
     },
-    skillTwo: {
-      type: String,
-    },
-    skillTwo1: {
-      type: String,
-    },
-    skillTwo2: {
-      type: String,
-    },
-    skillTwo3: {
-      type: String,
-    },
-    skillComp1: {
-      type: String,
-    },
-    skillComp2: {
-      type: String,
-    },
-    skillComp3: {
-      type: String,
-    },
-    skillOne: {
-      type: String,
-    },
-    skillOne1: {
-      type: String,
-    },
-    skillOne2: {
-      type: String,
-    },
-    skillOne3: {
-      type: String,
-    },
-    skillProf1: {
-      type: String,
-    },
-    skillProf2: {
-      type: String,
-    },
-    skillProf3: {
-      type: String,
-    },
+
     resume: {
       type: String,
     },

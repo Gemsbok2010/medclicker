@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ReactSession } from "react-client-session";
 import ReactGA from "react-ga4";
+import { RotatingLines } from "react-loader-spinner";
 
 const Question2 = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const Question2 = () => {
   const [listOfProfessions, setListOfProfessions] = useState([]);
   const [page, setPage] = useState(1);
   const [maxPage, setMaxPage] = useState([]);
-  const [customerId, setCustomerId] = useState("");
+  const [readyToShow, setReadyToShow] = useState(false);
 
   // =============== PAGE BUTTONS ================
 
@@ -77,6 +78,7 @@ const Question2 = () => {
 
   useEffect(() => {
     let isCancelled = false;
+    setReadyToShow(false);
     setCustomerId(ReactSession.get("customerId"));
     if (!ReactSession.get("professions")) {
       setProfession("");
@@ -95,11 +97,11 @@ const Question2 = () => {
           ReactSession.get("contractType")
       );
       const data = await res.json();
-
       if (isCancelled === false) {
         setPage(data.page);
         setMaxPage(data.maxPage);
         setListOfProfessions(data.professions);
+        setReadyToShow(true);
       }
     };
     if (isCancelled === false) {
@@ -114,7 +116,7 @@ const Question2 = () => {
   }, [maxPage, page]);
 
   const [professions, setProfession] = useState("");
-
+  const [customerId, setCustomerId] = useState("");
   const [, setActive] = useState("");
 
   const handleActive = (e, id) => {
@@ -149,11 +151,42 @@ const Question2 = () => {
     }
   };
 
-  // ============= CLEAR CUSTOMER ID ================
-  const clearId = () => {
-    sessionStorage.clear();
-    navigate("/admin/users");
-  };
+  if (readyToShow === false)
+    return (
+      <div
+        style={{
+          backgroundColor: "#14a248",
+          top: "0",
+          left: "0",
+          height: "100%",
+          width: "100%",
+          zIndex: "2500",
+          display: "block",
+          position: "fixed",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            position: "absolute",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <RotatingLines
+            strokeColor="white"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
+            visible={true}
+          />
+        </div>
+      </div>
+    );
 
   return (
     <>
@@ -173,7 +206,6 @@ const Question2 = () => {
                     src="/images/medclicker.png"
                     alt="LOGO"
                     className="img-fluid"
-                    onClick={clearId}
                   />
                 </Link>
               </figure>

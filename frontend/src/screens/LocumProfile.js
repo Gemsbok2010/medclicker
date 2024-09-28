@@ -7,6 +7,7 @@ import $ from "jquery";
 import axios from "axios";
 import { ExternalLink } from "react-external-link";
 import { RotatingLines } from "react-loader-spinner";
+import { ThreeDots } from "react-loader-spinner";
 import { useSelector } from "react-redux";
 
 import {
@@ -127,8 +128,6 @@ const LocumProfile = () => {
   const [driverslicense, setDriverslicense] = useState("");
   const [ahpra, setAhpra] = useState("");
   const [profession, setProfession] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [country, setCountry] = useState("");
   const [state, setState] = useState("");
@@ -141,12 +140,13 @@ const LocumProfile = () => {
   const [SMStext, setSMStext] = useState("");
   const [newsletter, setNewsletter] = useState("");
   const [idPhoto, setIdPhoto] = useState("");
-  const [isloaded, setIsloaded] = useState(false);
+  const [readyToShow, setReadyToShow] = useState(false);
+  const [isloading, setIsloading] = useState(false);
   const [listOfProfessions, setListOfProfessions] = useState([]);
 
   // ============ PROFILE DATA ===========
   useEffect(() => {
-    setIsloaded(false);
+    setReadyToShow(false);
     const fetchData = async () => {
       axios
         .get(
@@ -155,8 +155,6 @@ const LocumProfile = () => {
         .then((response) => {
           if (response.status === 200) {
             setUserInfo(response.data);
-            setFirstName(response.data.firstName);
-            setLastName(response.data.lastName);
             setSMStext(response.data.SMStext);
             setNewsletter(response.data.newsletter);
             setProfession(response.data.profession);
@@ -172,7 +170,7 @@ const LocumProfile = () => {
             setLongitude(response.data.longitude);
             setPhone(response.data.phone);
             setIdPhoto(response.data.filename);
-            setIsloaded(true);
+            setReadyToShow(true);
           }
         });
     };
@@ -184,10 +182,23 @@ const LocumProfile = () => {
   const [alert, setAlert] = useState(false);
   const [alertMsg, setAlertMsg] = useState("");
 
+  const [updatePhoto, setUpdatePhoto] = useState(false);
+  const [alertPhoto, setAlertPhoto] = useState(false);
+
+  function outPutErrorMessagePhoto(errorMessage) {
+    setAlertPhoto(true);
+    setImageHere("");
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+    setAlertMsg(errorMessage);
+  }
+
   function outPutErrorMessagesInAllusers(errorMessage) {
     setAlert(true);
     window.scrollTo({
-      top: 60,
+      top: 150,
       behavior: "smooth",
     });
     setAlertMsg(errorMessage);
@@ -195,15 +206,16 @@ const LocumProfile = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    setIsloading(true);
     fetch(process.env.REACT_APP_BACKEND_URL + "api/locums/updateProfile", {
       method: "PUT",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
         _id: userInfo._id,
-        nanoId: userInfo.nanoId,
-        firstName: firstName,
-        lastName: lastName,
-        email: userInfo.email,
+        nanoId: user.nanoId,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
         profession: profession,
         ahpra: ahpra,
         driverslicense: driverslicense,
@@ -226,11 +238,13 @@ const LocumProfile = () => {
       .then((data) => {
         if (data.invalid) {
           outPutErrorMessagesInAllusers(data.invalid);
+          setIsloading(false);
         } else {
           setUpdateNote(true);
           setAlert(false);
+          setIsloading(false);
           window.scrollTo({
-            top: 0,
+            top: 150,
             behavior: "smooth",
           });
 
@@ -288,7 +302,7 @@ const LocumProfile = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const photoSubmit = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
@@ -296,7 +310,7 @@ const LocumProfile = () => {
 
     fetch(
       process.env.REACT_APP_BACKEND_URL +
-        `api/locums/upload?email=${userInfo.email}`,
+        `api/locums/upload?email=${user.email}`,
       {
         method: "POST",
         body: formData,
@@ -305,17 +319,15 @@ const LocumProfile = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.invalid) {
-          outPutErrorMessagesInAllusers(data.invalid);
+          outPutErrorMessagePhoto(data.invalid);
         } else {
-          setUpdateNote(true);
+          setUpdatePhoto(true);
+          setAlert(false);
+          setAlertPhoto(false);
           setIdPhoto(data.newImage);
-          window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-          });
 
           setTimeout(function () {
-            setUpdateNote(false);
+            setUpdatePhoto(false);
           }, 2000);
         }
       })
@@ -394,8 +406,8 @@ const LocumProfile = () => {
             email: email,
             newsletter: true,
             attributes: {
-              FIRSTNAME: firstName,
-              LASTNAME: lastName,
+              FIRSTNAME: user.firstName,
+              LASTNAME: user.lastName,
               STATES: state,
             },
           }),
@@ -451,8 +463,8 @@ const LocumProfile = () => {
             email: email,
             newsletter: true,
             attributes: {
-              FIRSTNAME: firstName,
-              LASTNAME: lastName,
+              FIRSTNAME: user.firstName,
+              LASTNAME: user.lastName,
               STATES: state,
             },
           }),
@@ -467,7 +479,7 @@ const LocumProfile = () => {
     }
   };
 
-  // =============== CHECK IF IN SEND IN BLUE (BREVO) =============
+  // ========= CHECK IF IN SEND IN BLUE (BREVO) =============
 
   const [inBrevo, setInBrevo] = useState(false);
 
@@ -693,7 +705,7 @@ const LocumProfile = () => {
     libraries: libraries,
   });
 
-  if (!isLoaded || isloaded === false)
+  if (!isLoaded || readyToShow === false)
     return (
       <div
         style={{
@@ -745,14 +757,6 @@ const LocumProfile = () => {
           <h2>Locum information</h2>
         </div>
         <div className="wrap">
-          {updateNote && (
-            <section className="updateNote container-fluid">
-              <div className="container-fluid ">
-                <img src="/images/tick.png" width="12px" alt="" />
-                <span>Your details have been updated</span>
-              </div>
-            </section>
-          )}
           <div className="divider">
             <div className="personContent">
               <div className="threeItem">
@@ -762,7 +766,10 @@ const LocumProfile = () => {
                   </Link>
                 </div>
                 <div>
-                  <Link to="/locum_cv">My Skills & Experiences</Link>
+                  <Link to="/locum_cv">My Experiences</Link>
+                </div>
+                <div>
+                  <Link to="/agreements">Locum Contracts</Link>
                 </div>
                 <div>
                   <ExternalLink
@@ -787,12 +794,39 @@ const LocumProfile = () => {
                 }
                 encType="multipart/form-data"
               > */}
-              <form id="formZero" onSubmit={handleSubmit}>
+              <form id="formZero" onSubmit={photoSubmit}>
                 <div className="sectionHeadings">
                   <h2>Photo</h2>
                 </div>
                 <div className="questionCard">
                   <div className="container-fluid regCon">
+                    <div className="errorMessageHere">
+                      {updatePhoto && (
+                        <section className="updateNote container-fluid">
+                          <div className="container-fluid ">
+                            <img src="/images/tick.png" width="12px" alt="" />
+                            <span>Updated successfully.</span>
+                          </div>
+                        </section>
+                      )}
+                      {alertPhoto ? (
+                        <div className="alert">
+                          <img
+                            onClick={() => {
+                              setAlertPhoto(false);
+                            }}
+                            style={{ cursor: "pointer", width: "12px" }}
+                            src="/images/cross-black.png"
+                            alt=""
+                          />{" "}
+                          <span
+                            dangerouslySetInnerHTML={{ __html: alertMsg }}
+                          ></span>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
                     <div className="bigHead">
                       <figure id="imagePreview">
                         <div id="bin" onClick={() => deletePhoto(userInfo._id)}>
@@ -808,12 +842,6 @@ const LocumProfile = () => {
                           <>
                             <img
                               src={idPhoto}
-                              alt=""
-                              name="image-File"
-                              id="image-facebook"
-                            />
-                            <img
-                              src={`/locumPhoto/${idPhoto}`}
                               alt=""
                               name="image-File"
                               id="image-facebook"
@@ -853,7 +881,7 @@ const LocumProfile = () => {
                               imageUploadActivateButton();
                               setFile(event.target.files[0]);
                             }}
-                            name="gameFile"
+                            name="file"
                           />
 
                           {savePhoto ? (
@@ -886,24 +914,34 @@ const LocumProfile = () => {
                   <h2>My Details</h2>
                 </div>
                 <div className="regCon">
-                  <div className="errorMessageHere">
-                    {alert ? (
-                      <div className="alert">
-                        <img
-                          src="/images/cross-black.png"
-                          style={{ width: "12px" }}
-                          alt=""
-                        />
-                        <span
-                          dangerouslySetInnerHTML={{ __html: alertMsg }}
-                        ></span>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-
                   <section className="middleQuestionCard">
+                    <div className="errorMessageHere">
+                      {updateNote && (
+                        <section className="updateNote container-fluid">
+                          <div className="container-fluid ">
+                            <img src="/images/tick.png" width="12px" alt="" />
+                            <span>Updated successfully.</span>
+                          </div>
+                        </section>
+                      )}
+                      {alert ? (
+                        <div className="alert">
+                          <img
+                            onClick={() => {
+                              setAlert(false);
+                            }}
+                            src="/images/cross-black.png"
+                            style={{ width: "12px", cursor: "pointer" }}
+                            alt=""
+                          />{" "}
+                          <span
+                            dangerouslySetInnerHTML={{ __html: alertMsg }}
+                          ></span>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
                     <div className="row">
                       <div className="col-md-6">
                         <div className="form-group row">
@@ -919,7 +957,7 @@ const LocumProfile = () => {
                               disabled
                               className="form-control-lg"
                               id="firstName"
-                              defaultValue={firstName}
+                              defaultValue={user.firstName}
                             />
                           </div>
                         </div>
@@ -936,7 +974,7 @@ const LocumProfile = () => {
                               disabled
                               className="form-control-lg"
                               id="lastName"
-                              defaultValue={lastName}
+                              defaultValue={user.lastName}
                             />
                           </div>
                         </div>
@@ -1317,8 +1355,20 @@ const LocumProfile = () => {
                     )}
                   </div>
                 </section>
+
                 <section className="buttonCard">
-                  <input type="submit" className="btn-vori" value="Update" />
+                  {isloading ? (
+                    <button className="btn-vori">
+                      <ThreeDots
+                        type="ThreeDots"
+                        height={40}
+                        width={80}
+                        color={"white"}
+                      />
+                    </button>
+                  ) : (
+                    <input type="submit" className="btn-vori" value="Update" />
+                  )}
                 </section>
               </form>
             </div>
@@ -1351,7 +1401,7 @@ const LocumProfile = () => {
           }
 
           .wrap .updateNote {
-            width: 80%;
+            width: 90%;
             background-color: #bff4f2;
             margin-bottom: 8px;
             height: 40px;
@@ -1366,7 +1416,7 @@ const LocumProfile = () => {
             background-color: #fcebcd;
             margin: 5px auto 12px;
             padding: 7px;
-            width: 80%;
+            width: 90%;
           }
 
           @media screen and (max-width: 768px) {
@@ -1528,7 +1578,7 @@ const LocumProfile = () => {
             -webkit-box-direction: normal;
             -ms-flex-direction: column;
             flex-direction: column;
-            border-radius: 0px;
+            border-radius: 7px;
             background: #fff;
           }
 
@@ -1552,7 +1602,8 @@ const LocumProfile = () => {
             text-align: center;
             line-height: 40px;
             cursor: pointer;
-            border: 2px solid #dadada;
+            border: 1px solid #dadada;
+            border-radius: 7px;
           }
           .bigHead .ex {
             margin-bottom: 16px;
@@ -1567,6 +1618,7 @@ const LocumProfile = () => {
             margin: 0px auto;
             width: 130px;
             margin-left: 6px;
+            border-radius: 7px;
           }
           .bigHead #savePhoto:active,
           .bigHead #savePhoto:focus {
@@ -1638,7 +1690,7 @@ const LocumProfile = () => {
             text-align: center;
             line-height: 36px;
             cursor: pointer;
-            border: 2px solid #dadada;
+            border: 1px solid #dadada;
             background-color: white;
           }
           .bigHead {
@@ -1651,7 +1703,6 @@ const LocumProfile = () => {
             -ms-flex-align: center;
             align-items: center;
             padding-bottom: 20px;
-            border-bottom: 1px solid #ebebeb;
           }
           .bigHead .lp {
             width: 150px;
@@ -1791,11 +1842,11 @@ const LocumProfile = () => {
           input[type="text"],
           input[type="email"] {
             height: 42px;
-            border-radius: 0px;
+            border-radius: 7px;
             text-decoration: none;
             outline: none !important;
             background: none;
-            border: 2px solid #dadada;
+            border: 1px solid #dadada;
             padding: 12px 15px;
             font-weight: 500;
             width: 100%;
@@ -1815,7 +1866,7 @@ const LocumProfile = () => {
             -webkit-box-direction: normal;
             -ms-flex-direction: column;
             flex-direction: column;
-            border-radius: 0px;
+            border-radius: 7px;
             background: #fff;
           }
           .wrap .col-form-label {
@@ -1851,7 +1902,7 @@ const LocumProfile = () => {
             -webkit-box-direction: normal;
             -ms-flex-direction: column;
             flex-direction: column;
-            border-radius: 0px;
+            border-radius: 7px;
             background: #fff;
           }
 
@@ -2010,6 +2061,16 @@ const LocumProfile = () => {
             padding: 0;
             margin: 20px 0px 20px 0px;
             border: none;
+          }
+
+          .buttonCard .btn-vori {
+            width: 200px;
+            text-align: center;
+            background-color: #14a248;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
 
           @media screen and (max-width: 768px) {

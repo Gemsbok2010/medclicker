@@ -95,9 +95,8 @@ const Ad_details = () => {
     }
   }, [id]);
 
+  // ============ PROFILE DATA ===========
   useEffect(() => {
-    // ============ PROFILE DATA ===========
-
     axios
       .get(
         process.env.REACT_APP_BACKEND_URL + "api/locums/candidate/" + user.email
@@ -376,7 +375,6 @@ const Ad_details = () => {
                       <p>{list.startDate}</p>
                     </div>
                   </div>
-
                   <div className="row">
                     <div className="col-xs-7">
                       <p className="chart">Finish Date</p>

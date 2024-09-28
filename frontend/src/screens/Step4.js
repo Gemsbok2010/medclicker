@@ -47,18 +47,18 @@ const Step4 = () => {
           <meta name="description" content="Medclicker" />
         </Helmet>
         <LoggedInNavbar />
+
         <div className="wrap">
           <section className="questionCard container">
             <figure>
-              <Link to="/">
+              <Link to="/dashboard">
                 <img
-                  src="/images/medclicker.png"
+                  src="/images/medclicker-white.png"
                   alt="LOGO"
                   className="img-fluid"
                 />
               </Link>
             </figure>
-            <div className="locum"></div>
             <h2>Thank you for registering as a Locum.</h2>
           </section>
           <Footer />
@@ -81,7 +81,7 @@ const Step4 = () => {
             -ms-flex-align: center;
             align-items: center;
             padding-top: 60px;
-            background: #333;
+            background: #14a248;
           }
 
           /* =========== MODAL ============= */
@@ -90,10 +90,10 @@ const Step4 = () => {
             transform: translateX(0%);
           }
 
-          .wrap .locum {
+          .wrap .brief {
             width: 400px;
             height: 150px;
-            background-image: url("./../../images/tutors.jpg");
+            background-image: url("./../../images/sanofi-ipad.jpg");
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
@@ -113,15 +113,16 @@ const Step4 = () => {
             -webkit-box-align: center;
             -ms-flex-align: center;
             align-items: center;
-            border-radius: 0px;
+            border-radius: 7px;
             border: 1px solid #ebebeb;
-            background: #fff;
+
+            background: #14a248;
             -webkit-box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
             box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
           }
           .wrap .questionCard > figure {
             width: 200px;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
           }
           .wrap .questionCard > figure > a {
             display: block;
@@ -136,7 +137,7 @@ const Step4 = () => {
             margin: 0px auto 24px;
             padding-top: 8px;
             padding-bottom: 8px;
-            color: #2b2b2b;
+            color: #fff;
           }
           .questionCard p {
             margin: 10px auto;
@@ -159,9 +160,6 @@ const Step4 = () => {
             flex-direction: column;
             margin-bottom: 60px;
           }
-          .questionCard figure {
-            margin-bottom: 80px !important;
-          }
 
           @media only screen and (min-width: 768px) {
             .questionCard p {
@@ -171,7 +169,7 @@ const Step4 = () => {
               width: 710px;
               padding: 30px 20px;
             }
-            .wrap .locum {
+            .wrap .brief {
               width: 500px;
               height: 200px;
             }

@@ -1,23 +1,24 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { useNavigate } from "react-router-dom";
-import LoggedInNavbarByAdmin from "../components/LoggedInNavbarByAdmin";
+import { Link, useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ReactSession } from "react-client-session";
+import { useSelector } from "react-redux";
 
 // Three dots
 import { ThreeDots } from "react-loader-spinner";
+import { RotatingLines } from "react-loader-spinner";
 
-const Aad_details_std = () => {
-  ReactSession.setStoreType("sessionStorage");
+const Ad_details_std = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const slug = pathname.split("/")[2];
   const [list, setList] = useState({});
   const [isloaded, setIsloaded] = useState(false);
-  const [idPhoto, setIdPhoto] = useState("");
-  const [userid, setUserId] = useState("");
+  const [readyToShow, setReadyToShow] = useState(false);
+  const user = useSelector((state) => state.userInfo.value);
 
   // ============ AHPRA =============
   const [showAhpra, setShowAhpra] = useState(false);
@@ -66,9 +67,12 @@ const Aad_details_std = () => {
         "background-color:white";
     }
   };
+  const [verifyEmail, setVerifyEmail] = useState("");
 
   // ============ LISTINGS DATA ===========
+
   useEffect(() => {
+    setReadyToShow(false);
     axios
       .get(
         process.env.REACT_APP_BACKEND_URL +
@@ -78,6 +82,7 @@ const Aad_details_std = () => {
       .then((response) => {
         if (response.status === 200) {
           setList(response.data.listing);
+          setVerifyEmail(response.data.listing.email);
           setTodaysDate(response.data.listing.todaysDate);
           setAbout(response.data.listing.about);
           setCountry(response.data.listing.country);
@@ -90,13 +95,15 @@ const Aad_details_std = () => {
           setLongitude(response.data.listing.longitude);
           setProfessions(response.data.listing.professions);
           setContractType(response.data.listing.contractType);
+          window.history.pushState(
+            {},
+            document.title,
+            "/Ad_details_std/" + slug
+          );
+          setReadyToShow(true);
         }
       });
   }, []);
-
-  let search = window.location.search;
-  let params = new URLSearchParams(search);
-  let id = params.get("id");
 
   const [contractType, setContractType] = useState("");
   const [professions, setProfessions] = useState("");
@@ -113,12 +120,22 @@ const Aad_details_std = () => {
   const [file, setFile] = useState("");
   const [files, setFiles] = useState([]);
 
-  // ============= FACEBOOK & GOOGLE LOGIN DATA ==============
+  // ============ LOGGEDIN APPLICANT APPLIED ===========
+  const [applied, setApplied] = useState([]);
+
   useEffect(() => {
-    if (id) {
-      window.history.pushState({}, document.title, "/Ad_details_std/" + slug);
-    }
-  }, [id]);
+    axios
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          `api/applications/Ad_details/${slug}?nanoId=` +
+          user.nanoId
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          setApplied(response.data.applied);
+        }
+      });
+  }, [files]);
 
   // ========== ERROR MESSAGE ===============
 
@@ -132,7 +149,6 @@ const Aad_details_std = () => {
 
   // ============ UPLOAD FILE ===========
   const [selectedFile, setSelectedFile] = useState(false);
-  const [selectedCover, setSelectedCover] = useState(false);
 
   const resumeUpload = (event) => {
     const file = event.target.files[0];
@@ -144,16 +160,6 @@ const Aad_details_std = () => {
     }
   };
 
-  const coverUpload = (event) => {
-    const file = event.target.files[0];
-
-    setFiles([...files, file]);
-
-    if (file) {
-      setSelectedCover(true);
-    }
-  };
-
   const fileSubmit = (e) => {
     e.preventDefault();
     setIsloaded(true);
@@ -162,7 +168,7 @@ const Aad_details_std = () => {
 
     fetch(
       process.env.REACT_APP_BACKEND_URL +
-        `api/applications/singleUpload?email=${mimicUser.email}&caseId=${list.caseId}&ahpra=${ahpra}&status=${status}`,
+        `api/applications/singleUpload?email=${user.email}&caseId=${list.caseId}&ahpra=${ahpra}&status=${status}`,
       {
         method: "POST",
         body: formData,
@@ -175,39 +181,6 @@ const Aad_details_std = () => {
           setIsloaded(false);
         }
 
-        if (data.storedApplication) {
-          setIsloaded(false);
-          navigate("/admin_applicationsent");
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
-
-  const filesSubmit = (e) => {
-    e.preventDefault();
-    setIsloaded(true);
-    const formData = new FormData();
-
-    for (let i = 0; i < files.length; i++) {
-      formData.append("resumeFile", files[i]);
-    }
-
-    fetch(
-      process.env.REACT_APP_BACKEND_URL +
-        `api/applications/upload?email=${mimicUser.email}&caseId=${list.caseId}&ahpra=${ahpra}&status=${status}`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.invalid) {
-          outPutErrorMessage(data.invalid);
-          setIsloaded(false);
-        }
         if (data.storedApplication) {
           setIsloaded(false);
           navigate("/applicationSent");
@@ -218,37 +191,42 @@ const Aad_details_std = () => {
       });
   };
 
-  // ============ PROFILE DATA ===========
-  const [mimicUser, setMimicUser] = useState("");
-
-  useEffect(() => {
-    setUserId(ReactSession.get("customerId"));
-    axios
-      .get(process.env.REACT_APP_BACKEND_URL + "api/users/allusers/" + userid)
-      .then((response) => {
-        if (response.status === 200) {
-          setIdPhoto(response.data.filename);
-          setMimicUser(response.data);
-        }
-      });
-  }, [userid]);
-
-  // ============ APPLICANT APPLIED ===========
-  const [applied, setApplied] = useState([]);
-
-  useEffect(() => {
-    axios
-      .get(
-        process.env.REACT_APP_BACKEND_URL +
-          `api/applications/Ad_details/${slug}?nanoId=` +
-          mimicUser.nanoId
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          setApplied(response.data.applied);
-        }
-      });
-  }, [mimicUser]);
+  if (readyToShow === false)
+    return (
+      <div
+        style={{
+          backgroundColor: "#14a248",
+          top: "0",
+          left: "0",
+          height: "100%",
+          width: "100%",
+          zIndex: "2500",
+          display: "block",
+          position: "fixed",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            position: "absolute",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <RotatingLines
+            strokeColor="white"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
+            visible={true}
+          />
+        </div>
+      </div>
+    );
 
   return (
     <>
@@ -258,7 +236,7 @@ const Aad_details_std = () => {
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>
-        <LoggedInNavbarByAdmin photo={idPhoto} />
+        <Navbar />
         <div className="wrap">
           <div className="top-container">
             <div className="ad-description">
@@ -270,9 +248,13 @@ const Aad_details_std = () => {
                 }}
               >
                 Posted by {list.firstName}
-                <figure className="smallPhoto">
-                  <img src={list.filename} alt="" />
-                </figure>
+                {verifyEmail === user.email ? (
+                  <figure className="smallPhoto">
+                    <img src={list.filename} alt="" />
+                  </figure>
+                ) : (
+                  ""
+                )}
               </div>
 
               <h2 className="mt-3 mb-4">
@@ -305,9 +287,7 @@ const Aad_details_std = () => {
 
             <form
               id={!updateNote ? "selectdate" : "selectdateError"}
-              onSubmit={
-                selectedFile && selectedCover ? filesSubmit : fileSubmit
-              }
+              onSubmit={fileSubmit}
             >
               {updateNote ? (
                 <div className="updateNote">
@@ -440,34 +420,14 @@ const Aad_details_std = () => {
                   accept=".doc,.docx, application/pdf"
                   onChange={(e) => {
                     resumeUpload(e);
-                    selectedFile && selectedCover
-                      ? setFile(e)
-                      : setFile(e.target.files[0]);
+                    setFile(e.target.files[0]);
                   }}
                 />
                 <label htmlFor="resume">
                   {selectedFile ? "File Attached" : "Upload File"}
                 </label>
               </div>
-              <div className="container-coverletter">
-                <p>Cover Letter (Optional)</p>
-                <input
-                  type="file"
-                  id="cover-letter"
-                  name="resumeFile"
-                  multiple="multiple"
-                  accept=".doc,.docx, application/pdf"
-                  onChange={(e) => {
-                    coverUpload(e);
-                    selectedFile && selectedCover
-                      ? setFile(e)
-                      : setFile(e.target.files[0]);
-                  }}
-                />
-                <label htmlFor="cover-letter">
-                  {selectedCover ? "File Attached" : "Upload File"}
-                </label>
-              </div>
+
               {applied.slice(0, 1).map((appId) => {
                 return (
                   appId.caseId === list.caseId && (
@@ -480,39 +440,67 @@ const Aad_details_std = () => {
                 );
               })}
               {applied.length === 0 ? (
-                list.email !== mimicUser.email ? (
-                  status && ahpra && selectedFile ? (
-                    !isloaded ? (
-                      <input type="submit" className="btn-med" value="Apply" />
-                    ) : (
-                      <button className="btn-dots">
-                        <ThreeDots
-                          type="ThreeDots"
-                          height={40}
-                          width={80}
-                          color={"white"}
+                user.isLoggedIn ? (
+                  verifyEmail !== user.email ? (
+                    status && ahpra && selectedFile ? (
+                      !isloaded ? (
+                        <input
+                          type="submit"
+                          className="btn-med"
+                          value="Apply"
                         />
-                      </button>
+                      ) : (
+                        <button className="btn-dots">
+                          <ThreeDots
+                            type="ThreeDots"
+                            height={40}
+                            width={80}
+                            color={"white"}
+                          />
+                        </button>
+                      )
+                    ) : (
+                      <input
+                        type="button"
+                        className="btn-inactive"
+                        value="Apply"
+                      />
                     )
                   ) : (
                     <input
                       type="button"
-                      className="btn-inactive"
-                      value="Apply"
+                      className="btn-notself"
+                      value="Cannot apply to your own listing"
                     />
                   )
                 ) : (
                   <input
                     type="button"
-                    className="btn-notself"
-                    value="Cannot apply to your own listing"
+                    className="btn-inactive"
+                    id="loginFirst"
+                    value="Apply"
                   />
                 )
               ) : (
                 ""
               )}
+              {user.isLoggedIn ? (
+                ""
+              ) : (
+                <div className="container-signup">
+                  <p>
+                    You need to login or sign up.
+                    <Link target="_blank" to="/login">
+                      {" "}
+                      Login here
+                    </Link>
+                  </p>
+                </div>
+              )}
             </form>
           </div>
+
+          <Footer />
         </div>
 
         <style jsx="true">{`
@@ -686,7 +674,7 @@ const Aad_details_std = () => {
 
           #selectdate {
             width: 470px;
-            height: 485px;
+            height: 405px;
             background-color: white;
             position: relative;
             margin: 30px auto 0px;
@@ -733,7 +721,6 @@ const Aad_details_std = () => {
             color: #14a248;
           }
 
-          #cover-letter,
           #resume {
             display: none;
           }
@@ -1142,7 +1129,7 @@ const Aad_details_std = () => {
 
             #selectdate {
               width: 400px;
-              height: 485px;
+              height: 405px;
               display: inline-block;
               margin-top: 0px;
               position: fixed;
@@ -1181,4 +1168,4 @@ const Aad_details_std = () => {
   );
 };
 
-export default Aad_details_std;
+export default Ad_details_std;
