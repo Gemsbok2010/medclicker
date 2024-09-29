@@ -5,7 +5,7 @@ import LoggedInNavbar from "../components/LoggedInNavbar";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
-const Resume = () => {
+const ResumeCandidate = () => {
   const { pathname } = useLocation();
   const nanoId = pathname.split("/")[2];
   const [firstName, setFirstName] = useState("");
@@ -863,4 +863,4 @@ const Resume = () => {
   );
 };
 
-export default Resume;
+export default ResumeCandidate;

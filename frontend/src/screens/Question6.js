@@ -357,12 +357,6 @@ const Question6 = () => {
     libraries: libraries,
   });
 
-  // ============= CLEAR CUSTOMER ID ================
-  const clearId = () => {
-    sessionStorage.clear();
-    navigate("/admin/users");
-  };
-
   if (!isLoaded) return <div>Loading...</div>;
   return (
     <>
@@ -381,7 +375,6 @@ const Question6 = () => {
                     src="/images/medclicker.png"
                     alt="LOGO"
                     className="img-fluid"
-                    onClick={clearId}
                   />
                 </Link>
               </figure>
@@ -475,8 +468,10 @@ const Question6 = () => {
             background-position: center;
             background-size: cover;
           }
+
           .wrap .questionCard {
             width: 475px;
+
             padding: 20px 10px;
             display: -webkit-box;
             display: -ms-flexbox;
@@ -494,6 +489,7 @@ const Question6 = () => {
             -webkit-box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
             box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
           }
+
           .wrap .questionCard > figure {
             width: 200px;
             margin-bottom: 40px;

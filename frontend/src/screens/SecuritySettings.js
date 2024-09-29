@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 import { FiEyeOff, FiEye } from "react-icons/fi";
 import { ThreeDots } from "react-loader-spinner";
+import { useSelector } from "react-redux";
 
 const SecuritySettings = () => {
   const [password, setPassword] = useState("");
@@ -11,6 +12,7 @@ const SecuritySettings = () => {
   const [show, setShow] = useState(false);
   const [show2nd, setShow2nd] = useState(false);
   const [isloading, setIsloading] = useState(false);
+  const user = useSelector((state) => state.userInfo.value);
 
   // ================= PUT ===================
   const onSubmit = (e) => {
@@ -20,7 +22,7 @@ const SecuritySettings = () => {
       fetch(
         process.env.REACT_APP_BACKEND_URL +
           "api/secure/securitySettings/" +
-          localStorage.getItem("userId"),
+          user.email,
         {
           method: "PUT",
           credentials: "include",
@@ -352,7 +354,7 @@ const SecuritySettings = () => {
             text-decoration: none;
             outline: none;
             background: none;
-            border: 2px solid #dadada;
+            border: 1px solid #dadada;
             padding: 12px 10px;
             font-weight: 500;
             width: 100%;
@@ -360,6 +362,14 @@ const SecuritySettings = () => {
             color: #777;
             font-family: sans-serif;
             display: inline-block;
+            border-radius: 7px;
+          }
+
+          input[type="text"]:focus,
+          input[type="password"]:focus,
+          input[type="text"]:active,
+          input[type="password"]:active {
+            outline: none;
           }
 
           .container1 .eye,

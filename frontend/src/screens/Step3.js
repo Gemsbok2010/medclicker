@@ -7,10 +7,12 @@ import Footer from "../components/Footer";
 import LoggedInNavbar from "../components/LoggedInNavbar";
 import { useSelector } from "react-redux";
 import { RotatingLines } from "react-loader-spinner";
+import { ThreeDots } from "react-loader-spinner";
 
 const Step3 = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.userInfo.value);
+  const [isloading, setIsloading] = useState(false);
   const [readyToShow, setReadyToShow] = useState(false);
   ReactSession.setStoreType("sessionStorage");
   const [phone, setPhone] = useState("");
@@ -110,15 +112,59 @@ const Step3 = () => {
     setReadyToShow(true);
   }, []);
 
+  // ======= CLEAR SESSION STORAGE ========= //
+  const clearLocumData = () => {
+    ReactSession.remove("finish3");
+    ReactSession.remove("finish2");
+    ReactSession.remove("finish1");
+    ReactSession.remove("start1");
+    ReactSession.remove("start2");
+    ReactSession.remove("start3");
+    ReactSession.remove("university1");
+    ReactSession.remove("university2");
+    ReactSession.remove("university3");
+    ReactSession.remove("degree1");
+    ReactSession.remove("degree2");
+    ReactSession.remove("degree3");
+    ReactSession.remove("education");
+    ReactSession.remove("activeButton");
+    ReactSession.remove("row");
+    ReactSession.remove("languages");
+    ReactSession.remove("locum_firstName");
+    ReactSession.remove("locum_lastName");
+    ReactSession.remove("locum_country");
+    ReactSession.remove("locum_state");
+    ReactSession.remove("locum_suburb");
+    ReactSession.remove("locum_street");
+    ReactSession.remove("locum_streetNo");
+    ReactSession.remove("locum_postalCode");
+    ReactSession.remove("locum_latitude");
+    ReactSession.remove("locum_longitude");
+    ReactSession.remove("resume");
+    ReactSession.remove("locum_phone");
+    ReactSession.remove("locum_drivers");
+    ReactSession.remove("locum_profession");
+    ReactSession.remove("locum_ahpra");
+    ReactSession.remove("honourTitle");
+    ReactSession.remove("workhistory");
+    ReactSession.remove("whichlanguage0");
+    ReactSession.remove("whichlanguage1");
+    ReactSession.remove("whichlanguage2");
+    ReactSession.remove("languageLvl0");
+    ReactSession.remove("languageLvl1");
+    ReactSession.remove("languageLvl2");
+    ReactSession.remove("honourAwards");
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
-    const isLocum = true;
+    setIsloading(true);
     fetch(process.env.REACT_APP_BACKEND_URL + "api/locums/step3", {
       method: "PUT",
       credentials: "include",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
-        isLocum: isLocum,
+        isLocum: true,
         nanoId: user.nanoId,
         email: user.email,
         firstName: user.firstName,
@@ -171,7 +217,8 @@ const Step3 = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        sessionStorage.clear();
+        setIsloading(false);
+        clearLocumData();
         navigate("/step4");
       })
       .catch((err) => {
@@ -467,9 +514,20 @@ const Step3 = () => {
               <button className="btn-previous">
                 <Link to="/step2">Go Back</Link>
               </button>
-              <button className="btn-next" type="submit">
-                Confirm
-              </button>
+              {!isloading ? (
+                <button className="btn-next" type="submit">
+                  Confirm
+                </button>
+              ) : (
+                <button className="btn-next">
+                  <ThreeDots
+                    type="ThreeDots"
+                    height={40}
+                    width={80}
+                    color={"white"}
+                  />
+                </button>
+              )}
             </div>
           </form>
           <Footer />
@@ -835,7 +893,11 @@ const Step3 = () => {
             padding: 0;
             margin: 0px auto 30px;
             box-shadow: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
           }
+
           .btn-previous a,
           .btn-next a {
             color: white;

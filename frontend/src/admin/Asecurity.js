@@ -137,7 +137,7 @@ const Asecurity = () => {
                         <h4>Payment Management</h4>
                       </Link>
                       <Link to="/admin/security">
-                        <h4>Security Settings</h4>
+                        <h4>Change Password</h4>
                       </Link>
                       <Link to="/sms">
                         <h4>SMS</h4>

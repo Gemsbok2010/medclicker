@@ -4,10 +4,11 @@ const router = express.Router();
 // Imports
 const PaymentPlans = require("../models/paymentPlansModel");
 
-//========== SUBMIT LOCUM PLANS (from ApaymentConsole.js) ==========
+//======= SUBMIT LOCUM PLANS (from ApaymentConsole.js) ==========
 router.put("/plans", async (req, res, next) => {
+
   try {
-    if (req.body._id !== "") {
+    if (req.body._id !== "" || req.body._id) {
       req.body.freeDays === null || req.body.freeDays === ""
         ? (req.body.freeDays = 30)
         : req.body.freeDays;
@@ -25,7 +26,6 @@ router.put("/plans", async (req, res, next) => {
 
       const payment = new PaymentPlans({
         createdAt: dt,
-        freeDays: req.body.freeDays,
         expDays1: req.body.expDays1,
         expDays2: req.body.expDays2,
         expDays3: req.body.expDays3,
@@ -81,10 +81,11 @@ router.put("/plans", async (req, res, next) => {
         locumFee9: req.body.locumFee9,
         locumDiscount9: req.body.locumDiscount9,
         isAdmin: req.body.isAdmin,
-        setRegularPayment: req.body.setRegularPayment,
+        regularPayment: req.body.regularPayment,
         locumPayment: req.body.locumPayment,
       });
       const savedPlan = await payment.save();
+
       res.send(savedPlan);
     }
   } catch (err) {

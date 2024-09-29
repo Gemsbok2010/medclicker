@@ -566,7 +566,7 @@ const Navbar = () => {
                   <Link to="/listingmanager">Listing Manager</Link>
                 </li>
                 <li className="nonselect">
-                  <Link to="/securitySettings">Security Settings</Link>
+                  <Link to="/securitySettings">Change Password</Link>
                 </li>
                 <li className="nonselect">
                   <ExternalLink href="/logout" target="_self">
@@ -595,7 +595,7 @@ const Navbar = () => {
       </div>
 
       <style jsx="true">{`
-      nav {
+        nav {
           background-color: #fff;
           width: 100%;
           height: 75px;
@@ -650,6 +650,8 @@ const Navbar = () => {
           transform: translate(0%, -50%);
           display: none;
         }
+
+      
 
         .navbar-nav ul {
           padding: 0;

@@ -260,6 +260,7 @@ const HomeNav = () => {
           ) {
             ReactSession.set("displayName", data.user.firstName);
             localStorage.setItem("userId", data.user._id);
+
             setState(data.user.state);
             setFirstName(data.user.firstName);
             setLastName(data.user.lastName);
@@ -949,7 +950,7 @@ const HomeNav = () => {
                     </li>
 
                     <li className="nonselect">
-                      <Link to="/securitySettings">Security Settings</Link>
+                      <Link to="/securitySettings">Change Password</Link>
                     </li>
                     <li className="nonselect">
                       <ExternalLink href="/logout" target="_self">
@@ -978,7 +979,7 @@ const HomeNav = () => {
                       <Link to="/listingmanager">Listing Manager</Link>
                     </li>
                     <li className="nonselect">
-                      <Link to="/securitySettings">Security Settings</Link>
+                      <Link to="/securitySettings">Change Password</Link>
                     </li>
                     <li className="nonselect">
                       <ExternalLink href="/logout" target="_self">

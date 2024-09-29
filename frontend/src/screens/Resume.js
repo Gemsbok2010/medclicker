@@ -114,6 +114,9 @@ const Resume = () => {
                     <Link to="/locum_cv">My Experiences</Link>
                   </div>
                   <div>
+                    <Link to="/agreements">Locum Contracts</Link>
+                  </div>
+                  <div>
                     <ExternalLink
                       style={{ color: "#14a248" }}
                       href={

@@ -91,7 +91,7 @@ const Contact = () => {
                   Phone : <span>+61 (0)472 720 100</span>
                 </p>
                 <p>
-                  E-mail : <span>info@medclicker.com.au</span>
+                  E-mail : <span>info@medclicker.com</span>
                 </p>
               </div>
             </div>
@@ -137,6 +137,7 @@ const Contact = () => {
                     />
                     <label htmlFor="email">E-mail</label>
                   </div>
+
                   <div className="form-group cusInput">
                     <input
                       className={`form-contact form-contact-lg ${

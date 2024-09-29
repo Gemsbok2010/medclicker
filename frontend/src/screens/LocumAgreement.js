@@ -2,6 +2,8 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+// Three dots
+import { ThreeDots } from "react-loader-spinner";
 
 const LocumAgreement = () => {
   const { pathname } = useLocation();
@@ -11,12 +13,14 @@ const LocumAgreement = () => {
   const [list, setList] = useState([]);
   const [user, setUser] = useState([]);
   const [locum, setLocum] = useState([]);
+  const [isloaded, setIsloaded] = useState(true);
 
   const dt = new Date();
   const thisyear = dt.getFullYear();
 
+  // ============ PROFILE DATA ===========
   useEffect(() => {
-    // ============ PROFILE DATA ===========
+    setIsloaded(false);
     axios
       .get(
         process.env.REACT_APP_BACKEND_URL +
@@ -24,12 +28,12 @@ const LocumAgreement = () => {
           caseId
       )
       .then((response) => {
-    
         if (response.status === 200) {
           setAgreement(response.data.caseId);
           setList(response.data.list);
           setUser(response.data.user);
           setLocum(response.data.locum);
+          setIsloaded(true);
         }
       });
   }, []);
@@ -98,106 +102,126 @@ const LocumAgreement = () => {
                 />
               </div>
 
-              <div
-                style={{
-                  position: "relative",
-                  padding: "5px 46px 0px 50px",
-                  top: "14%",
-                  textAlign: "left",
-                  backgroundColor: "#eeebeb",
-                }}
-              >
-                <h2
+              {!isloaded ? (
+                <div
+                  className="sidebar"
                   style={{
-                    color: "#333",
-                    fontSize: "16px",
-                    marginBottom: "5px",
-                    fontWeight: "500",
-                    lineHeight: "1.1",
-                    boxSizing: "borderBox",
-                    marginTop: "0px",
+                    display: "flex",
+                    justifyContent: "center",
+                    position: "relative",
+                    alignItems: "center",
+                    height: "604px",
                   }}
                 >
-                  EMPLOYER DETAILS
-                </h2>
-                <p
+                  <ThreeDots
+                    type="ThreeDots"
+                    height={40}
+                    width={80}
+                    color={"grey"}
+                  />
+                </div>
+              ) : (
+                <div
                   style={{
-                    color: "#777",
-                    fontSize: "16px",
-                    fontWeight: "500",
-                    margin: "0 0 10px",
-                    marginBottom: "5px",
+                    position: "relative",
+                    padding: "5px 46px 0px 50px",
+                    top: "14%",
+                    textAlign: "left",
+                    backgroundColor: "#eeebeb",
                   }}
                 >
-                  {user.firstName} {user.lastName}
-                </p>
-                <p
-                  style={{
-                    color: "#777",
-                    fontSize: "16px",
-                    fontWeight: "500",
-                    margin: "0 0 10px",
-                    marginBottom: "5px",
-                  }}
-                >
-                  {user.streetNo} {user.street}
-                </p>
-                <p
-                  style={{
-                    color: "#777",
-                    fontSize: "16px",
-                    fontWeight: "500",
-                    margin: "0 0 10px",
-                    marginBottom: "5px",
-                  }}
-                >
-                  {user.suburb}
-                </p>
-                <p
-                  style={{
-                    color: "#777",
-                    fontSize: "16px",
-                    fontWeight: "500",
-                    margin: "0 0 10px",
-                    marginBottom: "5px",
-                  }}
-                >
-                  {user.state} {user.postalCode}
-                </p>
-                <p
-                  style={{
-                    color: "#777",
-                    fontSize: "16px",
-                    fontWeight: "500",
-                    margin: "0 0 10px",
-                    marginBottom: "5px",
-                  }}
-                >
-                  Australia
-                </p>
-                <p
-                  style={{
-                    color: "#777",
-                    fontSize: "16px",
-                    fontWeight: "500",
-                    margin: "0 0 10px",
-                    marginBottom: "5px",
-                  }}
-                >
-                  Mobile: {user.phone}
-                </p>
-                <p
-                  style={{
-                    color: "#777",
-                    fontSize: "16px",
-                    fontWeight: "500",
-                    margin: "0 0 10px",
-                    marginBottom: "5px",
-                  }}
-                >
-                  Email: {user.email}
-                </p>
-              </div>
+                  <h2
+                    style={{
+                      color: "#333",
+                      fontSize: "16px",
+                      marginBottom: "5px",
+                      fontWeight: "500",
+                      lineHeight: "1.1",
+                      boxSizing: "borderBox",
+                      marginTop: "0px",
+                    }}
+                  >
+                    EMPLOYER DETAILS
+                  </h2>
+                  <p
+                    style={{
+                      color: "#777",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      margin: "0 0 10px",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    {user.firstName} {user.lastName}
+                  </p>
+                  <p
+                    style={{
+                      color: "#777",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      margin: "0 0 10px",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    {user.streetNo} {user.street}
+                  </p>
+                  <p
+                    style={{
+                      color: "#777",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      margin: "0 0 10px",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    {user.suburb}
+                  </p>
+                  <p
+                    style={{
+                      color: "#777",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      margin: "0 0 10px",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    {user.state} {user.postalCode}
+                  </p>
+                  <p
+                    style={{
+                      color: "#777",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      margin: "0 0 10px",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    Australia
+                  </p>
+                  <p
+                    style={{
+                      color: "#777",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      margin: "0 0 10px",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    Mobile: {user.phone}
+                  </p>
+                  <p
+                    style={{
+                      color: "#777",
+                      fontSize: "16px",
+                      fontWeight: "500",
+                      margin: "0 0 10px",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    Email: {user.email}
+                  </p>
+                </div>
+              )}
 
               <div
                 className="copyright"
@@ -308,799 +332,878 @@ const LocumAgreement = () => {
                   boxSizing: "border-box",
                 }}
               >
-                <table
-                  style={{
-                    width: "100%",
-                    position: "relative",
-                    borderSpacing: "0",
-                    borderCollapse: "collapse",
-                  }}
-                >
-                  <thead>
-                    <tr
-                      style={{
-                        color: "#011b58",
-                        borderBottom: "1px solid #eee",
-                        height: "40px",
-                      }}
-                    >
-                      <th
+                {!isloaded ? (
+                  <div
+                    className="sidebar"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      position: "relative",
+                      alignItems: "center",
+                      height: "180px",
+                    }}
+                  >
+                    <ThreeDots
+                      type="ThreeDots"
+                      height={40}
+                      width={80}
+                      color={"grey"}
+                    />
+                  </div>
+                ) : (
+                  <table
+                    style={{
+                      width: "100%",
+                      position: "relative",
+                      borderSpacing: "0",
+                      borderCollapse: "collapse",
+                    }}
+                  >
+                    <thead>
+                      <tr
                         style={{
-                          padding: "0",
-                          textAlign: "left",
-                          fontWeight: "900",
+                          color: "#011b58",
+                          borderBottom: "1px solid #eee",
+                          height: "40px",
                         }}
                       >
-                        Employment Details
-                      </th>
-                      <th style={{ padding: "0", textAlign: "left" }}></th>
-                      <th style={{ padding: "0", textAlign: "left" }}></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      style={{ borderBottom: "1px solid #eee", height: "40px" }}
-                    >
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Case ID
-                      </td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingRight: "5px",
-                          textAlign: "right",
-                        }}
-                      >
-                        {agreement.caseId}
-                      </td>
-                    </tr>
-                    <tr style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          backgroundColor: "#eeebeb",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Date Issued
-                      </td>
-                      <td
+                        <th
+                          style={{
+                            padding: "0",
+                            textAlign: "left",
+                            fontWeight: "900",
+                          }}
+                        >
+                          Employment Details
+                        </th>
+                        <th style={{ padding: "0", textAlign: "left" }}></th>
+                        <th style={{ padding: "0", textAlign: "left" }}></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
                         style={{
                           borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                          textAlign: "right",
+                          height: "40px",
                         }}
                       >
-                        {agreement.createdAt
-                          ? agreement.createdAt.split("T")[0]
-                          : ""}
-                      </td>
-                    </tr>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Case ID
+                        </td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingRight: "5px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {agreement.caseId}
+                        </td>
+                      </tr>
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            backgroundColor: "#eeebeb",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Date Issued
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {agreement.createdAt
+                            ? agreement.createdAt.split("T")[0]
+                            : ""}
+                        </td>
+                      </tr>
 
-                    <tr style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Work Address
-                      </td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingRight: "5px",
-                          textAlign: "right",
-                        }}
-                      >
-                        {list.streetNo} {list.street}, {list.suburb}{" "}
-                      </td>
-                    </tr>
-                    <tr style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          backgroundColor: "#eeebeb",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        State
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                          textAlign: "right",
-                        }}
-                      >
-                        {list.state} {list.postalCode}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Work Address
+                        </td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingRight: "5px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {list.streetNo} {list.street}, {list.suburb}{" "}
+                        </td>
+                      </tr>
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            backgroundColor: "#eeebeb",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          State
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {list.state} {list.postalCode}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                )}
+
                 <br />
-                <table
-                  style={{
-                    width: "100%",
-                    position: "relative",
-                    borderSpacing: "0",
-                    borderCollapse: "collapse",
-                  }}
-                >
-                  <thead>
-                    <tr
-                      style={{
-                        color: "#011b58",
-                        borderBottom: "1px solid #eee",
-                        height: "40px",
-                      }}
-                    >
-                      <th
-                        style={{
-                          padding: "0",
-                          textAlign: "left",
-                          fontWeight: "900",
-                        }}
-                      >
-                        {list.professions} Locum Details
-                      </th>
-                      <th style={{ padding: "0", textAlign: "left" }}></th>
-                      <th style={{ padding: "0", textAlign: "left" }}></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      style={{ borderBottom: "1px solid #eee", height: "40px" }}
-                    >
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Locum Name
-                      </td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingRight: "5px",
-                          textAlign: "right",
-                        }}
-                      >
-                        {agreement.firstName} {agreement.lastName}
-                      </td>
-                    </tr>
-                    <tr style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          backgroundColor: "#eeebeb",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Phone
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                          textAlign: "right",
-                        }}
-                      >
-                        {agreement.phone}
-                      </td>
-                    </tr>
-                    <tr
-                      style={{ borderBottom: "1px solid #eee", height: "40px" }}
-                    >
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Email
-                      </td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingRight: "5px",
-                          textAlign: "right",
-                        }}
-                      >
-                        {agreement.email}
-                      </td>
-                    </tr>
-                    <tr style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          backgroundColor: "#eeebeb",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Address
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                          textAlign: "right",
-                        }}
-                      >
-                        {agreement.streetNo} {agreement.street},{" "}
-                        {agreement.suburb}
-                      </td>
-                    </tr>
 
-                    <tr style={{ height: "40px" }}>
-                      <td
+                {!isloaded ? (
+                  <div
+                    className="sidebar"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      position: "relative",
+                      alignItems: "center",
+                      height: "280px",
+                    }}
+                  >
+                    <ThreeDots
+                      type="ThreeDots"
+                      height={40}
+                      width={80}
+                      color={"grey"}
+                    />
+                  </div>
+                ) : (
+                  <table
+                    style={{
+                      width: "100%",
+                      position: "relative",
+                      borderSpacing: "0",
+                      borderCollapse: "collapse",
+                    }}
+                  >
+                    <thead>
+                      <tr
                         style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        State
-                      </td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
+                          color: "#011b58",
                           borderBottom: "1px solid #eee",
-                          padding: "0",
-                          paddingRight: "5px",
-                          fontSize: "14px",
-                          textAlign: "right",
+                          height: "40px",
                         }}
                       >
-                        {agreement.state} {agreement.postalCode}
-                      </td>
-                    </tr>
-                    <tr style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          backgroundColor: "#eeebeb",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        AHPRA
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
+                        <th
+                          style={{
+                            padding: "0",
+                            textAlign: "left",
+                            fontWeight: "900",
+                          }}
+                        >
+                          {list.professions} Locum Details
+                        </th>
+                        <th style={{ padding: "0", textAlign: "left" }}></th>
+                        <th style={{ padding: "0", textAlign: "left" }}></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
                         style={{
                           borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                          textAlign: "right",
+                          height: "40px",
                         }}
                       >
-                        {locum.ahpra}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Locum Name
+                        </td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingRight: "5px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {agreement.firstName} {agreement.lastName}
+                        </td>
+                      </tr>
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            backgroundColor: "#eeebeb",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Phone
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {agreement.phone}
+                        </td>
+                      </tr>
+                      <tr
+                        style={{
+                          borderBottom: "1px solid #eee",
+                          height: "40px",
+                        }}
+                      >
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Email
+                        </td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingRight: "5px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {agreement.email}
+                        </td>
+                      </tr>
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            backgroundColor: "#eeebeb",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Address
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {agreement.streetNo} {agreement.street},{" "}
+                          {agreement.suburb}
+                        </td>
+                      </tr>
+
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          State
+                        </td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            borderBottom: "1px solid #eee",
+                            padding: "0",
+                            paddingRight: "5px",
+                            fontSize: "14px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {agreement.state} {agreement.postalCode}
+                        </td>
+                      </tr>
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            backgroundColor: "#eeebeb",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          AHPRA
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {locum.ahpra}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                )}
                 <br />
-                <table
-                  style={{
-                    width: "100%",
-                    position: "relative",
-                    borderSpacing: "0",
-                    borderCollapse: "collapse",
-                  }}
-                >
-                  <thead>
-                    <tr
-                      style={{
-                        color: "#011b58",
-                        borderBottom: "1px solid #eee",
-                        height: "40px",
-                      }}
-                    >
-                      <th
-                        style={{
-                          padding: "0",
-                          textAlign: "left",
-                          fontWeight: "900",
-                        }}
-                      >
-                        The Offer
-                      </th>
-                      <th style={{ padding: "0", textAlign: "left" }}></th>
-                      <th style={{ padding: "0", textAlign: "left" }}></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      style={{ borderBottom: "1px solid #eee", height: "40px" }}
-                    >
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Weekday Rates
-                      </td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingRight: "5px",
-                          textAlign: "right",
-                        }}
-                      >
-                        {list.normal_rate !== undefined
-                          ? list.normal_rate !== ""
-                            ? `AUD ${list.normal_rate}`
-                            : "Negotiable"
-                          : ""}{" "}
-                      </td>
-                    </tr>
-                    <tr style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          backgroundColor: "#eeebeb",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Saturday Rates
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                          textAlign: "right",
-                        }}
-                      >
-                        {list.sat_rate !== undefined
-                          ? list.sat_rate !== ""
-                            ? `AUD ${list.sat_rate}`
-                            : "Negotiable"
-                          : ""}
-                      </td>
-                    </tr>
 
-                    <tr style={{ height: "40px" }}>
-                      <td
+                {!isloaded ? (
+                  <div
+                    className="sidebar"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      position: "relative",
+                      alignItems: "center",
+                      height: "280px",
+                    }}
+                  >
+                    <ThreeDots
+                      type="ThreeDots"
+                      height={40}
+                      width={80}
+                      color={"grey"}
+                    />
+                  </div>
+                ) : (
+                  <table
+                    style={{
+                      width: "100%",
+                      position: "relative",
+                      borderSpacing: "0",
+                      borderCollapse: "collapse",
+                    }}
+                  >
+                    <thead>
+                      <tr
                         style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingLeft: "5px",
+                          color: "#011b58",
+                          borderBottom: "1px solid #eee",
+                          height: "40px",
                         }}
                       >
-                        Sunday Rates
-                      </td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingRight: "5px",
-                          textAlign: "right",
-                        }}
-                      >
-                        {list.sun_rate !== undefined
-                          ? list.sun_rate !== ""
-                            ? `AUD ${list.sun_rate}`
-                            : "Negotiable"
-                          : ""}
-                      </td>
-                    </tr>
-                    <tr style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          backgroundColor: "#eeebeb",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Public Holiday Rates
-                      </td>
-                      <td
+                        <th
+                          style={{
+                            padding: "0",
+                            textAlign: "left",
+                            fontWeight: "900",
+                          }}
+                        >
+                          The Offer
+                        </th>
+                        <th style={{ padding: "0", textAlign: "left" }}></th>
+                        <th style={{ padding: "0", textAlign: "left" }}></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
                         style={{
                           borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                          textAlign: "right",
+                          height: "40px",
                         }}
                       >
-                        {list.ph_rate !== undefined
-                          ? list.ph_rate !== ""
-                            ? `AUD ${list.ph_rate}`
-                            : "Negotiable"
-                          : ""}
-                      </td>
-                    </tr>
-                    <tr style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Air Travel Reimbursed
-                      </td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingRight: "5px",
-                          textAlign: "right",
-                        }}
-                      >
-                        {list.airtravel === true ? "Included" : "Not included"}
-                      </td>
-                    </tr>
-                    <tr style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          backgroundColor: "#eeebeb",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Air Travel Airport from
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                          textAlign: "right",
-                        }}
-                      >
-                        {list.airport ? list.airport : "Not Applicable"}
-                      </td>
-                    </tr>
-                    <tr style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Road Travel Reimbursed
-                      </td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingRight: "5px",
-                          textAlign: "right",
-                        }}
-                      >
-                        {list.roadtravel === true ? "Included" : "Not included"}
-                      </td>
-                    </tr>
-                    <tr style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          backgroundColor: "#eeebeb",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Accommodation Included
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                          textAlign: "right",
-                        }}
-                      >
-                        {list.accommodation === true
-                          ? "Included"
-                          : "Not included"}
-                      </td>
-                    </tr>
-                    <tr style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Start Date
-                      </td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          paddingRight: "5px",
-                          textAlign: "right",
-                          fontWeight: "900",
-                        }}
-                      >
-                        {agreement.available_start}
-                      </td>
-                    </tr>
-                    <tr style={{ height: "40px" }}>
-                      <td
-                        style={{
-                          boxSizing: "border-box",
-                          padding: "0",
-                          fontSize: "14px",
-                          backgroundColor: "#eeebeb",
-                          paddingLeft: "5px",
-                        }}
-                      >
-                        Finish Date
-                      </td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                        }}
-                      ></td>
-                      <td
-                        style={{
-                          borderBottom: "1px solid #eee",
-                          backgroundColor: "#eeebeb",
-                          padding: "0",
-                          paddingRight: "5px",
-                          boxSizing: "border-box",
-                          fontSize: "14px",
-                          textAlign: "right",
-                          fontWeight: "900",
-                        }}
-                      >
-                        {agreement.available_finish}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Weekday Rates
+                        </td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingRight: "5px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {list.normal_rate !== undefined
+                            ? list.normal_rate !== ""
+                              ? `AUD ${list.normal_rate}`
+                              : "Negotiable"
+                            : ""}{" "}
+                        </td>
+                      </tr>
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            backgroundColor: "#eeebeb",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Saturday Rates
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {list.sat_rate !== undefined
+                            ? list.sat_rate !== ""
+                              ? `AUD ${list.sat_rate}`
+                              : "Negotiable"
+                            : ""}
+                        </td>
+                      </tr>
+
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Sunday Rates
+                        </td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingRight: "5px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {list.sun_rate !== undefined
+                            ? list.sun_rate !== ""
+                              ? `AUD ${list.sun_rate}`
+                              : "Negotiable"
+                            : ""}
+                        </td>
+                      </tr>
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            backgroundColor: "#eeebeb",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Public Holiday Rates
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {list.ph_rate !== undefined
+                            ? list.ph_rate !== ""
+                              ? `AUD ${list.ph_rate}`
+                              : "Negotiable"
+                            : ""}
+                        </td>
+                      </tr>
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Air Travel Reimbursed
+                        </td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingRight: "5px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {list.airtravel === true
+                            ? "Included"
+                            : "Not included"}
+                        </td>
+                      </tr>
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            backgroundColor: "#eeebeb",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Air Travel Airport from
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {list.airport ? list.airport : "Not Applicable"}
+                        </td>
+                      </tr>
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Road Travel Reimbursed
+                        </td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingRight: "5px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {list.roadtravel === true
+                            ? "Included"
+                            : "Not included"}
+                        </td>
+                      </tr>
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            backgroundColor: "#eeebeb",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Accommodation Included
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                            textAlign: "right",
+                          }}
+                        >
+                          {list.accommodation === true
+                            ? "Included"
+                            : "Not included"}
+                        </td>
+                      </tr>
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Start Date
+                        </td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            paddingRight: "5px",
+                            textAlign: "right",
+                            fontWeight: "900",
+                          }}
+                        >
+                          {agreement.available_start}
+                        </td>
+                      </tr>
+                      <tr style={{ height: "40px" }}>
+                        <td
+                          style={{
+                            boxSizing: "border-box",
+                            padding: "0",
+                            fontSize: "14px",
+                            backgroundColor: "#eeebeb",
+                            paddingLeft: "5px",
+                          }}
+                        >
+                          Finish Date
+                        </td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                          }}
+                        ></td>
+                        <td
+                          style={{
+                            borderBottom: "1px solid #eee",
+                            backgroundColor: "#eeebeb",
+                            padding: "0",
+                            paddingRight: "5px",
+                            boxSizing: "border-box",
+                            fontSize: "14px",
+                            textAlign: "right",
+                            fontWeight: "900",
+                          }}
+                        >
+                          {agreement.available_finish}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                )}
               </div>
             </div>
           </div>

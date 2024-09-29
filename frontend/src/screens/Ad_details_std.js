@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 
 // Three dots
 import { ThreeDots } from "react-loader-spinner";
+import { RotatingLines } from "react-loader-spinner";
 
 const Ad_details_std = () => {
   const { pathname } = useLocation();
@@ -16,6 +17,7 @@ const Ad_details_std = () => {
   const slug = pathname.split("/")[2];
   const [list, setList] = useState({});
   const [isloaded, setIsloaded] = useState(false);
+  const [readyToShow, setReadyToShow] = useState(false);
   const user = useSelector((state) => state.userInfo.value);
 
   // ============ AHPRA =============
@@ -67,8 +69,10 @@ const Ad_details_std = () => {
   };
   const [verifyEmail, setVerifyEmail] = useState("");
 
+  // ============ LISTINGS DATA ===========
+
   useEffect(() => {
-    // ============ LISTINGS DATA ===========
+    setReadyToShow(false);
     axios
       .get(
         process.env.REACT_APP_BACKEND_URL +
@@ -91,13 +95,15 @@ const Ad_details_std = () => {
           setLongitude(response.data.listing.longitude);
           setProfessions(response.data.listing.professions);
           setContractType(response.data.listing.contractType);
+          window.history.pushState(
+            {},
+            document.title,
+            "/Ad_details_std/" + slug
+          );
+          setReadyToShow(true);
         }
       });
   }, []);
-
-  let search = window.location.search;
-  let params = new URLSearchParams(search);
-  let id = params.get("id");
 
   const [contractType, setContractType] = useState("");
   const [professions, setProfessions] = useState("");
@@ -113,13 +119,6 @@ const Ad_details_std = () => {
   const [todaysDate, setTodaysDate] = useState("");
   const [file, setFile] = useState("");
   const [files, setFiles] = useState([]);
-
-  // ============= FACEBOOK & GOOGLE LOGIN DATA ==============
-  useEffect(() => {
-    if (id) {
-      window.history.pushState({}, document.title, "/Ad_details_std/" + slug);
-    }
-  }, [id]);
 
   // ============ LOGGEDIN APPLICANT APPLIED ===========
   const [applied, setApplied] = useState([]);
@@ -150,7 +149,6 @@ const Ad_details_std = () => {
 
   // ============ UPLOAD FILE ===========
   const [selectedFile, setSelectedFile] = useState(false);
-  const [selectedCover, setSelectedCover] = useState(false);
 
   const resumeUpload = (event) => {
     const file = event.target.files[0];
@@ -159,16 +157,6 @@ const Ad_details_std = () => {
 
     if (file) {
       setSelectedFile(true);
-    }
-  };
-
-  const coverUpload = (event) => {
-    const file = event.target.files[0];
-
-    setFiles([...files, file]);
-
-    if (file) {
-      setSelectedCover(true);
     }
   };
 
@@ -192,6 +180,7 @@ const Ad_details_std = () => {
           outPutErrorMessage(data.invalid);
           setIsloaded(false);
         }
+
         if (data.storedApplication) {
           setIsloaded(false);
           navigate("/applicationSent");
@@ -202,38 +191,42 @@ const Ad_details_std = () => {
       });
   };
 
-  const filesSubmit = (e) => {
-    e.preventDefault();
-    setIsloaded(true);
-    const formData = new FormData();
-
-    for (let i = 0; i < files.length; i++) {
-      formData.append("resumeFile", files[i]);
-    }
-
-    fetch(
-      process.env.REACT_APP_BACKEND_URL +
-        `api/applications/upload?email=${user.email}&caseId=${list.caseId}&ahpra=${ahpra}&status=${status}`,
-      {
-        method: "POST",
-        body: formData,
-      }
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.invalid) {
-          outPutErrorMessage(data.invalid);
-          setIsloaded(false);
-        }
-        if (data.storedApplication) {
-          setIsloaded(false);
-          navigate("/applicationSent");
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
+  if (readyToShow === false)
+    return (
+      <div
+        style={{
+          backgroundColor: "#14a248",
+          top: "0",
+          left: "0",
+          height: "100%",
+          width: "100%",
+          zIndex: "2500",
+          display: "block",
+          position: "fixed",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            position: "absolute",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <RotatingLines
+            strokeColor="white"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
+            visible={true}
+          />
+        </div>
+      </div>
+    );
 
   return (
     <>
@@ -294,9 +287,7 @@ const Ad_details_std = () => {
 
             <form
               id={!updateNote ? "selectdate" : "selectdateError"}
-              onSubmit={
-                selectedFile && selectedCover ? filesSubmit : fileSubmit
-              }
+              onSubmit={fileSubmit}
             >
               {updateNote ? (
                 <div className="updateNote">
@@ -417,6 +408,7 @@ const Ad_details_std = () => {
                   ""
                 )}
               </div>
+
               <div className="container-resume">
                 <p>Resume</p>
                 <input
@@ -428,42 +420,24 @@ const Ad_details_std = () => {
                   accept=".doc,.docx, application/pdf"
                   onChange={(e) => {
                     resumeUpload(e);
-                    selectedFile && selectedCover
-                      ? setFile(e)
-                      : setFile(e.target.files[0]);
+                    setFile(e.target.files[0]);
                   }}
                 />
                 <label htmlFor="resume">
                   {selectedFile ? "File Attached" : "Upload File"}
                 </label>
               </div>
-              <div className="container-coverletter">
-                <p>Cover Letter (Optional)</p>
-                <input
-                  type="file"
-                  id="cover-letter"
-                  name="resumeFile"
-                  multiple="multiple"
-                  accept=".doc,.docx, application/pdf"
-                  onChange={(e) => {
-                    coverUpload(e);
-                    selectedFile && selectedCover
-                      ? setFile(e)
-                      : setFile(e.target.files[0]);
-                  }}
-                />
-                <label htmlFor="cover-letter">
-                  {selectedCover ? "File Attached" : "Upload File"}
-                </label>
-              </div>
+
               {applied.slice(0, 1).map((appId) => {
                 return (
                   appId.caseId === list.caseId && (
-                    <input
-                      type="button"
-                      className="appliedbefore"
-                      value="Applied Already"
-                    />
+                    <span key={appId.caseId}>
+                      <input
+                        type="button"
+                        className="appliedbefore"
+                        value="Applied Already"
+                      />
+                    </span>
                   )
                 );
               })}
@@ -702,7 +676,7 @@ const Ad_details_std = () => {
 
           #selectdate {
             width: 470px;
-            height: 485px;
+            height: 405px;
             background-color: white;
             position: relative;
             margin: 30px auto 0px;
@@ -749,7 +723,6 @@ const Ad_details_std = () => {
             color: #14a248;
           }
 
-          #cover-letter,
           #resume {
             display: none;
           }
@@ -1158,7 +1131,7 @@ const Ad_details_std = () => {
 
             #selectdate {
               width: 400px;
-              height: 485px;
+              height: 405px;
               display: inline-block;
               margin-top: 0px;
               position: fixed;

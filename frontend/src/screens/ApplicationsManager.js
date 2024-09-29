@@ -355,6 +355,7 @@ const ApplicationsManager = () => {
         setSort(data.sort);
         setListOfProfessions(data.professions);
         setIsloaded(true);
+        ReactSession.remove("slug");
       }
     };
     if (isCancelled === false) {
@@ -1817,10 +1818,6 @@ const ApplicationsManager = () => {
             color: white;
           }
 
-          .wrapper-ads .inactive {
-            background-color: #ebebeb;
-          }
-
           .wrapper .closed {
             position: absolute;
             transform: translate(-50%, -180%);
@@ -1990,16 +1987,6 @@ const ApplicationsManager = () => {
             left: 85%;
             transform: translate(-50%, -50%);
             display: block;
-          }
-
-          .preview-ad.inactive {
-            background-color: #ebebeb;
-            cursor: default;
-            border-color: #353f47;
-          }
-
-          .preview-ad.inactive:hover {
-            background-color: #ebebeb;
           }
 
           .applicants {

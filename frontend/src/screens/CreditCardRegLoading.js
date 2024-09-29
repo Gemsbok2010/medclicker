@@ -38,6 +38,7 @@ const CreditCardRegLoading = () => {
           latitude: ReactSession.get("latitude"),
           todaysDate: ReactSession.get("todaysDate"),
           expireIn: ReactSession.get("expireIn"),
+          expiryDate: ReactSession.get("expiryDate"),
         }),
       })
         .then((res) => res.json())
@@ -67,6 +68,7 @@ const CreditCardRegLoading = () => {
           accessCode
       )
       .then((response) => {
+        console.log(response);
         if (
           response.data.response.attributes.Transactions[0]
             .TransactionStatus === true

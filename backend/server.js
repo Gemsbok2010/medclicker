@@ -71,7 +71,6 @@ app.use("/api/dashboard", dashboardRoute);
 
 const User = require("./models/userModel");
 const { generateToken } = require("./util");
-const passportSetup = require("./passport");
 
 //============== GOOGLE ROUTES ==============
 let remainOnSamePage = "";

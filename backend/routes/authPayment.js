@@ -16,7 +16,6 @@ const apiKey = process.env.API_KEY,
 // Imports
 const Listing = require("../models/listingModel");
 const Payment = require("../models/paymentModel");
-const PaymentCard = require("../models/paymentCardModel");
 const Pub = require("../models/applicationModel");
 const User = require("../models/userModel");
 const Locum = require("../models/locumModel");
@@ -111,8 +110,6 @@ router.post("/nopayment", async (req, res) => {
     jobSeekerLastName: candidate.lastName,
     jobSeekerEmail: candidate.email,
   });
-
-
 
   const logo = "https://i.ibb.co/1KgVNwJ/medclicker.png";
   const mc = "https://i.ibb.co/TrWvXBB/mc.png";
@@ -212,7 +209,6 @@ router.post("/nopayment", async (req, res) => {
 
   sendEmail(to, from, subject, output, attachments);
   await browser.close();
-
   // Listings => Paused
   let set = {};
   set["isPaidLocum"] = req.body.isPaidLocum;
@@ -289,8 +285,6 @@ router.put("/finalise", async (req, res) => {
     jobSeekerLastName: candidate.lastName,
     jobSeekerEmail: candidate.email,
   });
-
-
 
   const logo = "https://i.ibb.co/1KgVNwJ/medclicker.png";
   const thisyear = moment().format("YYYY");
@@ -571,85 +565,10 @@ router.put("/emailToLocum", async (req, res) => {
   await browser.close();
 });
 
-// =========== REMOVE CREDIT CARD (from CreditCard.js) ==========
-router.put("/removeCard/:email", async (req, res) => {
-  // Check email if already exist in database
-  const emailExist = await PaymentCard.findOne({ email: req.params.email });
 
-  try {
-    if (emailExist) {
-      PaymentCard.findByIdAndUpdate(emailExist._id, req.body).then(function () {
-        PaymentCard.findById(emailExist._id).then(function (saveCard) {
-          saveCard.save();
-          res.send(saveCard);
-        });
-      });
-    } else {
-      const storeCard = new PaymentCard({
-        save_card: req.body.save_card,
-        email: req.params.email,
-        cardNumber: req.body.cardNumber,
-        cardName: req.body.cardName,
-        expiry: req.body.expiry,
-      });
-      const storePayment = await storeCard.save();
-      res.send({ storePayment: storePayment });
-    }
-  } catch (err) {
-    res.status(400).json({ err });
-  }
-});
 
-// =========== STORE CREDIT CARD (from CreditCard.js) ==========
-router.put("/storeCard/:email", async (req, res) => {
-  // Check email if already exist in database
-  const emailExist = await PaymentCard.findOne({ email: req.params.email });
 
-  try {
-    if (emailExist) {
-      PaymentCard.findByIdAndUpdate(emailExist._id, req.body).then(function () {
-        PaymentCard.findById(emailExist._id).then(function (saveCard) {
-          saveCard.save();
-          res.send(saveCard);
-        });
-      });
-    } else {
-      const storeCard = new PaymentCard({
-        save_card: req.body.save_card,
-        email: req.params.email,
-        cardNumber: req.body.cardNumber,
-        cardName: req.body.cardName,
-        expiry: req.body.expiry,
-      });
-      const storePayment = await storeCard.save();
-      res.send({ storePayment: storePayment });
-    }
-  } catch (err) {
-    res.status(400).json({ err });
-  }
-});
 
-//====== GET EXISTING CREDIT CARD (from CreditCard.js) =======
-router.get("/anyCard/:email", async (req, res) => {
-  try {
-    const user = await User.findOne({ email: req.params.email });
-
-    const existingCard = await PaymentCard.findOne({ email: req.params.email });
-
-    let last4 = "";
-    if (existingCard !== null) {
-      last4 = existingCard.cardNumber.slice(-4);
-    }
-
-    res.status(200).json({
-      user: user,
-      existingCard: existingCard,
-      last4: last4,
-    });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
 
 //===== SUBMIT IN CREDIT CARD (from CreditCardRegular.js) =======
 router.post("/regularList", async (req, res, next) => {
@@ -702,6 +621,7 @@ router.post("/regularList", async (req, res, next) => {
         res.json({
           formUrl,
           accessCode,
+          expiryDate: req.query.expiryDate,
         });
       });
   } catch (e) {
@@ -719,21 +639,22 @@ router.put("/regFinalise", async (req, res) => {
 
   const fee = (total / 1.1).toFixed(2);
 
-  const dt = new Date();
-  const year = dt.getFullYear();
-  const dag = dt.getDate();
-
   // Generate local timezone for MongoDB
   let now = new Date();
   now = now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
 
   // Generate expireDate
-  const expireIn = req.body.expireIn;
+  const expiry = new Date();
 
-  const expiryDate = new Date();
-  expiryDate.setDate(expiryDate.getDate() + expireIn);
+  expiry.setDate(expiry.getDate() + req.body.expireIn);
+  const dag = expiry.getDate().toString();
+  const year = expiry.getFullYear();
 
-  const finishDate = expiryDate.toString();
+  const finishDate = expiry.toString();
+
+  const storeExp = new Date(req.body.expiryDate);
+
+  storeExp.setDate(storeExp.getDate() + 1);
 
   const jour = finishDate.split(" ")[2];
   const annee = finishDate.split(" ")[3];
@@ -763,7 +684,7 @@ router.put("/regFinalise", async (req, res) => {
     lastName: user.lastName,
     email: user.email,
     phone: user.phone,
-    expiryDate: expiryDate,
+    expiryDate: storeExp,
     finishDate: finish,
   });
 
@@ -931,6 +852,10 @@ router.post("/free", async (req, res) => {
   const mois = finishDate.split(" ")[1];
   const finish = `${jour} ${mois} ${annee}`;
 
+  const storeExp = new Date(req.query.expiryDate);
+
+  storeExp.setDate(storeExp.getDate() + 1);
+
   const list = new Listing({
     isPaid: req.body.isPaid,
     createdAt: now,
@@ -949,12 +874,12 @@ router.post("/free", async (req, res) => {
     longitude: req.body.longitude,
     latitude: req.body.latitude,
     // standard
-    filename: user.filename,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
+    filename: req.body.filename,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
     phone: user.phone,
-    expiryDate: expiryDate,
+    expiryDate: storeExp,
     finishDate: finish,
   });
 
@@ -1068,6 +993,7 @@ router.post("/free", async (req, res) => {
 
   const subject = `Payment Invoice ${invoice}`;
   const to = `${email}`;
+
   const from = {
     email: "info@medclicker.com.au",
     name: "Medclicker Customer Support",
@@ -1083,7 +1009,6 @@ router.post("/free", async (req, res) => {
   ];
 
   sendEmail(to, from, subject, output, attachments);
-
   await browser.close();
 
   try {
@@ -1139,7 +1064,7 @@ router.get("/invoices", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
-  
+    console.log(match, "match");
     try {
       const invoices = await Payment.find(match)
         .sort({ createdAt: sort })
@@ -1220,6 +1145,7 @@ router.get("/sortinvoices", async (req, res) => {
 
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
+    console.log(match, "match");
 
     try {
       const invoices = await Payment.find(match)

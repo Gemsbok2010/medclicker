@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { config } = require("../config");
 const moment = require("moment");
-require("dotenv/config");
 
 // Imports
 const User = require("../models/userModel");
@@ -20,15 +19,13 @@ const {
 } = require("../emails/sendEmail");
 
 // ========== CHANGE PASSWORD (from SecuritySettings.js) =======
-router.put("/securitySettings/:_id", async (req, res, next) => {
-  const { password, confirmPassword } = req.body;
-
+router.put("/securitySettings/:email", async (req, res, next) => {
   //LETS VALIDATE THE DATA BEFORE
   const { error } = await passwordChange(req.body);
 
   if (error) return res.status(400).send({ invalid: error.details[0].message });
 
-  const user = await User.findOne({ _id: req.params._id });
+  const user = await User.findOne({ email: req.params.email });
 
   //Hash Password
   const salt = await bcrypt.genSalt(10);
@@ -73,10 +70,12 @@ router.post("/sendmail", (req, res) => {
   const to = {
     email: "info@medclicker.com.au",
   };
+
   const from = {
     email: "info@medclicker.com.au",
     name: "Contact us",
   };
+
   contactUsEmail(to, from, subject, output);
   res.send({ message: "OK" });
 });

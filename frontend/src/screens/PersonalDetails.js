@@ -1,50 +1,284 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import $ from "jquery";
 import Footer from "../components/Footer";
 import LoggedInNavbar from "../components/LoggedInNavbar";
-import { FiEyeOff, FiEye } from "react-icons/fi";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RotatingLines } from "react-loader-spinner";
 import { ThreeDots } from "react-loader-spinner";
+import {
+  GoogleMap,
+  useJsApiLoader,
+  Marker,
+  Autocomplete,
+} from "@react-google-maps/api";
 
-const SecuritySettings = () => {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [show, setShow] = useState(false);
-  const [show2nd, setShow2nd] = useState(false);
+import { login } from "../redux/userInfo";
+
+function Plan({ address, latitude, longitude, geoLocate }) {
+  const defaultProps = {
+    center: {
+      lat: -33.865143,
+      lng: 151.2099,
+    },
+    zoom: 12,
+    latLngBounds: {
+      north: -9.36,
+      south: -55.35,
+      east: -175.81,
+      west: 110.28,
+    },
+  };
+
+  const option = {
+    center: {
+      lat: latitude,
+      lng: longitude,
+    },
+    zoom: 17,
+  };
+
+  return (
+    <>
+      {latitude && longitude ? (
+        <GoogleMap
+          zoom={17}
+          center={address ? option.center : { lat: latitude, lng: longitude }}
+          mapContainerStyle={{
+            width: "100%",
+            height: "400px",
+            marginBottom: "20px",
+          }}
+          options={{
+            disableDefaultUI: true,
+            gestureHandling: "none",
+            restriction: {
+              strictBounds: false,
+              latLngBounds: defaultProps.latLngBounds,
+            },
+          }}
+        >
+          <button className="useCurrentButton" onClick={geoLocate}>
+            Use Current Location
+          </button>
+
+          {latitude ? (
+            <Marker
+              position={
+                address ? option.center : { lat: latitude, lng: longitude }
+              }
+              animation={window.google.maps.Animation.DROP}
+              icon={{
+                url: "/images/mcicon.png",
+                origin: new window.google.maps.Point(0, 0),
+                anchor: new window.google.maps.Point(35, -35),
+                scaledSize: new window.google.maps.Size(28, 28),
+                anchorPoint: window.google.maps.Point(50, -29),
+              }}
+            />
+          ) : null}
+        </GoogleMap>
+      ) : (
+        <GoogleMap
+          center={latitude ? option.center : defaultProps.center}
+          zoom={defaultProps.zoom}
+          mapContainerStyle={{
+            width: "100%",
+            height: "400px",
+            marginBottom: "20px",
+          }}
+          options={{
+            disableDefaultUI: true,
+            gestureHandling: "none",
+            restriction: {
+              strictBounds: false,
+              latLngBounds: defaultProps.latLngBounds,
+            },
+          }}
+        >
+          <button className="useCurrentButton" onClick={geoLocate}>
+            Use Current Location
+          </button>
+
+          {latitude ? (
+            <Marker
+              position={option.center}
+              animation={window.google.maps.Animation.DROP}
+              icon={{
+                url: "/images/mcicon.png",
+                origin: new window.google.maps.Point(0, 0),
+                anchor: new window.google.maps.Point(35, -35),
+                scaledSize: new window.google.maps.Size(28, 28),
+                anchorPoint: window.google.maps.Point(50, -29),
+              }}
+            />
+          ) : null}
+        </GoogleMap>
+      )}
+    </>
+  );
+}
+
+const PersonalDetails = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.userInfo.value);
+
+  let search = window.location.search;
+  let params = new URLSearchParams(search);
+  let id = params.get("id");
+  let token = params.get("token");
+  let access = params.get("access");
+  access = access === "true";
+  const [readyToShow, setReadyToShow] = useState(false);
+  const [country, setCountry] = useState("");
+  const [state, setState] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [suburb, setSuburb] = useState("");
+  const [street, setStreet] = useState("");
+  const [streetNo, setStreetNo] = useState("");
+  const [longitude, setLongitude] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [userInfo, setUserInfo] = useState({});
+  const [idPhoto, setIdPhoto] = useState("");
   const [isloading, setIsloading] = useState(false);
 
-  // ================= PUT ===================
-  const onSubmit = (e) => {
-    e.preventDefault();
-    setIsloading(true);
-    try {
-      fetch(
-        process.env.REACT_APP_BACKEND_URL +
-          "api/secure/securitySettings/" +
-          localStorage.getItem("userId"),
-        {
-          method: "PUT",
-          credentials: "include",
-          headers: { "Content-type": "application/json" },
-          body: JSON.stringify({
-            password: password,
-            confirmPassword: confirmPassword,
-          }),
-        }
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.invalid) {
-            outPutErrorMessagesInSecuritySettings(data.invalid);
-            setIsloading(false);
-          }
-          if (data.user) {
-            outPutSuccessMessageInSecuritySettings(data.user);
-            setIsloading(false);
-          }
-        });
-    } catch (err) {
-      console.error(err);
+  // ========= GOOGLE & FACEBOOK SIGN UP DATA ===========
+  useEffect(() => {
+    if (id) {
+      localStorage.setItem("userId", id);
+      localStorage.setItem("token", token);
     }
+
+    // ============ PROFILE DATA ===========
+    setReadyToShow(false);
+    axios
+      .get(
+        process.env.REACT_APP_BACKEND_URL +
+          "api/users/allusers/" +
+          localStorage.getItem("userId")
+      )
+      .then((response) => {
+        if (response.status === 200) {
+          localStorage.setItem("userId", response.data._id);
+          setUserInfo(response.data);
+          setCountry(response.data.country);
+
+          if (!response.data.postalCode) {
+            setPostalCode("");
+          } else {
+            setPostalCode(response.data.postalCode);
+          }
+          if (!response.data.state) {
+            setState("");
+          } else {
+            setState(response.data.state);
+          }
+          if (!response.data.suburb) {
+            setSuburb("");
+          } else {
+            setSuburb(response.data.suburb);
+          }
+
+          if (!response.data.street) {
+            setStreet("");
+          } else {
+            setStreet(response.data.street);
+          }
+
+          if (!response.data.streetNo) {
+            setStreetNo("");
+          } else {
+            setStreetNo(response.data.streetNo);
+          }
+
+          if (!response.data.longitude) {
+            setLongitude("");
+          } else {
+            setLongitude(response.data.longitude);
+          }
+          if (!response.data.latitude) {
+            setLatitude("");
+          } else {
+            setLatitude(response.data.latitude);
+          }
+          setIdPhoto(response.data.filename);
+          dispatch(
+            login({
+              firstName: response.data.firstName,
+              lastName: response.data.lastName,
+              email: response.data.email,
+              filename: response.data.filename,
+              isLoggedIn: true,
+              isLocum: response.data.isLocum,
+              isActive: response.data.isActive,
+              nanoId: response.data.nanoId,
+              isAdmin: response.data.isAdmin,
+              completeAccess: response.data.survey !== "" ? true : false,
+            })
+          );
+          window.history.pushState({}, document.title, "/personal-details");
+          setReadyToShow(true);
+        }
+      });
+  }, [id]);
+
+  // ============ PROFESSION (Disable and enable submit) =========
+  const [listOfProfessions, setListOfProfessions] = useState([]);
+  const [showProfession, setShowProfession] = useState(false);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    // declare the data fetching function
+    const fetchData = async () => {
+      const res = await fetch(
+        process.env.REACT_APP_BACKEND_URL + "api/listings/listOfProfessions?"
+      );
+      const data = await res.json();
+
+      if (isCancelled === false) {
+        setListOfProfessions(data.professions);
+      }
+    };
+    if (isCancelled === false) {
+      // call the function
+      fetchData()
+        // make sure to catch any error
+        .catch(console.error);
+    }
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+
+  const handleSetProfession = (e) => {
+    const innerHTML = e.target.innerHTML;
+    setUserInfo({ ...userInfo, profession: innerHTML });
+  };
+
+  // ========== TAKE OUT DUPLICATE PROFESSIONS =========
+  const noDuplicates = [
+    ...new Map(
+      listOfProfessions.map((list) => [list.professionName, list])
+    ).values(),
+  ];
+
+  // ========== SURVEY (Disable and enable submit) ===========
+  const [showSurvey, setShowSurvey] = useState(false);
+  const handleShowSurvey = () => {
+    setShowSurvey(false);
+  };
+  const handleSetSurvey = (e) => {
+    const innerHTML = e.target.innerHTML;
+    setUserInfo({ ...userInfo, survey: innerHTML });
+  };
+
+  const handleOnChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setUserInfo({ ...userInfo, [name]: value });
   };
 
   // ========== ALERT MESSAGE ===============
@@ -52,185 +286,1010 @@ const SecuritySettings = () => {
   const [alert, setAlert] = useState(false);
   const [alertMsg, setAlertMsg] = useState("");
 
-  function outPutErrorMessagesInSecuritySettings(errorMessage) {
-    setAlert(true);
+  const [updatePhoto, setUpdatePhoto] = useState(false);
+  const [alertPhoto, setAlertPhoto] = useState(false);
+
+  function outPutErrorMessagePhoto(errorMessage) {
+    setAlertPhoto(true);
+    setImageHere("");
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-    setTimeout(function () {
-      setUpdateNote(false);
-    }, 5000);
     setAlertMsg(errorMessage);
   }
 
-  function outPutSuccessMessageInSecuritySettings() {
-    setUpdateNote(true);
-    setPassword("");
-    setConfirmPassword("");
+  function outPutErrorMessagesInAllusers(errorMessage) {
+    setAlert(true);
+    setUpdateNote(false);
     window.scrollTo({
-      top: 0,
+      top: 200,
       behavior: "smooth",
     });
-
-    setTimeout(function () {
-      setUpdateNote(false);
-    }, 5000);
-    setAlertMsg("");
+    setAlertMsg(errorMessage);
   }
+
+  // ============ HIGHLIGHT ADDRESS SEARCH FIELD ==========
+  var has_focus = false;
+  $("#search").click(function (e) {
+    if (!has_focus) {
+      $(this).select();
+      has_focus = true;
+    }
+  });
+
+  $("#search").blur(function (e) {
+    has_focus = false;
+  });
+
+  //==== ID PHOTO (disable and enable save photo button) ====
+  const [savePhoto, setSavePhoto] = useState(false);
+
+  function imageUploadActivateButton() {
+    setSavePhoto(true);
+  }
+
+  // =============== UPLOAD PHOTO ===============
+  const [previewImage, setPreviewImage] = useState(false);
+  const [previewText, setPreviewText] = useState(false);
+  const [imageFacebook, setImageFacebook] = useState(false);
+  const [imageHere, setImageHere] = useState("");
+
+  const [file, setFile] = useState("");
+
+  const imageUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      setPreviewText(true);
+      setImageFacebook(true);
+      setPreviewImage(true);
+      reader.onload = function (event) {
+        setImageHere(event.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // =========== DELETE PHOTO ==================
+  const deletePhoto = async (id) => {
+    await fetch(
+      process.env.REACT_APP_BACKEND_URL + "api/users/allusers/" + id,
+      {
+        method: "DELETE",
+      }
+    ).then((res) => {
+      if (res.ok === true) {
+        setIdPhoto("");
+        setImageHere("");
+        dispatch(
+          login({
+            firstName: user.firstName,
+            lastName: user.lastName,
+            isLoggedIn: true,
+            email: user.email,
+            filename: "",
+            isLocum: user.isLocum,
+            isActive: user.isActive,
+            nanoId: user.nanoId,
+            isAdmin: user.isAdmin,
+            completeAccess: user.survey !== "" ? true : false,
+          })
+        );
+      }
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    fetch(
+      process.env.REACT_APP_BACKEND_URL +
+        "api/users/upload?email=" +
+        user.email,
+      {
+        method: "POST",
+        body: formData,
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.invalid) {
+          outPutErrorMessagePhoto(data.invalid);
+        } else {
+          setUpdatePhoto(true);
+          setAlert(false);
+          setAlertPhoto(false);
+          setIdPhoto(data.newImage);
+
+          dispatch(
+            login({
+              firstName: data.storedUser.firstName,
+              lastName: data.storedUser.lastName,
+              isLoggedIn: true,
+              email: data.storedUser.email,
+              filename: data.newImage,
+              isLocum: data.storedUser.isLocum,
+              isActive: data.storedUser.isActive,
+              nanoId: data.storedUser.nanoId,
+              isAdmin: data.storedUser.isAdmin,
+              completeAccess: true,
+            })
+          );
+          setTimeout(function () {
+            setUpdatePhoto(false);
+          }, 2000);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  // ======= PUT REQUEST TO UPDATE TO AUTHUSERS.JS ======
+  const onSubmit = (e) => {
+    e.preventDefault();
+    setIsloading(true);
+    fetch(process.env.REACT_APP_BACKEND_URL + "api/users/allusers", {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-type": "application/json" },
+      body: JSON.stringify({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: userInfo.phone,
+        profession: userInfo.profession,
+        survey: userInfo.survey,
+        country: country,
+        state: state,
+        suburb: suburb,
+        street: street,
+        streetNo: streetNo,
+        latitude: latitude,
+        longitude: longitude,
+        postalCode: postalCode,
+        filename: idPhoto,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.invalid) {
+          outPutErrorMessagesInAllusers(data.invalid);
+          setIsloading(false);
+        } else {
+          setUpdateNote(true);
+          setIsloading(false);
+          setAlert(false);
+
+          window.scrollTo({
+            top: 200,
+            behavior: "smooth",
+          });
+          setUserInfo(data);
+          dispatch(
+            login({
+              firstName: data.firstName,
+              isLoggedIn: true,
+              lastName: data.lastName,
+              email: data.email,
+              filename: data.filename,
+              isLocum: data.isLocum,
+              isActive: data.isActive,
+              nanoId: data.nanoId,
+              isAdmin: data.isAdmin,
+              completeAccess: true,
+            })
+          );
+
+          setTimeout(function () {
+            setUpdateNote(false);
+          }, 2000);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  // ================= GEOLOCATION ==================
+  const geoLocate = (e) => {
+    e.preventDefault();
+    if (navigator.geolocation) {
+      const geocoder = new window.google.maps.Geocoder();
+
+      navigator.geolocation.getCurrentPosition((position) => {
+        setLatitude(position.coords.latitude);
+        setLongitude(position.coords.longitude);
+        const pos = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+
+        geocoder.geocode({ location: pos }, (results, status) => {
+          if (status === "OK") {
+            setStreetNo("");
+            setStreet("");
+            setSuburb("");
+            setPostalCode("");
+            setState("");
+            setCountry("");
+            setLatitude("");
+            setLongitude("");
+
+            for (var i = 0; i < results[0].address_components.length; i++) {
+              if (
+                results[0].address_components[i].types[0] === "street_number"
+              ) {
+                setStreetNo(results[0].address_components[i].long_name);
+              }
+
+              if (results[1].address_components[i].types[0] === "route") {
+                setStreet(results[1].address_components[i].long_name);
+              }
+
+              if (results[0].address_components[i].types[0] === "locality") {
+                setSuburb(results[0].address_components[i].long_name);
+              }
+
+              if (
+                results[0].address_components[i].types[0] ===
+                "administrative_area_level_1"
+              ) {
+                setState(results[0].address_components[i].short_name);
+              }
+
+              if (results[0].address_components[i].types[0] === "postal_code") {
+                setPostalCode(results[0].address_components[i].long_name);
+              }
+
+              if (results[0].address_components[i].types[0] === "country") {
+                setCountry(results[0].address_components[i].long_name);
+              }
+              setLatitude(pos.lat);
+              setLongitude(pos.lng);
+            }
+          }
+        });
+      });
+    }
+  };
+
+  // ============== AUTOCOMPLETE ===============
+  const [address, setAddress] = useState("");
+
+  const getAddressObject = async (places) => {
+    setStreetNo("");
+    setStreet("");
+    setSuburb("");
+    setPostalCode("");
+    setState("");
+    setCountry("");
+    setLatitude("");
+    setLongitude("");
+
+    for (var i = 0; i < places.address_components.length; i++) {
+      if (places.address_components[i].types[0] === "street_number") {
+        setStreetNo(places.address_components[i].long_name);
+      }
+      if (places.address_components[i].types[0] === "route") {
+        setStreet(places.address_components[i].long_name);
+      }
+      if (places.address_components[i].types[0] === "locality") {
+        setSuburb(places.address_components[i].long_name);
+      }
+      if (places.address_components[i].types[0] === "postal_code") {
+        setPostalCode(places.address_components[i].long_name);
+      }
+      if (
+        places.address_components[i].types[0] === "administrative_area_level_1"
+      ) {
+        setState(places.address_components[i].short_name);
+      }
+      if (places.address_components[i].types[0] === "country") {
+        setCountry(places.address_components[i].long_name);
+      }
+    }
+    if (places.geometry.viewport) {
+      setLongitude(places.geometry.location.lng());
+      setLatitude(places.geometry.location.lat());
+    }
+  };
+
+  const handleSelect = () => {
+    const autocomplete = new window.google.maps.places.Autocomplete(
+      document.getElementById("search")
+    );
+    autocomplete.setComponentRestrictions({
+      country: ["au"],
+    });
+
+    autocomplete.addListener("place_changed", async () => {
+      const places = autocomplete.getPlace();
+      getAddressObject(places);
+    });
+  };
+
+  // =========== BACKDROP ============//
+  const [backdrop, setBackdrop] = useState(true);
+  const [alertBanner, setAlertBanner] = useState(true);
+
+  // ================= LOAD GOOGLE MAP ==================
+  const [libraries] = useState(["drawing", "places"]);
+
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    // LANGUAGE AND PLACES
+    language: "en-AU",
+    region: "AU",
+    libraries: libraries,
+  });
+
+  if (!isLoaded || readyToShow === false)
+    return (
+      <div
+        style={{
+          backgroundColor: "#14a248",
+          top: "0",
+          left: "0",
+          height: "100%",
+          width: "100%",
+          zIndex: "2500",
+          display: "block",
+          position: "fixed",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            position: "absolute",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <RotatingLines
+            strokeColor="white"
+            strokeWidth="4"
+            animationDuration="1.25"
+            width="100"
+            visible={true}
+          />
+        </div>
+      </div>
+    );
 
   return (
     <>
       <HelmetProvider>
         <Helmet>
-          <title>Change Password | Medclicker</title>
+          <title>Personal Details | Medclicker</title>
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
-          <meta name="description" content="Medclicker Change Password" />
+          <meta name="description" content="Medclicker Personal Details" />
         </Helmet>
         <LoggedInNavbar />
-        <div className="wrap">
-          <section className="questionCard container">
-            <div className="container regCon">
-              <div className="errorMessageHere">
-                {alert ? (
-                  <div className="alert">
+
+        <div className="personal_details">
+          <Link to="/dashboard">Back to my Dashboard</Link>
+          <h2>Personal information</h2>
+        </div>
+
+        {userInfo.survey === "" ||
+        userInfo.phone === "" ||
+        userInfo.profession === "" ||
+        userInfo.street === "" ? (
+          <>
+            {backdrop && alertBanner ? (
+              <>
+                <div className="backdrop"></div>
+                <div className="alertCard">
+                  <figure>
                     <img
+                      onClick={() => {
+                        setBackdrop(false);
+                        setAlertBanner(false);
+                      }}
+                      className="cross"
                       src="/images/cross-black.png"
-                      style={{ width: "12px", cursor: "pointer" }}
                       alt=""
-                      onClick={() => {
-                        setAlert(false);
-                      }}
-                    />{" "}
-                    <span dangerouslySetInnerHTML={{ __html: alertMsg }}></span>
-                  </div>
-                ) : null}
-                {updateNote ? (
-                  <section className="updateNote container-fluid">
-                    <div className="container-fluid ">
-                      <img
-                        src="/images/tick.png"
-                        style={{ width: "12px" }}
-                        alt=""
-                      />
-                      <span>Password updated.</span>
-                    </div>
-                  </section>
-                ) : null}
+                    />
+                  </figure>
+
+                  <h3>New User's Note</h3>
+                  <p>
+                    Please fill in the remainder empty fields.
+                    <img
+                      style={{ width: "390px", marginLeft: "20px" }}
+                      src="/images/profession.png"
+                      alt=""
+                    />
+                  </p>
+                  <br />
+                  <p>
+                    Click on the "Update" button at the end.
+                    <img
+                      style={{ width: "200px", marginLeft: "20px" }}
+                      src="/images/update_button.png"
+                      alt=""
+                    />
+                  </p>
+                  <br />
+                  <p>
+                    You would have full access to all of Medclicker's services
+                    once all fields are completed. Thank you.
+                  </p>
+                </div>
+              </>
+            ) : (
+              ""
+            )}
+          </>
+        ) : (
+          ""
+        )}
+
+        <div className="wrap">
+          {/* <div className="personContent">
+            {updateNote ? (
+              <section className="updateNote container-fluid">
+                <div className="container-fluid ">
+                  <img
+                    src="/images/tick.png"
+                    style={{ width: "12px" }}
+                    alt=""
+                  />
+                  <span>Updated successfully.</span>
+                </div>
+              </section>
+            ) : null}
+
+            {alertTop ? (
+              <div className="alert">
+                <img
+                  src="/images/cross-black.png"
+                  style={{ width: "12px", cursor: "pointer" }}
+                  alt=""
+                  onClick={() => {
+                    setAlertTop(false);
+                  }}
+                />{" "}
+                <span dangerouslySetInnerHTML={{ __html: alertMsg }}></span>
               </div>
-              <h2 className="mt-5 mb-4">Change Password</h2>
-              <form id="passwordChange" onSubmit={onSubmit}>
-                <div className="contain">
-                  <div className="container1">
-                    <label htmlFor="password">New Password</label>
-                    <input
-                      type={show ? "text" : "password"}
-                      id="password"
-                      value={password}
-                      autoComplete="off"
-                      onChange={(e) => {
-                        setPassword(e.target.value);
-                      }}
-                    />
-                    <span
-                      onClick={() => {
-                        setShow(!show);
-                      }}
-                      className="eye"
-                    >
-                      {show ? (
-                        <FiEye
-                          style={{
-                            color: "#777",
-                            fontSize: "18px",
-                            cursor: "pointer",
+            ) : (
+              ""
+            )}
+          </div> */}
+
+          <form id="formZero" onSubmit={handleSubmit}>
+            <div className="personContent">
+              <section className="questionCard container-fluid">
+                <h2>Photo</h2>
+                <div className="container-fluid regCon">
+                  <div className="errorMessageHere">
+                    {updatePhoto && (
+                      <section className="updateNote container-fluid">
+                        <div className="container-fluid ">
+                          <img src="/images/tick.png" width="12px" alt="" />
+                          <span>Updated successfully.</span>
+                        </div>
+                      </section>
+                    )}
+                    {alertPhoto ? (
+                      <div className="alert">
+                        <img
+                          onClick={() => {
+                            setAlertPhoto(false);
                           }}
-                        />
-                      ) : (
-                        <FiEyeOff
-                          style={{
-                            color: "#777",
-                            fontSize: "18px",
-                            cursor: "pointer",
-                          }}
-                        />
-                      )}
-                    </span>
-                  </div>
-                  <div className="container2">
-                    <label htmlFor="passwordConfirmation">
-                      {" "}
-                      Re-enter new Password
-                    </label>
-                    <input
-                      id="passwordConfirmation"
-                      autoComplete="off"
-                      type={show2nd ? "text" : "password"}
-                      value={confirmPassword}
-                      onChange={(e) => {
-                        setConfirmPassword(e.target.value);
-                      }}
-                    />
-                    <span
-                      onClick={() => {
-                        setShow2nd(!show2nd);
-                      }}
-                      className="eye"
-                    >
-                      {show2nd ? (
-                        <FiEye
-                          style={{
-                            color: "#777",
-                            fontSize: "18px",
-                            cursor: "pointer",
-                          }}
-                        />
-                      ) : (
-                        <FiEyeOff
-                          style={{
-                            color: "#777",
-                            fontSize: "18px",
-                            cursor: "pointer",
-                          }}
-                        />
-                      )}
-                    </span>
-                  </div>
-                  <div className="container1"></div>
-                  <div className="container2">
-                    {password === confirmPassword ? (
-                      password && confirmPassword ? (
-                        !isloading ? (
-                          <input type="submit" value="Confirm" />
-                        ) : (
-                          <button className="btn-vori">
-                            <ThreeDots
-                              type="ThreeDots"
-                              height={40}
-                              width={80}
-                              color={"white"}
-                            />
-                          </button>
-                        )
-                      ) : (
-                        <input
-                          type="button"
-                          value="Confirm"
-                          disabled="disabled"
-                        />
-                      )
+                          style={{ cursor: "pointer", width: "12px" }}
+                          src="/images/cross-black.png"
+                          alt=""
+                        />{" "}
+                        <span
+                          dangerouslySetInnerHTML={{ __html: alertMsg }}
+                        ></span>
+                      </div>
                     ) : (
-                      <input
-                        type="button"
-                        value="Confirm"
-                        disabled="disabled"
-                      />
+                      ""
                     )}
                   </div>
+                  <div className="bigHead">
+                    <figure id="imagePreview">
+                      <div id="bin" onClick={() => deletePhoto(userInfo._id)}>
+                        <input
+                          type="submit"
+                          id="embedBin"
+                          style={{ visibility: "hidden" }}
+                        />
+                      </div>
+                      {imageFacebook ? (
+                        ""
+                      ) : (
+                        <>
+                          <img
+                            src={idPhoto}
+                            alt=""
+                            name="image-File"
+                            id="image-facebook"
+                          />
+                        </>
+                      )}
+                      {previewImage ? (
+                        <img
+                          src={imageHere}
+                          alt=""
+                          name="imageFile"
+                          id="image-preview"
+                        />
+                      ) : (
+                        ""
+                      )}
+
+                      {previewText ? "" : <span id="text-preview"></span>}
+                    </figure>
+                    <div className="rp">
+                      <span className="ex">
+                        JPG, JPEG, PNG and GIF files only, max. file size: 600kb
+                      </span>
+                      <br />
+                      <div className="buttonsEven">
+                        <label htmlFor="photoUpload" className="upload-btn">
+                          Upload Photo
+                        </label>
+                        <input
+                          type="file"
+                          accept="image/gif, image/jpeg, image/jpg, image/png, .doc,.docx, application/pdf"
+                          className="form-control-file headUp"
+                          id="photoUpload"
+                          onChange={(event) => {
+                            imageUpload(event);
+                            imageUploadActivateButton();
+                            setFile(event.target.files[0]);
+                          }}
+                          name="gameFile"
+                        />
+
+                        {savePhoto ? (
+                          <button
+                            style={{
+                              backgroundColor: "#14a248",
+                              cursor: "pointer",
+                              color: "#fff",
+                              border: "1px solid #14a248",
+                            }}
+                            type="submit"
+                            id="savePhoto"
+                          >
+                            Save Photo
+                          </button>
+                        ) : (
+                          <button type="submit" disabled id="savePhoto">
+                            Save Photo
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </form>
+              </section>
             </div>
-          </section>
+          </form>
+          <form id="formOne" onSubmit={onSubmit}>
+            <div className="personContent">
+              <section className="middleQuestionCard container-fluid">
+                <h2>My Details</h2>
+                <div className="container-fluid regCon">
+                  <div className="errorMessageHere">
+                    {updateNote && (
+                      <section className="updateNote container-fluid">
+                        <div className="container-fluid ">
+                          <img src="/images/tick.png" width="12px" alt="" />
+                          <span>Updated successfully.</span>
+                        </div>
+                      </section>
+                    )}
+                    {alert ? (
+                      <div className="alert">
+                        <img
+                          onClick={() => {
+                            setAlert(false);
+                          }}
+                          src="/images/cross-black.png"
+                          style={{ width: "12px", cursor: "pointer" }}
+                          alt=""
+                        />{" "}
+                        <span
+                          dangerouslySetInnerHTML={{ __html: alertMsg }}
+                        ></span>
+                      </div>
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="form-group row">
+                        <label
+                          htmlFor="firstName"
+                          className="col-sm-3 col-form-label"
+                        >
+                          First Name
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="text"
+                            className="form-control-lg"
+                            id="firstName"
+                            name="firstName"
+                            autoComplete="none"
+                            value={user.firstName ? user.firstName : ""}
+                            onChange={handleOnChange}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group row">
+                        <label
+                          htmlFor="lastName"
+                          className="col-sm-3 col-form-label"
+                        >
+                          Last Name
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="text"
+                            className="form-control-lg"
+                            id="lastName"
+                            name="lastName"
+                            autoComplete="none"
+                            value={user.lastName ? user.lastName : ""}
+                            onChange={handleOnChange}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group row">
+                        <label
+                          htmlFor="email"
+                          className="col-sm-3 col-form-label"
+                        >
+                          Email
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="email"
+                            className="form-control-lg"
+                            id="email"
+                            disabled
+                            defaultValue={user.email}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="col-md-6">
+                      <div className="form-group row">
+                        <label
+                          htmlFor="phone"
+                          className="col-sm-3 col-form-label"
+                        >
+                          Mobile
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="text"
+                            required
+                            className="form-control-lg"
+                            autoComplete="nope"
+                            maxLength="10"
+                            minLength="10"
+                            placeholder="10-digits number"
+                            value={userInfo.phone ? userInfo.phone : ""}
+                            id="phone"
+                            name="phone"
+                            onChange={handleOnChange}
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group row">
+                        <label
+                          htmlFor="profession"
+                          className="col-sm-3 col-form-label"
+                        >
+                          Profession
+                        </label>
+                        <div className="col-sm-9">
+                          <input
+                            type="text"
+                            required
+                            className="form-control-lg"
+                            id="profession"
+                            name="profession"
+                            autoComplete="off"
+                            value={
+                              userInfo.profession ? userInfo.profession : ""
+                            }
+                            onFocus={() => {
+                              setShowProfession(true);
+                              setShowSurvey(false);
+                            }}
+                            onChange={() => {
+                              setShowProfession(true);
+                              setShowSurvey(false);
+                            }}
+                          />
+
+                          {showProfession ? (
+                            <div className="professionList">
+                              <ul>
+                                <li
+                                  onClick={(e) => {
+                                    handleSetProfession(e);
+                                    setShowProfession(false);
+                                  }}
+                                >
+                                  I am a Guest
+                                </li>
+                                {noDuplicates.map((profession) => {
+                                  return (
+                                    <li
+                                      key={profession._id}
+                                      onClick={(e) => {
+                                        handleSetProfession(e);
+                                        setShowProfession(false);
+                                      }}
+                                    >
+                                      {profession.professionName}
+                                    </li>
+                                  );
+                                })}
+                              </ul>
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </div>
+
+                      {user.completeAccess === true ? (
+                        ""
+                      ) : (
+                        <div className="form-group row">
+                          <label
+                            htmlFor="survey"
+                            className="col-sm-3 col-form-label"
+                          >
+                            Survey
+                          </label>
+                          <div className="col-sm-9">
+                            <input
+                              type="text"
+                              required
+                              className="form-control-lg"
+                              id="survey"
+                              name="survey"
+                              autoComplete="off"
+                              value={userInfo.survey ? userInfo.survey : ""}
+                              onFocus={() => {
+                                setShowSurvey(true);
+                                setShowProfession(false);
+                              }}
+                              onChange={() => {
+                                setShowSurvey(true);
+                                setShowProfession(false);
+                              }}
+                            />
+                            {showSurvey && (
+                              <div className="surveyList">
+                                <ul>
+                                  <li
+                                    onClick={(e) => {
+                                      handleSetSurvey(e);
+                                      handleShowSurvey();
+                                    }}
+                                  >
+                                    Facebook
+                                  </li>
+                                  <li
+                                    onClick={(e) => {
+                                      handleSetSurvey(e);
+                                      handleShowSurvey();
+                                    }}
+                                  >
+                                    Search Engine
+                                  </li>
+                                  <li
+                                    onClick={(e) => {
+                                      handleSetSurvey(e);
+                                      handleShowSurvey();
+                                    }}
+                                  >
+                                    Publication
+                                  </li>
+                                  <li
+                                    onClick={(e) => {
+                                      handleSetSurvey(e);
+                                      handleShowSurvey();
+                                    }}
+                                  >
+                                    Word of Mouth
+                                  </li>
+                                  <li
+                                    onClick={(e) => {
+                                      handleSetSurvey(e);
+                                      handleShowSurvey();
+                                    }}
+                                  >
+                                    Other
+                                  </li>
+                                </ul>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div className="personContent">
+              <section className="bottomQuestionCard container-fluid">
+                <h2>Primary Location of Practice</h2>
+                <div className="container-fluid">
+                  <div className="location">
+                    <div className="row">
+                      <div className="col-md-6">
+                        <label htmlFor="search">
+                          Locate your primary address of practice (clinic,
+                          hospital, pharmacy etc). Search for your street
+                          address, landmarks, or general area below.
+                        </label>
+
+                        <Autocomplete
+                          className={"googleAutoComplete"}
+                          restrictions={{ country: "au" }}
+                          fields={[
+                            "address_components",
+                            "geometry",
+                            "icon",
+                            "name",
+                          ]}
+                        >
+                          {latitude ? (
+                            <>
+                              <input
+                                required
+                                autoComplete="off"
+                                type="text"
+                                id="search"
+                                placeholder="Type your address here..."
+                                onSelect={handleSelect}
+                                value={`${streetNo} ${street}, ${suburb} ${state} ${postalCode}`}
+                                onInput={() => {
+                                  setLatitude("");
+                                  setAddress("");
+                                }}
+                                onChange={() => {
+                                  setLatitude("");
+                                  setAddress("");
+                                }}
+                              />
+                              <input
+                                type="text"
+                                disabled
+                                style={{
+                                  marginTop: "12px",
+                                  border: "none",
+                                  paddingTop: "1px",
+                                  paddingBottom: "1px",
+                                  height: "24px",
+                                  fontWeight: "700",
+                                }}
+                                value={`${streetNo} ${street}`}
+                              />
+
+                              <input
+                                type="text"
+                                disabled
+                                style={{
+                                  marginTop: "2px",
+                                  border: "none",
+                                  paddingTop: "1px",
+                                  paddingBottom: "1px",
+                                  height: "24px",
+                                  fontWeight: "700",
+                                }}
+                                value={`${suburb} ${state} ${postalCode}`}
+                              />
+
+                              <input
+                                type="text"
+                                disabled
+                                style={{
+                                  marginTop: "2px",
+                                  border: "none",
+                                  paddingTop: "1px",
+                                  paddingBottom: "1px",
+                                  height: "24px",
+                                  fontWeight: "700",
+                                }}
+                                value={country}
+                              />
+                            </>
+                          ) : (
+                            <>
+                              <input
+                                required
+                                autoComplete="off"
+                                type="text"
+                                placeholder="Type your address here..."
+                                onSelect={handleSelect}
+                                id="search"
+                                value={address ? address : ""}
+                                onChange={(e) => {
+                                  setAddress(e.target.value);
+                                }}
+                              />
+                              <div className="bottomTips">
+                                <p>
+                                  <b>Having difficulty finding your address?</b>
+                                </p>
+                                <span>
+                                  Search for your street or click "Use Current
+                                  Location" in the top centre of the map.
+                                </span>
+                              </div>
+                            </>
+                          )}
+                        </Autocomplete>
+                      </div>
+                      <div className="col-md-6">
+                        <Plan
+                          address={address}
+                          latitude={latitude}
+                          longitude={longitude}
+                          geoLocate={geoLocate}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <div className="personContent">
+              <section className="buttonCard container-fluid">
+                {user.lastName &&
+                user.firstName &&
+                userInfo.profession &&
+                userInfo.phone &&
+                userInfo.survey &&
+                street &&
+                suburb &&
+                state &&
+                country ? (
+                  !isloading ? (
+                    <input type="submit" className="btn-vori" value="Update" />
+                  ) : (
+                    <button className="btn-vori">
+                      <ThreeDots
+                        type="ThreeDots"
+                        height={40}
+                        width={80}
+                        color={"white"}
+                      />
+                    </button>
+                  )
+                ) : (
+                  <button disabled>Update</button>
+                )}
+              </section>
+            </div>
+          </form>
           <Footer />
         </div>
 
@@ -243,18 +1302,6 @@ const SecuritySettings = () => {
             overflow-x: hidden;
           }
 
-          .wrap .updateSuccess {
-            width: 100%;
-            background-color: #bff4f2;
-            margin-bottom: 8px;
-            height: 40px;
-            line-height: 40px;
-            padding: 0px 15px 0px 28px;
-            display: block;
-          }
-          .wrap .updateSuccess span {
-            margin-left: 5px;
-          }
           .wrap {
             -webkit-box-pack: center;
             -ms-flex-pack: center;
@@ -262,168 +1309,104 @@ const SecuritySettings = () => {
             -webkit-box-align: center;
             -ms-flex-align: center;
             align-items: center;
-            padding-top: 60px;
+            padding: 0;
             background-color: #f4f5f6;
           }
-          .wrap .questionCard {
-            width: 380px;
-            padding: 20px 10px;
+
+          .btn-vori {
+            position: relative;
+            background-color: #14a248;
+            color: #fff;
+            border: 1px solid #14a248;
+            font-weight: 800;
+            width: 150px;
+            height: 50px;
+            line-height: 50px;
+            outline: none;
+            font-size: 20px;
+            border-radius: 4px;
+            padding: 0;
+            width: 100%;
+            cursor: pointer;
+            text-align: center;
+            align-items: center;
+          }
+          .btn-login {
+            height: 48px;
+            border-radius: 4px;
+            width: 100%;
+            font-weight: 800;
+            font-size: 20px;
+            background-color: rgb(165, 206, 15);
+            text-align: center;
+            box-sizing: border-box;
+            margin-top: 0px;
+            cursor: pointer;
+            padding: 1px auto;
+            background-color: #14a248;
+            color: #fff;
+            border: 1px solid #14a248;
+          }
+
+          .buttonCard button {
+            position: relative;
+            background-color: #ddd;
+            color: #888;
+            border: 1px solid #ddd;
+            font-weight: 800;
+            width: 150px;
+            height: 50px;
+            line-height: 50px;
+            outline: none;
+            font-size: 20px;
+            border-radius: 4px;
+            padding: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+          }
+
+          .regCon {
+            width: 85% !important;
+            padding: 20px 0;
+          }
+          .regCon h2 {
+            margin-bottom: 20px;
+          }
+          .regCon .form-group {
+            margin-bottom: 25px;
+          }
+
+          @media only screen and (min-width: 768px) {
+            .wrap {
+              padding-top: 60px;
+            }
+            .buttonCard .btn-vori {
+              width: 200px;
+              text-align: center;
+              background-color: #14a248;
+              cursor: pointer;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            }
+
+            .buttonCard button {
+              width: 200px;
+            }
+          }
+
+          /* ======== POST-SAVE MESSAGE ========== */
+          .wrap .personContent {
+            width: 90%;
+            margin: 0 auto;
             display: -webkit-box;
             display: -ms-flexbox;
             display: flex;
-            -webkit-box-orient: vertical;
-            -webkit-box-direction: normal;
-            -ms-flex-direction: column;
-            flex-direction: column;
-            -webkit-box-align: center;
-            -ms-flex-align: center;
-            align-items: center;
-            border-radius: 0px;
-            margin-bottom: 60px;
-            border: 1px solid #ebebeb;
-            background: #fff;
-          }
-          .wrap .questionCard > figure {
-            width: 200px;
-            margin-bottom: 40px;
-          }
-          .wrap .questionCard > figure > a {
-            display: block;
-          }
-
-          .wrap .questionCard h2 {
-            font-family: sans-serif;
-            text-align: left;
-            font-weight: 800;
-            font-size: 28px;
-            width: 100%;
-            margin: 0px auto 24px;
-            padding-top: 8px;
-            padding-bottom: 8px;
-            color: #2b2b2b;
-          }
-
-          label {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 10px;
-            color: #1d1d1d;
-            width: 250px;
-            text-align: left;
             position: relative;
-            transform: translateY(20%);
-            width: 260px;
-          }
-
-          .contain {
-            position: relative;
-            width: 100%;
-            left: 0%;
-          }
-
-          .container1,
-          .container2 {
-            display: inline-block;
-            position: relative;
-            width: 100%;
-          }
-
-          .container2 .btn-vori {
-            height: 48px;
-            background-color: #14a248;
-            color: white;
-            cursor: pointer;
-            width: 100%;
-            text-align: center;
-            box-sizing: border-box;
-            font-weight: 500;
-            font-size: 16px;
-            border: none;
-            margin-top: 20px;
-            outline: none;
-            border-radius: 4px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          }
-          input[type="text"],
-          input[type="password"] {
-            height: 42px;
-            text-decoration: none;
-            outline: none;
-            background: none;
-            border: 1px solid #dadada;
-            padding: 12px 10px;
-            font-weight: 500;
-            width: 100%;
-            font-size: 14px;
-            color: #777;
-            font-family: sans-serif;
-            display: inline-block;
-            border-radius: 7px;
-          }
-
-          .container1 .eye,
-          .container2 .eye {
-            position: absolute;
-            top: 41px;
-            right: 20px;
-          }
-
-          input[type="button"] {
-            height: 48px;
-            border-radius: 4px;
-            width: 100%;
-            color: #888;
-            background-color: #dddddd;
-            text-align: center;
-            box-sizing: border-box;
-            font-weight: 500;
-            font-size: 16px;
-            border: none;
-            margin-top: 20px;
-            outline: none;
-          }
-
-          input[type="submit"] {
-            height: 48px;
-            background-color: #14a248;
-            color: white;
-            cursor: pointer;
-            width: 100%;
-            text-align: center;
-            box-sizing: border-box;
-            font-weight: 500;
-            font-size: 16px;
-            border: none;
-            margin-top: 20px;
-            outline: none;
-            border-radius: 4px;
-          }
-
-          .questionCard p {
-            margin: 10px auto;
-            text-align: center;
-            color: #777;
-            width: 100%;
-            font-size: 15px;
-            font-weight: 500;
-            font-family: sans-serif;
-          }
-          .questionCard a {
-            margin-bottom: 0;
-            width: 100%;
-            font-size: 15px;
-            font-weight: 500;
-            font-family: sans-serif;
-          }
-          .alert {
-            background-color: #fcebcd;
-            margin: 5px auto 12px;
-            padding: 7px;
           }
           .wrap .updateNote {
-            width: 100%;
+            width: 90%;
             background-color: #bff4f2;
             margin-bottom: 8px;
             height: 40px;
@@ -434,33 +1417,497 @@ const SecuritySettings = () => {
           .wrap .updateNote span {
             margin-left: 5px;
           }
-          @media only screen and (min-width: 768px) {
+
+          .wrap .alert {
+            background-color: #fcebcd;
+            margin: 5px auto 12px;
+            padding: 7px;
+            width: 90%;
+          }
+
+          /* ========= ID Photo =========== */
+          .wrap .questionCard {
+            width: 80%;
+            min-height: 270px;
+            padding: 30px 20px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            margin-top: 40px;
+            border-radius: 7px;
+            background: #fff;
+          }
+
+          .questionCard h2 {
+            position: absolute;
+            transform: translate(0%, -200%);
+            font-weight: 500;
+            font-size: 24px;
+            width: 440px;
+            margin-top: 10px;
+            padding-top: 8px;
+            padding-bottom: 8px;
+            margin-bottom: 40px;
+            color: #323232;
+          }
+
+          .bigHead {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            width: 85%;
+            margin: 0 auto;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            padding-bottom: 20px;
+          }
+          .bigHead #savePhoto {
+            background-color: #ddd;
+            color: #888;
+            border: 1px solid #ddd;
+            height: 40px;
+            margin: 0px auto;
+            width: 130px;
+            border-radius: 7px;
+            margin-left: 5px;
+          }
+          .bigHead #savePhoto:active,
+          .bigHead #savePhoto:focus {
+            outline: none;
+          }
+
+          .bigHead #imagePreview {
+            width: 150px;
+            height: 150px;
+            border: 1px solid #ddd;
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            background-color: #eee;
+            color: #ccc;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+          }
+          .bigHead #imagePreview img {
+            position: absolute;
+            height: 150px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+          }
+
+          .bigHead #bin {
+            margin: 4px 0px 0px 1px;
+            height: 24px;
+            width: 24px;
+            cursor: pointer;
+            position: relative;
+            left: -42%;
+            top: -43%;
+            border-radius: 2px;
+            background-color: #484848;
+            background-image: url("./../../images/bin.png");
+            background-position: center;
+            background-size: 12px;
+            background-repeat: no-repeat;
+            z-index: 200;
+          }
+
+          .bigHead #bin:hover {
+            background-color: #2b2b2b;
+            cursor: pointer;
+          }
+
+          .bigHead #bin:active,
+          .bigHead #bin:focus {
+            border: none;
+            background-color: #2b2b2b;
+          }
+
+          .bigHead .rp {
+            margin-left: 50px;
+          }
+          .bigHead .ex {
+            margin-bottom: 16px;
+            display: inline-block;
+          }
+
+          #photoUpload {
+            display: none;
+          }
+          .upload-btn,
+          .photo-btn {
+            color: #484848;
+            width: 130px;
+            height: 40px;
+            text-align: center;
+            line-height: 36px;
+            cursor: pointer;
+            border: 1px solid #dadada;
+            border-radius: 7px;
+            background-color: white;
+          }
+
+          .bigHead .buttonsEven {
+            display: flex;
+            justifycontent: space-evenly;
+            width: 60%;
+          }
+
+          @media screen and (max-width: 768px) {
             .wrap .questionCard {
-              width: 710px;
-              padding: 30px 20px;
+              margin: 90px 0px 0px;
+              width: 100%;
             }
-            .nav-box {
-              left: 96%;
+
+            .row .col-md-6:first-child {
+              margin-bottom: 15px;
             }
-            .container1 .eye,
-            .container2 .eye {
-              top: 41px;
-              right: 58px;
+
+            .bigHead .buttonsEven {
+              display: block;
             }
-            .container2 .btn-vori {
-              width: 260px;
+            .bigHead #savePhoto {
+              margin-left: 0px;
             }
-            input[type="text"],
-            input[type="password"] {
-              width: 260px;
+
+            .bigHead {
+              -webkit-box-orient: vertical;
+              -webkit-box-direction: normal;
+              -ms-flex-direction: column;
+              flex-direction: column;
             }
-            input[type="button"],
-            input[type="submit"] {
-              width: 260px;
+            .bigHead > .rp {
+              margin: 0 auto;
+              text-align: center;
             }
-            .container1,
-            .container2 {
-              width: 305px;
+            .bigHead > .rp .headUp {
+              padding-left: 40px;
+              margin-top: 10px;
+            }
+            .bigHead > .rp label {
+              display: block;
+            }
+            .bigHead > .rp .ex {
+              display: none;
+            }
+          }
+
+          /* ============= PERSONAL DETAILS ============== */
+
+          .personal_details {
+            margin: 15px auto 25px;
+            padding: 10px 210px;
+          }
+
+          .personal_details a {
+            color: #14a248;
+            display: block;
+            margin-bottom: 10px;
+          }
+
+          .personal_details a:hover {
+            color: #0e7132;
+          }
+
+          .personal_details h2 {
+            color: #323232;
+            font-weight: 500;
+            font-size: 32px;
+          }
+
+          @media screen and (max-width: 768px) {
+            .personal_details {
+              margin: 25px auto;
+              padding: 10px 100px;
+              text-align: center;
+            }
+          }
+
+          /* ============= QUESTION CARD ============== */
+          .wrap .bottomQuestionCard,
+          .wrap .middleQuestionCard {
+            width: 80%;
+            min-height: 325px;
+            padding: 30px 20px;
+            margin-top: 90px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            border-radius: 7px;
+            background: #fff;
+          }
+
+          .wrap .bottomQuestionCard h2,
+          .wrap .middleQuestionCard h2 {
+            position: absolute;
+            font-size: 24px;
+            font-weight: 500;
+            transform: translate(0%, -260%);
+            color: #323232;
+          }
+          .wrap .middleQuestionCard {
+            min-height: 240px;
+          }
+
+          .middleQuestionCard .row {
+            position: relative;
+            top: 5%;
+            width: 100%;
+            left: 3%;
+          }
+
+          #email:disabled {
+            background-color: #ebebeb;
+          }
+
+          input[type="text"]:invalid,
+          input[type="date"]:invalid {
+            border: 3px solid #14a248;
+          }
+
+          input[type="text"],
+          input[type="date"],
+          input[type="tel"],
+          input[type="email"] {
+            height: 42px;
+            border-radius: 0px;
+            text-decoration: none;
+            outline: none !important;
+            background: none;
+            border: 1px solid #dadada;
+            border-radius: 7px;
+            padding: 12px 10px;
+            font-weight: 500;
+            width: 100%;
+            font-size: 14px;
+            color: #2b2b2b;
+            font-family: "Noto Sans TC", sans-serif;
+          }
+
+          .professionList {
+            position: absolute;
+            z-index: 2000;
+            width: 93%;
+            display: block;
+          }
+          .professionList ul {
+            position: relative;
+            margin: 0px;
+            padding: 0;
+            width: 100%;
+          }
+          .professionList ul li {
+            background-color: #f4f5f6;
+            text-decoration: none;
+            cursor: pointer;
+            list-style-type: none;
+            display: inline-block;
+            height: 40px;
+            line-height: 40px;
+            border-bottom: 1px solid #dadada;
+            border-left: 2px solid #dadada;
+            border-right: 2px solid #dadada;
+            padding-left: 18px;
+            position: relative;
+            width: 100%;
+          }
+
+          .professionList ul li:hover {
+            background-color: white;
+            border-left: 3px solid #14a248;
+            padding-left: 17px;
+          }
+
+          .surveyList {
+            position: absolute;
+            z-index: 2000;
+            width: 94%;
+            display: block;
+          }
+          .surveyList ul {
+            position: relative;
+            margin: 0px;
+            padding: 0;
+            width: 100%;
+          }
+          .surveyList ul li {
+            background-color: #f4f5f6;
+            text-decoration: none;
+            cursor: pointer;
+            list-style-type: none;
+            display: inline-block;
+            height: 40px;
+            line-height: 40px;
+            border-bottom: 1px solid #dadada;
+            border-left: 2px solid #dadada;
+            border-right: 2px solid #dadada;
+            padding-left: 18px;
+            position: relative;
+            width: 100%;
+          }
+          .surveyList ul li:hover {
+            background-color: white;
+            border-left: 3px solid #14a248;
+            padding-left: 17px;
+          }
+          .wrap .buttonCard {
+            width: 80%;
+            margin: 30px auto;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            border-radius: 0px;
+            background: #fff;
+            background-color: #f4f5f6;
+          }
+
+          .useCurrentButton {
+            background-color: #14a248;
+            color: white;
+            font-weight: 800;
+            width: 220px;
+            height: 36px;
+            outline: none;
+            border: none;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 1;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+
+          .useCurrentButton:active,
+          .useCurrentButton:focus {
+            outline: none;
+            border: none;
+          }
+
+          .regCon .location > p {
+            color: #777;
+            font-size: 22px;
+          }
+          .regCon .location .bottomTips span {
+            color: #2b2b2b;
+            font-size: 14px;
+            font-weight: 500;
+          }
+          .regCon .location .bottomTips p {
+            color: #2b2b2b;
+            margin: 10px auto;
+            font-size: 16px;
+            font-weight: 800;
+          }
+
+          @media screen and (max-width: 768px) {
+            .wrap .bottomQuestionCard,
+            .wrap .middleQuestionCard {
+              margin: 90px 0px 0px;
+              width: 100%;
+            }
+            .wrap .personContent {
+              -webkit-box-orient: vertical;
+              -webkit-box-direction: normal;
+              -ms-flex-direction: column;
+              flex-direction: column;
+            }
+            .wrap .buttonCard {
+              width: 410px;
+              margin: 25px auto;
+            }
+            .professionList {
+              width: 95%;
+            }
+            .container {
+              text-align: center;
+            }
+          }
+
+          /* ======= INCOMPLETE PROFILE ALERT POP UP ======== */
+
+          .backdrop {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: #3f3f3f;
+            z-index: 100;
+            opacity: 0.8;
+            cursor: auto;
+            z-index: 2000;
+          }
+          .alertCard {
+            position: fixed;
+            transform: translate(-50%, -50%);
+            left: 50%;
+            top: 50%;
+            width: 1140px;
+            padding: 28px 30px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            border-radius: 0px;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 2000;
+          }
+          .alertCard figure {
+            position: relative;
+            width: 100%;
+            display: block;
+          }
+
+          .alertCard .cross {
+            width: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: left;
+          }
+
+          .alertCard h3 {
+            color: #333;
+            font-size: 38px;
+            font-family: "Noto Sans TC", sans-serif;
+            font-weight: 900;
+            margin-bottom: 40px;
+            text-align: center;
+          }
+
+          .alertCard p {
+            color: #333;
+            font-size: 22px;
+            font-family: "Noto Sans TC", sans-serif;
+            text-align: center;
+          }
+
+          @media screen and (max-width: 768px) {
+            .alertCard {
+              width: 500px;
+              margin: 0 auto;
             }
           }
         `}</style>
@@ -468,5 +1915,4 @@ const SecuritySettings = () => {
     </>
   );
 };
-
-export default SecuritySettings;
+export default PersonalDetails;

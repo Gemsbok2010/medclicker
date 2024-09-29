@@ -198,7 +198,7 @@ const LocumProfile = () => {
   function outPutErrorMessagesInAllusers(errorMessage) {
     setAlert(true);
     window.scrollTo({
-      top: 60,
+      top: 150,
       behavior: "smooth",
     });
     setAlertMsg(errorMessage);
@@ -244,7 +244,7 @@ const LocumProfile = () => {
           setAlert(false);
           setIsloading(false);
           window.scrollTo({
-            top: 0,
+            top: 150,
             behavior: "smooth",
           });
 
@@ -767,6 +767,9 @@ const LocumProfile = () => {
                 </div>
                 <div>
                   <Link to="/locum_cv">My Experiences</Link>
+                </div>
+                <div>
+                  <Link to="/agreements">Locum Contracts</Link>
                 </div>
                 <div>
                   <ExternalLink
@@ -1413,7 +1416,7 @@ const LocumProfile = () => {
             background-color: #fcebcd;
             margin: 5px auto 12px;
             padding: 7px;
-            width: 80%;
+            width: 90%;
           }
 
           @media screen and (max-width: 768px) {

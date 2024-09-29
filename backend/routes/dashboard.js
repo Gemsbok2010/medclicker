@@ -107,12 +107,12 @@ router.get("/dashboard/:email", async (req, res) => {
     }).countDocuments();
 
     const applied = await Pub.find({
-      nanoId: req.query.nanoId,
+      email: req.params.email,
     }).countDocuments();
 
     const seen = await Pub.find({
       seen: true,
-      nanoId: req.query.nanoId,
+      email: req.params.email,
     }).countDocuments();
 
     res.status(200).json({
@@ -139,7 +139,28 @@ router.get("/dashboard/:email", async (req, res) => {
   }
 });
 
-// ========== HIDE ME AS LOCUM (From dashboard.js) ==========
+// ============= JOB CASES (from dashboard.js) ================
+router.get("/jobcases", async (req, res, next) => {
+  try {
+    res.status(200).json({
+      applied: applied,
+      seen: seen,
+      nsw: nsw,
+      vic: vic,
+      qld: qld,
+      sa: sa,
+      wa: wa,
+      tas: tas,
+      nt: nt,
+      act: act,
+      state: state,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// ================ HIDE ME AS LOCUM (From dashboard.js) ============
 router.put("/hideme/:id", async (req, res) => {
   const locum = await Locum.findOne({ locumId: req.params.id });
 

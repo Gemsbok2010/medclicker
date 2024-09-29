@@ -141,7 +141,6 @@ const Step1 = () => {
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
   const [userInfo, setUserInfo] = useState({});
-  const [resume, setResume] = useState("");
   const [readyToShow, setReadyToShow] = useState(false);
 
   // ============ PROFESSION (Disable and enable submit) =========
@@ -229,7 +228,6 @@ const Step1 = () => {
       setLongitude(ReactSession.get("locum_longitude"));
     }
 
-    setResume(ReactSession.get("resume"));
     // ============ PROFILE DATA ===========
     axios
       .get(
@@ -567,9 +565,9 @@ const Step1 = () => {
                 <Link
                   style={{
                     fontWeight: "bold",
-                    cursor: resume ? "pointer" : "default",
+                    cursor: ReactSession.get("resume") ? "pointer" : "default",
                   }}
-                  to={resume ? "/step3" : "#"}
+                  to={ReactSession.get("resume") ? "/step3" : "#"}
                 >
                   <span className="badge">3</span>
                   <span>Review CV</span>
@@ -1132,7 +1130,7 @@ const Step1 = () => {
             font-size: 24px;
             font-weight: 800;
             transform: translate(10%, -260%);
-            color: white;
+            color: #2b2b2b;
           }
           .bottomQuestionCard #address {
             width: 100%;
@@ -1142,7 +1140,7 @@ const Step1 = () => {
             display: -webkit-box;
             display: -ms-flexbox;
             display: flex;
-            background-color: #333;
+            background-color: #f4f5f6;
             width: 80%;
             margin: 30px auto 30px;
             text-align: center;

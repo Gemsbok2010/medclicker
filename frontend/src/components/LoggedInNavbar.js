@@ -42,7 +42,7 @@ const LoggedInNavbar = () => {
             <div id="dropItem">
               <div className="dropwrap">
                 <div>
-                  <Link to="/securitySettings">Security Settings</Link>
+                  <Link to="/securitySettings">Change Password</Link>
                 </div>
                 <div>
                   <ExternalLink href="/logout" target="_self">
@@ -158,7 +158,7 @@ const LoggedInNavbar = () => {
                   </Link>
                 </div>
                 <div>
-                  <Link to="/securitySettings">Security Settings</Link>
+                  <Link to="/securitySettings">Change Password</Link>
                 </div>
 
                 <div>
@@ -328,7 +328,7 @@ const LoggedInNavbar = () => {
 
           .dropwrap .locumActivated {
             background-color: #14a248;
-            animation: mailframe 500ms ease-in 0ms;
+            animation: textframe 500ms ease-in-out 0ms;
             animation-fill-mode: forwards;
           }
 
@@ -337,17 +337,6 @@ const LoggedInNavbar = () => {
             animation: textframe 500ms ease-in-out 0ms;
           }
 
-          @keyframes mailframe {
-            0% {
-              opacity: 0;
-              transform: translateX(8%);
-            }
-
-            100% {
-              opacity: 1;
-              transform: translateX(0%);
-            }
-          }
           @keyframes textframe {
             0% {
               opacity: 0;

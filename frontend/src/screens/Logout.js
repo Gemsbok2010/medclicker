@@ -17,7 +17,6 @@ const Logout = () => {
     cookies.remove("authToken", { path: "/" });
     cookies.remove("adminToken", { path: "/" });
     cookies.remove("connect.sid", { path: "/" });
-    localStorage.setItem("userId", "");
     localStorage.setItem("token", "");
     localStorage.removeItem("userId");
     localStorage.removeItem("token");

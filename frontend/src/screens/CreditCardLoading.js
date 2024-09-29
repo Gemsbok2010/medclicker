@@ -90,7 +90,7 @@ const CreditCardLoading = () => {
         window.history.pushState(
           {},
           document.title,
-          "/payment_loading" + nanoslug
+          "/payment_loading/" + nanoslug
         );
         if (
           response.data.response.attributes.Transactions[0]

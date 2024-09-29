@@ -216,7 +216,6 @@ const ListingEdit = () => {
   const [professions, setProfessions] = useState("");
   const [airtravel, setAirtravel] = useState(false);
   const [roadtravel, setRoadtravel] = useState(false);
-
   const [accommodation, setAccommodation] = useState(false);
   const [normal_rate, setNormalRate] = useState("");
   const [sat_rate, setSatRate] = useState("");

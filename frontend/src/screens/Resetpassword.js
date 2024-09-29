@@ -102,7 +102,7 @@ const Resetpassword = () => {
                       src="/images/cross-black.png"
                       style={{ width: "12px" }}
                       alt=""
-                    />
+                    />{" "}
                     <span dangerouslySetInnerHTML={{ __html: alertMsg }}></span>
                   </div>
                 ) : null}

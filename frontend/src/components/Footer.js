@@ -106,7 +106,6 @@ const Footer = ({ asx }) => {
           data.user.profession === "" ||
           data.user.street === ""
         ) {
-          localStorage.setItem("userId", data.user._id);
           setIsloaded(false);
           dispatch(
             login({
@@ -125,7 +124,6 @@ const Footer = ({ asx }) => {
 
           navigate("/personal-details");
         } else {
-          localStorage.setItem("userId", data.user._id);
           setIsloaded(false);
           dispatch(
             login({

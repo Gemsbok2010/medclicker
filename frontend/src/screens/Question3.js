@@ -11,8 +11,8 @@ import ReactGA from "react-ga4";
 const Question3 = () => {
   const navigate = useNavigate();
   ReactSession.setStoreType("sessionStorage");
-
   const [customerId, setCustomerId] = useState("");
+
   const [monday, setMonday] = useState(false);
   const [tuesday, setTuesday] = useState(false);
   const [wednesday, setWednesday] = useState(false);
@@ -38,6 +38,7 @@ const Question3 = () => {
   // ============= POPULATE SESSION DATA =================
   useEffect(() => {
     setCustomerId(ReactSession.get("customerId"));
+
     if (localStorage.getItem("contractType")) {
       ReactSession.set("contractType", localStorage.getItem("contractType"));
     }
@@ -437,7 +438,7 @@ const Question3 = () => {
   };
 
   // ============ CALENDAR ================
-  const [, setFinishDate] = useState("");
+  const [finishDate, setFinishDate] = useState("");
   const [startDate, setStartDate] = useState("");
 
   const [showCalendarStart, setShowCalendarStart] = useState(false);
@@ -457,6 +458,7 @@ const Question3 = () => {
 
   const selectionnerFinit = (selectedFinishDay) => {
     setSelectedFinishDay(selectedFinishDay);
+
     setShowCalendarFinish(false);
   };
 
@@ -739,12 +741,6 @@ const Question3 = () => {
     setSunHr(hr + min);
   };
 
-  // ============= CLEAR CUSTOMER ID ================
-  const clearId = () => {
-    sessionStorage.clear();
-    navigate("/admin/users");
-  };
-
   return (
     <>
       <HelmetProvider>
@@ -763,7 +759,6 @@ const Question3 = () => {
                     src="/images/medclicker.png"
                     alt="LOGO"
                     className="img-fluid"
-                    onClick={clearId}
                   />
                 </Link>
               </figure>

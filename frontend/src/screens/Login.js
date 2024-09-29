@@ -59,7 +59,6 @@ const Login = () => {
           data.user.profession === "" ||
           data.user.street === ""
         ) {
-          localStorage.setItem("userId", data.user._id);
           setIsloaded(false);
           dispatch(
             login({
@@ -78,7 +77,6 @@ const Login = () => {
 
           navigate("/personal-details");
         } else {
-          localStorage.setItem("userId", data.user._id);
           setIsloaded(false);
           dispatch(
             login({
@@ -107,6 +105,7 @@ const Login = () => {
       <HelmetProvider>
         <Helmet>
           <title>Login | Medclicker</title>
+
           <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
           <meta name="description" content="Medclicker" />
         </Helmet>

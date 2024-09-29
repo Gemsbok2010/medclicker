@@ -19,6 +19,7 @@ const generateInvoice = generate.numbers(6);
 
 const { step1Validation, locumValidation } = require("../validation");
 
+
 // Imports
 const Locum = require("../models/locumModel");
 const User = require("../models/userModel");
@@ -211,7 +212,8 @@ router.post("/upload", async (req, res) => {
       }).then(function () {
         Locum.findOne({ email: req.query.email }).then(function (storedLocum) {
           storedLocum.save(() => {
-            res.json({ newImage: result.Location });
+            // res.redirect(process.env.FRONTEND_URL + "locum_profile");
+            res.status(200).json({ newImage: result.Location });
           });
         });
       });
@@ -317,10 +319,10 @@ router.get("/resumeCandidate/:nanoId/:slug", async (req, res) => {
 router.get("/database", async (req, res) => {
   Locum.paginate({}, {}).then(async (result) => {
     let sort = req.query.sortBy;
+
     if (sort === undefined || sort === "-1") {
       sort = -1;
     }
-
     let match = { isLocum: true, showLocum: true };
 
     // Language Type
@@ -354,6 +356,8 @@ router.get("/database", async (req, res) => {
       match["state"] = stateArr;
     }
 
+    console.log(match, "match");
+
     const num = await Locum.find(match).countDocuments();
 
     const professions = await Profession.find({
@@ -365,6 +369,7 @@ router.get("/database", async (req, res) => {
     let maxPage = Math.ceil(num / perPage);
     const page = req.query.page && num > perPage ? parseInt(req.query.page) : 1;
 
+    console.log(match, "match");
     try {
       const locums = await Locum.find(match)
         .sort({ createdAt: sort })
@@ -400,14 +405,13 @@ router.get("/listOfProfessions", async (req, res) => {
   }
 });
 
-//================ BOOK ME ======================
-// (from listingmanager.js )
-router.post("/bookme/:nanoId/:slug", async (req, res) => {
+//========== BOOK ME (from listingmanager.js) =============
+router.post("/bookme/:nanoId/:slug", async (req, res, next) => {
+  const user = await User.findOne({ email: req.body.email });
+
   const nanoslug = req.params.nanoId + req.params.slug;
 
   const candidate = await Pub.findOne({ nanoslug: nanoslug });
-
-  const user = await User.findOne({ email: req.body.email });
 
   const plans = await PaymentPlans.findOne({ isAdmin: true });
 
@@ -434,7 +438,7 @@ router.post("/bookme/:nanoId/:slug", async (req, res) => {
   var totale = null;
   // LOCUM PLAN 1
   if (noDays >= plans.locumMin1 && noDays < plans.locumMin2) {
-    if (plans.locumDiscount1 || plans.locumDiscount1 !== "") {
+    if (plans.locumDiscount1 !== null && plans.locumDiscount1 !== "") {
       const dis = parseFloat(plans.locumDiscount1).toFixed(2);
       totale = parseFloat(plans.locumFee1 * 100) * (1 - dis / 100);
     } else {
@@ -444,7 +448,7 @@ router.post("/bookme/:nanoId/:slug", async (req, res) => {
 
   // LOCUM PLAN 2
   if (noDays >= plans.locumMin2 && noDays < plans.locumMin3) {
-    if (plans.locumDiscount2 || plans.locumDiscount2 !== "") {
+    if (plans.locumDiscount2 !== null && plans.locumDiscount2 !== "") {
       const dis = parseFloat(plans.locumDiscount2).toFixed(2);
       totale = parseFloat(plans.locumFee2 * 100) * (1 - dis / 100);
     } else {
@@ -454,16 +458,17 @@ router.post("/bookme/:nanoId/:slug", async (req, res) => {
 
   // LOCUM PLAN 3
   if (noDays >= plans.locumMin3 && noDays < plans.locumMin4) {
-    if (plans.locumDiscount3 || plans.locumDiscount3 !== "") {
+    if (plans.locumDiscount3 !== null && plans.locumDiscount3 !== "") {
       const dis = parseFloat(plans.locumDiscount3).toFixed(2);
       totale = parseFloat(plans.locumFee3 * 100) * (1 - dis / 100);
     } else {
       totale = parseFloat(plans.locumFee3 * 100);
     }
   }
+
   // LOCUM PLAN 4
   if (noDays >= plans.locumMin4 && noDays < plans.locumMin5) {
-    if (plans.locumDiscount4 || plans.locumDiscount4 !== "") {
+    if (plans.locumDiscount4 !== null && plans.locumDiscount4 !== "") {
       const dis = parseFloat(plans.locumDiscount4).toFixed(2);
       totale = parseFloat(plans.locumFee4 * 100) * (1 - dis / 100);
     } else {
@@ -473,7 +478,7 @@ router.post("/bookme/:nanoId/:slug", async (req, res) => {
 
   // LOCUM PLAN 5
   if (noDays >= plans.locumMin5 && noDays < plans.locumMin6) {
-    if (plans.locumDiscount5 || plans.locumDiscount5 !== "") {
+    if (plans.locumDiscount5 !== null && plans.locumDiscount5 !== "") {
       const dis = parseFloat(plans.locumDiscount5).toFixed(2);
       totale = parseFloat(plans.locumFee5 * 100) * (1 - dis / 100);
     } else {
@@ -483,7 +488,7 @@ router.post("/bookme/:nanoId/:slug", async (req, res) => {
 
   // LOCUM PLAN 6
   if (noDays >= plans.locumMin6 && noDays < plans.locumMin7) {
-    if (plans.locumDiscount6 || plans.locumDiscount6 !== "") {
+    if (plans.locumDiscount6 !== null && plans.locumDiscount6 !== "") {
       const dis = parseFloat(plans.locumDiscount6).toFixed(2);
       totale = parseFloat(plans.locumFee6 * 100) * (1 - dis / 100);
     } else {
@@ -492,7 +497,7 @@ router.post("/bookme/:nanoId/:slug", async (req, res) => {
   }
   // LOCUM PLAN 7
   if (noDays >= plans.locumMin7 && noDays < plans.locumMin8) {
-    if (plans.locumDiscount7 || plans.locumDiscount7 !== "") {
+    if (plans.locumDiscount7 !== null && plans.locumDiscount7 !== "") {
       const dis = parseFloat(plans.locumDiscount7).toFixed(2);
       totale = parseFloat(plans.locumFee7 * 100) * (1 - dis / 100);
     } else {
@@ -501,7 +506,7 @@ router.post("/bookme/:nanoId/:slug", async (req, res) => {
   }
   // LOCUM PLAN 8
   if (noDays >= plans.locumMin8 && noDays < plans.locumMin9) {
-    if (plans.locumDiscount8 || plans.locumDiscount8 !== "") {
+    if (plans.locumDiscount8 !== null && plans.locumDiscount8 !== "") {
       const dis = parseFloat(plans.locumDiscount8).toFixed(2);
       totale = parseFloat(plans.locumFee8 * 100) * (1 - dis / 100);
     } else {
@@ -511,7 +516,7 @@ router.post("/bookme/:nanoId/:slug", async (req, res) => {
 
   // LOCUM PLAN 9
   if (noDays >= plans.locumMin9 && noDays < plans.locumMax9) {
-    if (plans.locumDiscount9 || plans.locumDiscount9 !== "") {
+    if (plans.locumDiscount9 !== null && plans.locumDiscount9 !== "") {
       const dis = parseFloat(plans.locumDiscount9).toFixed(2);
       totale = parseFloat(plans.locumFee9 * 100) * (1 - dis / 100);
     } else {
@@ -570,6 +575,8 @@ router.post("/bookme/:nanoId/:slug", async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
+
+
 
 // ============= EMPLOYER VIEW LOCUM =================
 router.get("/isSelected/:nanoId/:slug", async (req, res) => {

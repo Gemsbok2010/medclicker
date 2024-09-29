@@ -129,7 +129,6 @@ const ListingEditReg = () => {
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
   const [backdrop, setBackdrop] = useState(false);
-  const [userInfo, setUserInfo] = useState({});
   const [updateNote, setUpdateNote] = useState(false);
 
   const onConfirmDelete = () => {
@@ -235,7 +234,6 @@ const ListingEditReg = () => {
       .then((response) => {
         if (response.status === 200) {
           setList(response.data.listing);
-          setUserInfo(response.data.listing);
           setProfessions(response.data.listing.professions);
           setAbout(response.data.listing.about);
           setCountry(response.data.listing.country);

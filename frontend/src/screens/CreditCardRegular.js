@@ -1,7 +1,7 @@
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Cards from "react-credit-cards-2";
 import "react-credit-cards-2/dist/es/styles-compiled.css";
 import axios from "axios";
@@ -11,12 +11,7 @@ import { useSelector } from "react-redux";
 const CreditCardRegular = () => {
   ReactSession.setStoreType("sessionStorage");
   const user = useSelector((state) => state.userInfo.value);
-  const [last4, setLast4] = useState("");
-  // const today = new Date();
-  // const [startDate, setStartDate] = useState("");
-  // const [finishDate, setFinishDate] = useState("");
   const [accessCode, setAccessCode] = useState("");
-  const [customerId, setCustomerId] = useState(ReactSession.get("customerId"));
   const [close, setClose] = useState(false);
   const [regFee1, setRegFee1] = useState("");
   const [regFee2, setRegFee2] = useState("");
@@ -37,108 +32,6 @@ const CreditCardRegular = () => {
   const [newsletter2, setNewsletter2] = useState(false);
   const [newsletter3, setNewsletter3] = useState(false);
 
-  // ============ CUSTOMER DATA ===========
-  const [customerInfo, setCustomerInfo] = useState({});
-  const [userId, setUserId] = useState(ReactSession.get("customerId"));
-
-  useEffect(() => {
-    axios
-      .get(process.env.REACT_APP_BACKEND_URL + "api/users/allusers/" + userId)
-      .then((response) => {
-        if (response.status === 200) {
-          setCustomerInfo(response.data);
-        }
-      });
-  }, []);
-
-  // ============ EXISTING CARD DATA ===========
-  const [existingCard, setExistingCard] = useState({});
-  const inputRef = useRef(null);
-  useEffect(() => {
-    axios
-      .get(
-        process.env.REACT_APP_BACKEND_URL + "api/payment/anyCard/" + user.email
-      )
-      .then((response) => {
-        if (response.status === 200) {
-          if (response.data.existingCard === null) {
-            setShow(false);
-            setExistingCard(null);
-            setLast4("");
-          } else {
-            setShow(true);
-            setExistingCard(response.data.existingCard);
-            setLast4(response.data.last4);
-          }
-        }
-      });
-  }, []);
-
-  // ============ SAVED CREDIT CARD DATA ===========
-  const displayCard = () => {
-    setCardName(existingCard.cardName);
-    setCardNumber(existingCard.cardNumber);
-    setExpiry(existingCard.expiry);
-    setShow(true);
-    setState((prev) => ({ ...prev, ["number"]: existingCard.cardNumber }));
-    setState((prev) => ({ ...prev, ["name"]: existingCard.cardName }));
-    setState((prev) => ({ ...prev, ["expiry"]: existingCard.expiry }));
-  };
-
-  // =============== STORE CREDIT CARD =============
-  const storeCard = async (e, email) => {
-    e.preventDefault();
-
-    if (show === true) {
-      const res = await fetch(
-        process.env.REACT_APP_BACKEND_URL + `api/payment/removeCard/${email}`,
-        {
-          method: "PUT",
-          credentials: "include",
-          headers: { "Content-type": "application/json" },
-          body: JSON.stringify({
-            save_card: false,
-            cardNumber: null,
-            cardName: null,
-            expiry: null,
-          }),
-        }
-      );
-      const data = await res.json();
-
-      if (data) {
-        setShow(false);
-      }
-    }
-
-    if (
-      show === false &&
-      cardName &&
-      cardNumber.length >= 18 &&
-      expiry.length === 5
-    ) {
-      const res = await fetch(
-        process.env.REACT_APP_BACKEND_URL + `api/payment/storeCard/${email}`,
-        {
-          method: "PUT",
-          credentials: "include",
-          headers: { "Content-type": "application/json" },
-          body: JSON.stringify({
-            save_card: true,
-            cardNumber: cardNumber,
-            cardName: cardName,
-            expiry: expiry,
-          }),
-        }
-      );
-      const data = await res.json();
-
-      if (data) {
-        setShow(true);
-      }
-    }
-  };
-
   // =============== CREDIT CARD DETAILS =============
   const [state, setState] = useState({
     number: "",
@@ -156,7 +49,6 @@ const CreditCardRegular = () => {
   const [vanishExpiry, setVanishExpiry] = useState(true);
   const [cvv, setCvv] = useState("");
   const [vanishCvv, setVanishCvv] = useState(true);
-  const [show, setShow] = useState(false);
 
   const spaceInFour = (e) => {
     const { name, value } = e.target;
@@ -313,8 +205,8 @@ const CreditCardRegular = () => {
 
   const getAccessCode = async (e, regTotal, expireIn) => {
     e.preventDefault();
-
     const { name } = e.target;
+    const expiry = new Date();
     if (name === "One") {
       setSelectOne(true);
       ReactSession.set("expireIn", expireIn);
@@ -327,21 +219,32 @@ const CreditCardRegular = () => {
       setSelectThree(true);
       ReactSession.set("expireIn", expireIn);
     }
+    expiry.setDate(expiry.getDate() + expireIn);
+    const dag = expiry.getDate().toString();
+    const mth = expiry.getMonth();
+    const year = expiry.getFullYear();
 
-    fetch(process.env.REACT_APP_BACKEND_URL + "api/payment/regularList", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({
-        email: customerId ? customerInfo.email : user.email,
-        total: regTotal,
-      }),
-    })
+    fetch(
+      process.env.REACT_APP_BACKEND_URL +
+        "api/payment/regularList?expiryDate=" +
+        new Date(year, mth, dag),
+      {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          email: user.email,
+          total: regTotal,
+        }),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         if (data.accessCode) {
           setAccessCode(data.accessCode);
           ReactSession.set("accessCode", data.accessCode);
+          ReactSession.set("expiryDate", data.expiryDate);
         }
       })
       .catch((err) => {
@@ -431,27 +334,6 @@ const CreditCardRegular = () => {
                       >
                         <div>
                           <h2>Payment Details</h2>
-                        </div>
-                        <div>
-                          {existingCard !== null ? (
-                            existingCard.save_card === true ? (
-                              <button
-                                className="previousCard"
-                                onClick={() => {
-                                  displayCard();
-                                  inputRef.current.focus();
-                                }}
-                                type="button"
-                              >
-                                Saved card Ending{" ****"}
-                                {last4}
-                              </button>
-                            ) : (
-                              ""
-                            )
-                          ) : (
-                            ""
-                          )}
                         </div>
                       </div>
                       <div
@@ -647,7 +529,6 @@ const CreditCardRegular = () => {
                             name="cvc"
                             autoComplete="off"
                             maxLength={cardNumber.length === 18 ? 4 : 3}
-                            ref={inputRef}
                             onKeyPress={(event) => {
                               if (!/[0-9]/.test(event.key)) {
                                 event.preventDefault();
@@ -678,53 +559,7 @@ const CreditCardRegular = () => {
                           <label htmlFor="cvv">CVV</label>
                         </div>
                       </div>
-                      {!customerId ? (
-                        show ? (
-                          <>
-                            <input
-                              type="checkbox"
-                              id="saveCard"
-                              checked={show ? true : false}
-                              onChange={(e) => {
-                                storeCard(e, user.email);
-                              }}
-                            />
-                            <label htmlFor="saveCard">
-                              Save this card for future payments
-                            </label>
-                          </>
-                        ) : (
-                          <>
-                            <input
-                              type="checkbox"
-                              id="saveCardB"
-                              v
-                              checked={show ? true : false}
-                              onChange={(e) => {
-                                storeCard(e, user.email);
-                              }}
-                            />
-                            <label htmlFor="saveCardB">
-                              Save this card for future payments
-                            </label>
-                          </>
-                        )
-                      ) : (
-                        <>
-                          <input
-                            type="checkbox"
-                            id="saveCard"
-                            disabled="disabled"
-                            checked={false}
-                            onChange={(e) => {
-                              storeCard(e, user.email);
-                            }}
-                          />
-                          <label htmlFor="saveCard">
-                            Save this card for future payments
-                          </label>
-                        </>
-                      )}
+
                       {cardName &&
                       cardNumber.length >= 18 &&
                       expiry.length === 5 &&
@@ -1782,7 +1617,7 @@ section {
     position: relative;
     background-color: white;
     width: 430px;
-    height: 612px;
+    height:570px;
     margin-top: 20px;
     margin-right: 10px;
     border-radius: 5px;
@@ -1852,6 +1687,7 @@ section {
     background-repeat: no-repeat;
     background-position: 5px 15px;
     background-size: 25px;
+    margin-bottom:25px
 }
 
 .leftBox .insideBox .input-group {
@@ -1979,11 +1815,12 @@ main section.middle .card .bottom .right {
     border-radius: 4px;
     color: #fff;
     height: 50px;
-    width: 140px;
+    width: 100%;
     background-color: #14a248;
     cursor: pointer;
     position: relative;
     right: 0px;
+
 }
 
 .insideBox button:disabled {
@@ -2193,11 +2030,10 @@ main section.middle .card .bottom .right {
     }
 
     .leftBox {
-
         transform: translate(-200%, 0%) !important;
         transition: all 1200ms ease-in-out 0ms;
         width: 430px;
-        height: 612px;
+       
         margin-top: 20px;
     }
 
