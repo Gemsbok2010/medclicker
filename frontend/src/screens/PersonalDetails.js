@@ -144,7 +144,7 @@ const PersonalDetails = () => {
   const [idPhoto, setIdPhoto] = useState("");
   const [isloading, setIsloading] = useState(false);
 
-  // ========= GOOGLE & FACEBOOK SIGN UP DATA ===========
+  // ========= GOOGLE SIGN UP DATA ===========
   useEffect(() => {
     if (id) {
       localStorage.setItem("userId", id);

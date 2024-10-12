@@ -174,7 +174,7 @@ const HomeNav = () => {
       });
   };
 
-  // ============= GOOGLE AND FACEBOOK LOGIN ===============
+  // ============= GOOGLE LOGIN ===============
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let id = params.get("id");
@@ -182,7 +182,7 @@ const HomeNav = () => {
   let access = params.get("access");
   access = access === "true";
 
-  // ========= GOOGLE & FACEBOOK LOGIN DATA ===========
+  // ========= GOOGLE LOGIN DATA ===========
   useEffect(() => {
     if (id) {
       localStorage.setItem("userId", id);
@@ -224,8 +224,7 @@ const HomeNav = () => {
   const googleUrlAddress =
     process.env.REACT_APP_BACKEND_URL + `auth/google?dd=${location.pathname}`;
 
-  // const facebookUrlAddress =
-  //   process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
+ 
 
   // ================ POST ===================
   const [, setFirstName] = useState("");
@@ -435,20 +434,7 @@ const HomeNav = () => {
                             )}
                           </div>
                           <div className="input-group">
-                            {/* <button className="nonselect" id="facebook-login">
-                              <img
-                                src="/images/fb.png"
-                                alt=""
-                                style={{ width: "24px" }}
-                              />
-                              <ExternalLink
-                                href={facebookUrlAddress}
-                                target="_self"
-                              >
-                                Facebook Login
-                              </ExternalLink>
-                            </button> 
-                             <p className="nonselect">or</p> */}
+                           
                             <button className="nonselect" id="google-login">
                               <img
                                 src="/images/googlelogin.png"
@@ -906,17 +892,7 @@ const HomeNav = () => {
                   </button>
                 )}
 
-                {/* <p>OR</p>
-                <button id="facebook-login">
-                  <ExternalLink href={facebookUrlAddress} target="_self">
-                    <img
-                      src="/images/fb.png"
-                      alt=""
-                      style={{ width: "28px" }}
-                    />
-                    Login with Facebook
-                  </ExternalLink>
-                </button> */}
+             
                 <p>OR</p>
                 <button id="google-login">
                   <ExternalLink href={googleUrlAddress} target="_self">
@@ -1137,7 +1113,6 @@ const HomeNav = () => {
           color: #14a248;
         }
         .loginQuestionCard .btn-login,
-        #facebook-login,
         #google-login {
           height: 48px;
           border-radius: 4px;
@@ -1161,21 +1136,8 @@ const HomeNav = () => {
           border-color: #14a248;
         }
 
-        .wrap .loginQuestionCard #facebook-login {
-          background-color: #3a5ba0;
-          border: 2px solid #3a5ba0;
-          position: relative;
-          cursor: pointer;
-          color: white;
-        }
-        .wrap .loginQuestionCard #facebook-login a {
-          font-weight: 800;
-          font-size: 20px;
-          color: #fff;
-          position: relative;
-          display: block;
-          width: 100%;
-        }
+     
+       
         .wrap .loginQuestionCard #google-login {
           background-color: #fff;
           border: 1px solid #333;
@@ -1439,7 +1401,6 @@ const HomeNav = () => {
         }
 
         #dropItem #login,
-        #dropItem #facebook-login,
         #dropItem #google-login {
           color: #fff;
           width: 100%;
@@ -1451,28 +1412,9 @@ const HomeNav = () => {
           border-radius: 4px;
         }
 
-        #dropItem #facebook-login {
-          background-color: #3a5ba0;
-          border: 2px solid #3a5ba0;
-          position: relative;
-        }
-        #dropItem #facebook-login a {
-          font-size: 14px;
-          font-weight: 700;
-          position: relative;
-          display: block;
-          width: 100%;
-          height: 100%;
-          line-height: 42px;
-          color: white;
-        }
+     
 
-        #dropItem #facebook-login img {
-          float: left;
-          margin-right: 10px;
-          position: absolute;
-          transform: translate(-90px, 7px);
-        }
+      
 
         #dropItem #google-login {
           background-color: #fff;

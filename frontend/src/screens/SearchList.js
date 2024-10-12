@@ -177,7 +177,7 @@ const SearchList = () => {
   const [maxPage, setMaxPage] = useState([]);
   const [isloaded, setIsloaded] = useState(false);
 
-  // ========= FACEBOOK & GOOGLE LOGIN DATA ==========
+  // ========= GOOGLE LOGIN DATA ==========
 
   useEffect(() => {
     if (id) {

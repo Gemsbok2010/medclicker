@@ -541,7 +541,6 @@ const Ausers = () => {
     { label: "Created At", key: "createdAt" },
     { label: "Updated At", key: "updatedAt" },
     { label: "Photo", key: "filename" },
-    { label: "Facebook Id", key: "facebookId" },
     { label: "Google Id", key: "googleId" },
   ];
 

@@ -265,13 +265,7 @@ const Footer = ({ asx }) => {
                 </button>
               )}
 
-              {/* <p>OR</p>
-              <button id="facebook-login">
-                <ExternalLink href={facebookUrlAddress} target="_self">
-                  <img src="/images/fb.png" alt="" style={{ width: "28px" }} />
-                  Login with Facebook
-                </ExternalLink>
-              </button> */}
+            
               <p>OR</p>
               <button id="google-login">
                 <ExternalLink href={googleUrlAddress} target="_self">
@@ -1048,7 +1042,6 @@ const Footer = ({ asx }) => {
           color: #14a248;
         }
         .loginQuestionCard .btn-login,
-        #facebook-login,
         #google-login {
           height: 48px;
           border-radius: 4px;
@@ -1072,21 +1065,8 @@ const Footer = ({ asx }) => {
           border-color: #14a248;
         }
 
-        .wrap .loginQuestionCard #facebook-login {
-          background-color: #3a5ba0;
-          border: 2px solid #3a5ba0;
-          position: relative;
-          cursor: pointer;
-          color: white;
-        }
-        .wrap .loginQuestionCard #facebook-login a {
-          font-weight: 800;
-          font-size: 20px;
-          color: #fff;
-          position: relative;
-          display: block;
-          width: 100%;
-        }
+      
+     
         .wrap .loginQuestionCard #google-login {
           background-color: #fff;
           border: 1px solid #333;

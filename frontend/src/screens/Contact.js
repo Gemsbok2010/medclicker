@@ -21,7 +21,7 @@ const Contact = () => {
   let id = params.get("id");
   const user = useSelector((state) => state.userInfo.value);
 
-  // ============= FACEBOOK & GOOGLE LOGIN DATA ==============
+  // ============= GOOGLE LOGIN DATA ==============
   useEffect(() => {
     if (id) {
       window.history.pushState({}, document.title, "/contact");

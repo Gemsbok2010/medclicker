@@ -88,7 +88,7 @@ const Ad_details = () => {
   const [phone, setPhone] = useState("");
   const [idPhoto, setIdPhoto] = useState("");
 
-  // ============= FACEBOOK & GOOGLE LOGIN DATA ==============
+  // ============= GOOGLE LOGIN DATA ==============
   useEffect(() => {
     if (id) {
       window.history.pushState({}, document.title, "/Ad_details/" + slug);

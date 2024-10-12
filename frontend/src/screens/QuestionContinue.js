@@ -31,10 +31,7 @@ const QuestionContinue = () => {
 
   // ========= CLEAR SESSION WHEN START OVER IS CLICKED =======
   const clearSession = () => {
-    sessionStorage.remove("contractType");
-    sessionStorage.remove("professions");
-    sessionStorage.remove("about");
-    sessionStorage.remove("street");
+    sessionStorage.clear();
   };
 
   return (

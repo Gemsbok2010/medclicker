@@ -18,8 +18,6 @@ const Login = () => {
   const googleUrlAddress =
     process.env.REACT_APP_BACKEND_URL + `auth/google?dd=${location.pathname}`;
 
-  // const facebookUrlAddress =
-  //   process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -236,18 +234,7 @@ const Login = () => {
                   )}
 
                   <hr />
-                  {/* <p>OR</p>
-                  <button id="facebook-login">
-                    <ExternalLink href={facebookUrlAddress} target="_self">
-                      <img
-                        src="/images/fb.png"
-                        alt=""
-                        width="30px"
-                        style={{ marginRight: "5px" }}
-                      />
-                      Login with Facebook
-                    </ExternalLink>
-                  </button> */}
+                
                   <p>OR</p>
                   <button id="google-login">
                     <ExternalLink href={googleUrlAddress} target="_self">
@@ -403,7 +390,6 @@ const Login = () => {
             text-align: left;
           }
           .wrap .questionCard .btn-login,
-          .wrap #facebook-login,
           .wrap #google-login {
             height: 48px;
             border-radius: 4px;
@@ -427,23 +413,8 @@ const Login = () => {
             border-color: #14a248;
           }
 
-          .wrap #facebook-login {
-            background-color: #3a5ba0;
-            border: 2px solid #3a5ba0;
-            position: relative;
-            cursor: pointer;
-            color: white;
-          }
-          .wrap #facebook-login a {
-            font-weight: 800;
-            font-size: 20px;
-            color: #fff;
-            position: relative;
-            display: block;
-            width: 100%;
-            height: 100%;
-            line-height: 42px;
-          }
+     
+      
           .wrap #google-login {
             background-color: #fff;
             border: 1px solid #333;

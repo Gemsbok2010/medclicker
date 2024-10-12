@@ -29,7 +29,7 @@ const Navbar = () => {
   access = access === "true";
   const [show, setShow] = useState(false);
 
-  // ========= GOOGLE & FACEBOOK LOGIN DATA ===========
+  // ========= GOOGLE LOGIN DATA ===========
   useEffect(() => {
     if (id) {
       localStorage.setItem("userId", id);
@@ -67,12 +67,11 @@ const Navbar = () => {
     }
   }, [id]);
 
-  // ============= GOOGLE AND FACEBOOK LOGIN ===============
+  // ============= GOOGLE LOGIN ===============
   const urlAddress =
     process.env.REACT_APP_BACKEND_URL + `auth/google?dd=${location.pathname}`;
 
-  // const facebookUrlAddress =
-  //   process.env.REACT_APP_BACKEND_URL + `auth/facebook?dd=${location.pathname}`;
+ 
 
   const [openDropDown, setOpenDropDown] = useState(false);
   const [openHamburger, setOpenHamburger] = useState(false);
@@ -328,20 +327,7 @@ const Navbar = () => {
                               )}
                             </div>
                             <div className="input-group">
-                              {/* <button className="nonselect" id="facebook-login">
-                                <img
-                                  src="/images/fb.png"
-                                  alt=""
-                                  style={{ width: "24px" }}
-                                />
-                                <ExternalLink
-                                  href={facebookUrlAddress}
-                                  target="_self"
-                                >
-                                  Facebook Login
-                                </ExternalLink>
-                              </button>
-                              <p className="nonselect">OR</p> */}
+                            
                               <button className="nonselect" id="google-login">
                                 <img
                                   src="/images/googlelogin.png"
@@ -927,7 +913,6 @@ const Navbar = () => {
         }
 
         #dropItem #login,
-        #dropItem #facebook-login,
         #dropItem #google-login {
           border: 2px solid #14a248;
           color: #fff;
@@ -943,30 +928,9 @@ const Navbar = () => {
         #dropItem #login:hover {
           cursor: pointer;
         }
-        #dropItem #facebook-login {
-          background-color: #3a5ba0;
-          border: 2px solid #3a5ba0;
-          position: relative;
-        }
-        #dropItem #facebook-login a {
-          font-size: 14px;
-          font-weight: 700;
-          position: relative;
-          display: block;
-          width: 100%;
-          height: 100%;
-          line-height: 42px;
-          color: white;
-        }
-        #dropItem #facebook-login:hover {
-          cursor: pointer;
-        }
-        #dropItem #facebook-login img {
-          float: left;
-          margin-right: 10px;
-          position: absolute;
-          transform: translate(-90px, 7px);
-        }
+     
+     
+     
 
         #dropItem #google-login {
           background-color: #fff;

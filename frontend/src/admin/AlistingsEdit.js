@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import $ from "jquery";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-
 import {
   GoogleMap,
   useJsApiLoader,
@@ -112,7 +110,6 @@ const AlistingsEdit = () => {
   const { pathname } = useLocation();
   const slug = pathname.split("/")[2];
   const navigate = useNavigate();
-  const user = useSelector((state) => state.userInfo.value);
   const [monday, setMonday] = useState(false);
   const [tuesday, setTuesday] = useState(false);
   const [wednesday, setWednesday] = useState(false);
@@ -302,6 +299,61 @@ const AlistingsEdit = () => {
     }, 3000);
   };
 
+  // ============= GENERATE INVOICE ==============
+
+  const [candidateEmail, setCandidateEmail] = useState("");
+  const [totalAmount, setTotalAmount] = useState("");
+
+  const onGenerateInv = async (e) => {
+    e.preventDefault();
+    const email = list.email;
+    const firstName = list.firstName;
+    const lastName = list.lastName;
+    const nanoId = list.nanoId;
+    await fetch(
+      process.env.REACT_APP_BACKEND_URL + "api/payment/generateInvoice",
+      {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          caseId: list.caseId,
+          candidateEmail: candidateEmail,
+          firstName: firstName,
+          lastName: lastName,
+          nanoId: nanoId,
+          email: email,
+          phone: list.phone,
+          country,
+          state,
+          suburb,
+          street,
+          streetNo,
+          postalCode,
+          professions,
+          totalAmount,
+        }),
+      }
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data) {
+          setUpdateNote(true);
+          const message = `${data.message}`;
+          setAlertMsg(message);
+          setTotalAmount("");
+          setCandidateEmail("");
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+          setTimeout(function () {
+            setUpdateNote(false);
+          }, 3000);
+        }
+      });
+  };
+
   // ============ AIRPORT =============
 
   const [showAirport, setShowAirport] = useState(false);
@@ -319,10 +371,10 @@ const AlistingsEdit = () => {
   // ============= PUT ==============
   const onSubmit = (e) => {
     e.preventDefault();
-    const email = user.email;
-    const firstName = user.firstName;
-    const lastName = user.lastName;
-    const nanoId = user.nanoId;
+    const email = list.email;
+    const firstName = list.firstName;
+    const lastName = list.lastName;
+    const nanoId = list.nanoId;
     fetch(process.env.REACT_APP_BACKEND_URL + "api/listings/edit", {
       method: "PUT",
       credentials: "include",
@@ -344,8 +396,8 @@ const AlistingsEdit = () => {
         sat_rate,
         sun_rate,
         ph_rate,
-        roadtravel: roadtravel,
-        airtravel: airtravel,
+        roadtravel,
+        airtravel,
         airport,
         accommodation,
         about,
@@ -421,13 +473,14 @@ const AlistingsEdit = () => {
           );
         } else {
           setUpdateNote(true);
+          setAlertMsg("Updated successfully.");
           window.scrollTo({
             top: 0,
             behavior: "smooth",
           });
           setTimeout(function () {
             setUpdateNote(false);
-          }, 2000);
+          }, 3000);
         }
       })
       .catch((err) => {
@@ -444,7 +497,6 @@ const AlistingsEdit = () => {
       .then((response) => {
         if (response.status === 200) {
           setList(response.data.listing);
-
           setProfessions(response.data.listing.professions);
           setMonday(response.data.listing.monday);
           setTuesday(response.data.listing.tuesday);
@@ -471,9 +523,9 @@ const AlistingsEdit = () => {
           setSatRate(response.data.listing.sat_rate);
           setSunRate(response.data.listing.sun_rate);
           setPhRate(response.data.listing.ph_rate);
-          setRoadtravel(response.data.listing.roadtravel);
           setAccommodation(response.data.listing.accommodation);
           setAirtravel(response.data.listing.airtravel);
+          setRoadtravel(response.data.listing.roadtravel);
           setAirport(response.data.listing.airport);
           setAbout(response.data.listing.about);
           setCountry(response.data.listing.country);
@@ -769,20 +821,16 @@ const AlistingsEdit = () => {
     setSunHr(hr + min);
   };
 
-  const listStartDate = new Date(list.startDate);
-  const today = new Date();
-  let difference = new Date(list.startDate) - new Date();
-
   // ============ HIGHLIGHT ADDRESS SEARCH FIELD ==========
   var has_focus = false;
-  $("#search").click(function (e) {
+  $("#search").click(function () {
     if (!has_focus) {
       $(this).select();
       has_focus = true;
     }
   });
 
-  $("#search").blur(function (e) {
+  $("#search").blur(function () {
     has_focus = false;
   });
 
@@ -853,6 +901,9 @@ const AlistingsEdit = () => {
   });
 
   if (!isLoaded) return <div>Loading...</div>;
+
+  console.log(totalAmount);
+
   return (
     <>
       <HelmetProvider>
@@ -881,7 +932,7 @@ const AlistingsEdit = () => {
                     style={{ width: "12px" }}
                     alt=""
                   />
-                  <span>Updated successfully.</span>
+                  <span dangerouslySetInnerHTML={{ __html: alertMsg }}></span>
                 </div>
               </section>
             ) : null}
@@ -1279,13 +1330,11 @@ const AlistingsEdit = () => {
                       <input
                         id="calstart"
                         type="text"
-                        disabled="disabled"
                         defaultValue={list.startDate}
                       />
                       <input
                         id="calfinish"
                         type="text"
-                        disabled="disabled"
                         defaultValue={list.finishDate}
                       />
                     </div>
@@ -1784,6 +1833,71 @@ const AlistingsEdit = () => {
                   <div className="container-map"></div>
                 </div>
               </div>
+
+              <div className="flexwrap">
+                <div className="groupThree">
+                  <div className="checkBoxGroup">
+                    <div className="container-rate">
+                      <h2>Manual Generate Invoice</h2>
+                    </div>
+                  </div>
+                  <div className="container-rate">
+                    <div className="align">
+                      <label htmlFor="candidate">Candidate Email</label>
+                      <input
+                        style={{ marginBottom: "10px" }}
+                        type="email"
+                        id="candidate"
+                        className="form-control5"
+                        autoComplete="off"
+                        value={candidateEmail}
+                        onChange={(e) => {
+                          setCandidateEmail(e.target.value);
+                        }}
+                      />
+                    </div>
+                    <div className="align">
+                      <label htmlFor="total">Total Amount</label>
+                      <input
+                        style={{ marginBottom: "10px" }}
+                        type="text"
+                        id="total"
+                        className="form-control5"
+                        autoComplete="off"
+                        value={totalAmount}
+                        onChange={(e) => {
+                          setTotalAmount(e.target.value);
+                        }}
+                      />
+                    </div>
+                    <div className="align">
+                      <label htmlFor="total">Fee</label>
+                      <input
+                        style={{ marginBottom: "10px" }}
+                        type="text"
+                        id="total"
+                        className="form-control5"
+                        autoComplete="off"
+                        disabled
+                        value={(totalAmount / 1.1).toFixed(2)}
+                      />
+                    </div>
+                    <div className="align">
+                      <label htmlFor="total">GST</label>
+                      <input
+                        style={{ marginBottom: "10px" }}
+                        type="text"
+                        id="total"
+                        className="form-control5"
+                        autoComplete="off"
+                        disabled
+                        value={((totalAmount / 1.1) * 0.1).toFixed(2)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <div className="bottomButtons">
                 {/* ADMIN CAN DELETE AND RELEASE LOCUM UNTIL LISTING EXPIRES */}
                 {/* USER CAN ONLY DELETE UNTIL PAYMENT */}
@@ -1880,6 +1994,21 @@ const AlistingsEdit = () => {
                     value="Save"
                   />
                 )}
+                {candidateEmail && totalAmount ? (
+                  <input
+                    type="button"
+                    className="invoice-btn"
+                    value="Generate Invoice"
+                    onClick={onGenerateInv}
+                  />
+                ) : (
+                  <input
+                    type="button"
+                    disabled
+                    className="invoice-btn"
+                    value="Generate Invoice"
+                  />
+                )}
               </div>
               {backdrop ? (
                 <div className="modal-box-delete">
@@ -1936,7 +2065,7 @@ const AlistingsEdit = () => {
         }
 
         .wrap .updateNote {
-          width: 80%;
+          width: 100%;
           background-color: #bff4f2;
           margin-bottom: 8px;
           height: 40px;
@@ -1958,14 +2087,13 @@ const AlistingsEdit = () => {
           padding: 0;
           margin: 0;
           width: 100%;
-          height: 45%;
           position: relative;
           display: flex;
           flex-wrap: wrap;
           justify-content: space-around;
         }
         .edit-description {
-          width: 410px;
+          width: 430px;
           position: relative;
           display: flex;
           display: -ms-flexbox;
@@ -1982,7 +2110,7 @@ const AlistingsEdit = () => {
           box-shadow: 4px 4px 20px rgba(51, 51, 51, 0.3);
         }
         .wrap .updateNote {
-          width: 80%;
+          width: 100%;
           background-color: #bff4f2;
           margin-bottom: 8px;
           height: 40px;
@@ -1992,6 +2120,21 @@ const AlistingsEdit = () => {
         }
         .wrap .updateNote span {
           margin-left: 5px;
+        }
+        .bottomButtons .invoice-btn {
+          position: relative;
+          background-color: #14a248;
+          color: white;
+          border: 1px solid #14a248;
+          cursor: pointer;
+          font-weight: 800;
+          width: 150px;
+          height: 50px;
+          line-height: 48px;
+          outline: none;
+          font-size: 20px;
+          border-radius: 4px;
+          margin-top: 0px;
         }
 
         .bottomButtons input[type="submit"] {
@@ -2003,12 +2146,12 @@ const AlistingsEdit = () => {
           font-weight: 800;
           width: 150px;
           height: 50px;
-          line-height: 50px;
+          line-height: 48px;
           outline: none;
-          font-size: 20px;
+          font-size: 16px;
           border-radius: 4px;
         }
-        .bottomButtons input[type="button"] {
+        .bottomButtons .delete-btn {
           position: relative;
           background-color: #e40000;
           color: white;
@@ -2017,18 +2160,22 @@ const AlistingsEdit = () => {
           font-weight: 800;
           width: 150px;
           height: 50px;
-          line-height: 50px;
+          line-height: 48px;
           outline: none;
           font-size: 20px;
           border-radius: 4px;
           margin: 0px;
+          display: none;
         }
+
         .bottomButtons {
           margin-top: 90px;
           display: flex;
-          width: 100%;
+
+          width: 430px;
           justify-content: space-around;
         }
+        .wrap .invoice-btn:disabled,
         .wrap .save-btn:disabled,
         .wrap .delete-btn:disabled {
           background-color: #ddd;
@@ -2040,7 +2187,7 @@ const AlistingsEdit = () => {
           font-weight: 800;
           height: 50px;
           line-height: 50px;
-          font-size: 20px;
+          font-size: 16px;
         }
         .container-intro {
           width: 100%;
@@ -2273,6 +2420,11 @@ const AlistingsEdit = () => {
         .align-other {
           margin: 0px;
           width: 120px;
+        }
+
+        .align {
+          display: flex;
+          justify-content: space-between;
         }
 
         #comlength select {
@@ -2621,6 +2773,20 @@ const AlistingsEdit = () => {
         .selectdate input[type="text"]:focus {
           outline: 3px solid #14a248;
         }
+
+        input[type="email"] {
+          outline: none;
+          padding: 6px 10px 6px 13px;
+          height: 40px;
+          width: 140px;
+          color: #2b2b2b;
+          font-size: 13px;
+          font-weight: 500;
+          font-family: sans-serif;
+          margin-right: 15px;
+          left: 50%;
+          border: 1px solid #ebebeb;
+        }
         .img-fluid {
           transform: translateX(36%);
         }
@@ -2655,7 +2821,7 @@ const AlistingsEdit = () => {
           height: 32px;
           line-height: 32px;
           font-weight: 900;
-          margin-top: 4px;
+          margin-top: 0px;
         }
 
         /* ======== MODAL BOX DELETE =========== */
@@ -2768,6 +2934,9 @@ const AlistingsEdit = () => {
           input[type="text"] {
             width: 220px;
           }
+          input[type="email"] {
+            width: 220px;
+          }
           input[type="button"] {
             width: 80px;
           }
@@ -2783,9 +2952,21 @@ const AlistingsEdit = () => {
           }
           .bottomButtons input[type="submit"] {
             width: 200px;
+            font-size: 20px;
           }
           .bottomButtons {
             margin-top: 42px;
+            width: 100%;
+          }
+
+          .wrap .invoice-btn:disabled,
+          .wrap .save-btn:disabled,
+          .wrap .delete-btn:disabled {
+            font-size: 20px;
+          }
+
+          .bottomButtons .delete-btn {
+            display: block;
           }
           .edit-description {
             width: 1050px;

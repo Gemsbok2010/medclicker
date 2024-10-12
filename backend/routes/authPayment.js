@@ -27,8 +27,10 @@ const unlinkFile = util.promisify(fs.unlink);
 
 const {
   paymentConfirmation,
+  paymentPending,
   sendEmail,
   pdfContent,
+  pdfInvoice,
   toLocum,
   pdfContract,
   sendHiredEmail,
@@ -417,6 +419,134 @@ router.put("/finalise", async (req, res) => {
   }
 });
 
+//=========== GENERATE INVOICE ============
+//Edit Slug Number page (from adminlistingsedit.js)
+router.put("/generateInvoice", async (req, res) => {
+  const candidate = await Locum.findOne({ email: req.body.candidateEmail });
+
+  const total = parseFloat(req.body.totalAmount).toFixed(2);
+
+  const gst = (total - total / 1.1).toFixed(2);
+
+  const fee = (total / 1.1).toFixed(2);
+
+  const dueDate = new Date();
+  dueDate.setDate(dueDate.getDate() + 14);
+
+  const logo = "https://i.ibb.co/1KgVNwJ/medclicker.png";
+  const thisyear = moment().format("YYYY");
+  const date = moment().format("DD MMM YYYY");
+  const payDate = moment(dueDate).format("DD MMM YYYY");
+  const mc = "https://i.ibb.co/TrWvXBB/mc.png";
+  const visa = "https://i.ibb.co/zSDYxhX/visa.png";
+  const amex = "https://i.ibb.co/7j3gRNH/amex.png";
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const phone = req.body.phone;
+  const email = req.body.email;
+  const caseId = req.body.caseId;
+  const status = "NOT PAID";
+  const product = "Locum Service";
+  const streetNo = req.body.streetNo;
+  const street = req.body.street;
+  const suburb = req.body.suburb;
+  const postalCode = req.body.postalCode;
+  const state = req.body.state;
+  const country = req.body.country;
+  const professions = req.body.professions;
+  const invoice = "INV" + generateInvoice + req.body.state;
+  const locumFirstName = candidate.firstName;
+  const locumLastName = candidate.lastName;
+  const locumPhone = candidate.phone;
+  const locumEmail = candidate.email;
+  const locumAhpra = candidate.ahpra;
+
+  const browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+  const page = await browser.newPage();
+
+  pdfInvoice(
+    invoice,
+    logo,
+    mc,
+    visa,
+    amex,
+    firstName,
+    lastName,
+    email,
+    phone === undefined ? "" : phone,
+    date,
+    professions,
+    product,
+    total,
+    fee,
+    gst,
+    streetNo === undefined ? "" : streetNo,
+    street === undefined ? "" : street,
+    suburb === undefined ? "" : suburb,
+    state === undefined ? "" : state,
+    postalCode === undefined ? "" : postalCode,
+    country === undefined ? "" : country,
+    thisyear,
+    status,
+    payDate,
+    locumFirstName,
+    locumLastName,
+    locumPhone,
+    locumEmail,
+    locumAhpra
+  );
+  await page.setContent(pdfOutput);
+
+  await page.pdf({
+    path: `./public/uploads/${invoice}.pdf`,
+    format: "A4",
+    printBackground: true,
+  });
+
+  paymentPending(
+    caseId,
+    invoice,
+    email,
+    firstName,
+    date,
+    total,
+    thisyear,
+    logo,
+    product,
+    payDate
+  );
+
+  const pathToAttachment = `./public/uploads/${invoice}.pdf`;
+  const attachment = fs.readFileSync(pathToAttachment).toString("base64");
+
+  // Save to AWS S3 Bucket
+  const result = await uploadInvoice(invoice, pathToAttachment);
+  await unlinkFile(pathToAttachment);
+
+  const subject = `Payment Invoice ${invoice}`;
+  const to = "info@medclicker.com.au";
+  const from = {
+    email: "info@medclicker.com.au",
+    name: "Medclicker Customer Support",
+  };
+
+  const attachments = [
+    {
+      content: attachment,
+      filename: `${invoice}.pdf`,
+      type: "application/pdf",
+      disposition: "attachment",
+    },
+  ];
+
+  sendEmail(to, from, subject, output, attachments);
+  await browser.close();
+
+  res.send({ message: "Invoice sent to admin@medclicker.com.au" });
+});
+
 // ====== PAYMENT REGISTER (from CreditCardLoading.js) ===
 router.put("/emailToLocum", async (req, res) => {
   const candidate = await Pub.findOne({ nanoslug: req.body.nanoslug });
@@ -564,11 +694,6 @@ router.put("/emailToLocum", async (req, res) => {
   sendHiredEmail(to, from, subject, output, attachments);
   await browser.close();
 });
-
-
-
-
-
 
 //===== SUBMIT IN CREDIT CARD (from CreditCardRegular.js) =======
 router.post("/regularList", async (req, res, next) => {
