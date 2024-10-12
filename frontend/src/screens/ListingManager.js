@@ -352,7 +352,13 @@ const ListingManager = () => {
         `api/listings/sleepAd/${slug}/?sortBy=` +
         sort +
         "&page=" +
-        page,
+        page +
+        "&location=" +
+        location +
+        "&contract=" +
+        contract +
+        "&professions=" +
+        professions,
       {
         method: "PUT",
         credentials: "include",
@@ -363,6 +369,7 @@ const ListingManager = () => {
     const data = await res.json();
 
     if (data) {
+      console.log(data);
       setListingInfo(data.adPosts);
       setSort(data.sort);
       setPage(data.page);
@@ -379,7 +386,13 @@ const ListingManager = () => {
         `api/listings/sleepAd/${slug}/?sortBy=` +
         sort +
         "&page=" +
-        page,
+        page +
+        "&location=" +
+        location +
+        "&contract=" +
+        contract +
+        "&professions=" +
+        professions,
       {
         method: "PUT",
         credentials: "include",
@@ -388,7 +401,7 @@ const ListingManager = () => {
       }
     );
     const data = await res.json();
-
+    console.log(data);
     if (data) {
       setListingInfo(data.adPosts);
       setSort(data.sort);

@@ -613,6 +613,47 @@ router.put("/sleepAd/:slug", async (req, res) => {
     sort = -1;
   }
 
+  let match = { email: user.email, isDeletedJob: false };
+
+  // Contract Type
+  if (req.query.contract !== "") {
+    const breakContract = req.query.contract;
+    const contractArr = breakContract.split(",");
+    const ans = { contract: contractArr };
+    let contract = [];
+    if (contractArr) {
+      contract = contractArr;
+      match["contractType"] = contract;
+    }
+  }
+
+  // Professions
+  if (req.query.professions !== "") {
+    const breakProfessions = req.query.professions;
+    const professionArr = breakProfessions.split(",");
+    const ans = { professions: professionArr };
+
+    let professions = [];
+    if (professionArr) {
+      professions = professionArr;
+      match["professions"] = professions;
+    }
+  }
+
+  // Location (STATE )
+  if (req.query.location !== "") {
+    const breakLocation = req.query.location;
+    const stateArr = breakLocation.split(",");
+
+    let location = [];
+    if (stateArr) {
+      location = stateArr;
+      const ans = { state: stateArr };
+      od = [ans];
+      match["$or"] = od;
+    }
+  }
+
   const num = await Listing.find({
     isActiveJob: req.body.isActiveJob,
     isDeletedJob: false,
@@ -627,10 +668,7 @@ router.put("/sleepAd/:slug", async (req, res) => {
       { slug: req.params.slug },
       { isActiveJob: req.body.isActiveJob }
     );
-    let adPosts = await Listing.find({
-      email: user.email,
-      isDeletedJob: false,
-    }).sort({
+    let adPosts = await Listing.find(match).sort({
       createdAt: sort,
     });
 
