@@ -238,11 +238,13 @@ const Dashboard = () => {
                     className="logo"
                     style={{ marginLeft: "20px", marginBottom: "1rem" }}
                   >
-                    <img
-                      src="/images/medclicker-white.png"
-                      className="logo"
-                      alt=""
-                    />
+                    <Link to="/">
+                      <img
+                        src="/images/medclicker-white.png"
+                        className="logo"
+                        alt="Medclicker logo"
+                      />
+                    </Link>
                   </div>
 
                   <button id="close-btn" onClick={() => setClose(false)}>
@@ -260,11 +262,13 @@ const Dashboard = () => {
                     className="logo"
                     style={{ marginLeft: "20px", marginBottom: "1rem" }}
                   >
-                    <img
-                      src="/images/medclicker-white.png"
-                      className="logo"
-                      alt=""
-                    />
+                    <Link to="/">
+                      <img
+                        src="/images/medclicker-white.png"
+                        className="logo"
+                        alt=""
+                      />
+                    </Link>
                   </div>
                   <button id="close-btn" onClick={() => setClose(true)}>
                     <span
