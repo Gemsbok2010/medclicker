@@ -121,7 +121,7 @@ const ApaymentConsole = () => {
     }
     setTimeout(function () {
       setUpdateNote(false);
-    }, 2000);
+    }, 3000);
   };
 
   // ============== LOCUM ============== //
@@ -345,133 +345,6 @@ const ApaymentConsole = () => {
     const errorMessage = `Max. Days for <b> ${plan} </b> cannot be less than the Min. Days. Please correct the error.`;
     setAlertMsg(errorMessage);
   }
-
-  // ============ MIN & MAX DAYS CHECK ============
-  const handleLocumPlan1 = (e) => {
-    const { value } = e.target;
-    const finishDay = parseInt(value);
-    const startDay = parseInt(locumMin1);
-
-    const differenceDays = finishDay - startDay;
-
-    if (differenceDays < 0) {
-      outPutErrorMessagesTimes("Plan 1");
-    } else {
-      setAlert(false);
-    }
-  };
-
-  const handleLocumPlan2 = (e) => {
-    const { value } = e.target;
-    const finishDay = parseInt(value);
-    const startDay = parseInt(locumMin2);
-
-    const differenceDays = finishDay - startDay;
-
-    if (differenceDays < 0) {
-      outPutErrorMessagesTimes("Plan 2");
-    } else {
-      setAlert(false);
-    }
-  };
-
-  const handleLocumPlan3 = (e) => {
-    const { value } = e.target;
-    const finishDay = parseInt(value);
-    const startDay = parseInt(locumMin3);
-
-    const differenceDays = finishDay - startDay;
-
-    if (differenceDays < 0) {
-      outPutErrorMessagesTimes("Plan 3");
-    } else {
-      setAlert(false);
-    }
-  };
-
-  const handleLocumPlan4 = (e) => {
-    const { value } = e.target;
-    const finishDay = parseInt(value);
-    const startDay = parseInt(locumMin4);
-
-    const differenceDays = finishDay - startDay;
-
-    if (differenceDays < 0) {
-      outPutErrorMessagesTimes("Plan 4");
-    } else {
-      setAlert(false);
-    }
-  };
-
-  const handleLocumPlan5 = (e) => {
-    const { value } = e.target;
-    const finishDay = parseInt(value);
-    const startDay = parseInt(locumMin5);
-
-    const differenceDays = finishDay - startDay;
-
-    if (differenceDays < 0) {
-      outPutErrorMessagesTimes("Plan 5");
-    } else {
-      setAlert(false);
-    }
-  };
-
-  const handleLocumPlan6 = (e) => {
-    const { value } = e.target;
-    const finishDay = parseInt(value);
-    const startDay = parseInt(locumMin6);
-
-    const differenceDays = finishDay - startDay;
-
-    if (differenceDays < 0) {
-      outPutErrorMessagesTimes("Plan 6");
-    } else {
-      setAlert(false);
-    }
-  };
-
-  const handleLocumPlan7 = (e) => {
-    const { value } = e.target;
-    const finishDay = parseInt(value);
-    const startDay = parseInt(locumMin7);
-
-    const differenceDays = finishDay - startDay;
-
-    if (differenceDays < 0) {
-      outPutErrorMessagesTimes("Plan 7");
-    } else {
-      setAlert(false);
-    }
-  };
-
-  const handleLocumPlan8 = (e) => {
-    const { value } = e.target;
-    const finishDay = parseInt(value);
-    const startDay = parseInt(locumMin8);
-
-    const differenceDays = finishDay - startDay;
-
-    if (differenceDays < 0) {
-      outPutErrorMessagesTimes("Plan 8");
-    } else {
-      setAlert(false);
-    }
-  };
-
-  const handleLocumPlan9 = (e) => {
-    const { value } = e.target;
-    const finishDay = parseInt(value);
-    const startDay = parseInt(locumMin9);
-
-    const differenceDays = finishDay - startDay;
-
-    if (differenceDays < 0) {
-      outPutErrorMessagesTimes("Plan 9");
-    } else {
-      setAlert(false);
-    }
-  };
 
   // =============== ENABLE LOCUM SWITCH ===============
   const [locumPayment, setLocumPayment] = useState(false);
@@ -1049,7 +922,6 @@ const ApaymentConsole = () => {
                         value={locumMax1 ? locumMax1 : ""}
                         onChange={(e) => {
                           setLocumMax1(e.target.value);
-                          handleLocumPlan1(e);
                         }}
                       />
                     </td>
@@ -1089,7 +961,6 @@ const ApaymentConsole = () => {
                         value={locumMax2 ? locumMax2 : ""}
                         onChange={(e) => {
                           setLocumMax2(e.target.value);
-                          handleLocumPlan2(e);
                         }}
                       />
                     </td>
@@ -1129,7 +1000,6 @@ const ApaymentConsole = () => {
                         value={locumMax3 ? locumMax3 : ""}
                         onChange={(e) => {
                           setLocumMax3(e.target.value);
-                          handleLocumPlan3(e);
                         }}
                       />
                     </td>
@@ -1169,7 +1039,6 @@ const ApaymentConsole = () => {
                         value={locumMax4 ? locumMax4 : ""}
                         onChange={(e) => {
                           setLocumMax4(e.target.value);
-                          handleLocumPlan4(e);
                         }}
                       />
                     </td>
@@ -1209,7 +1078,6 @@ const ApaymentConsole = () => {
                         value={locumMax5 ? locumMax5 : ""}
                         onChange={(e) => {
                           setLocumMax5(e.target.value);
-                          handleLocumPlan5(e);
                         }}
                       />
                     </td>
@@ -1249,7 +1117,6 @@ const ApaymentConsole = () => {
                         value={locumMax6 ? locumMax6 : ""}
                         onChange={(e) => {
                           setLocumMax6(e.target.value);
-                          handleLocumPlan6(e);
                         }}
                       />
                     </td>
@@ -1289,7 +1156,6 @@ const ApaymentConsole = () => {
                         value={locumMax7 ? locumMax7 : ""}
                         onChange={(e) => {
                           setLocumMax7(e.target.value);
-                          handleLocumPlan7(e);
                         }}
                       />
                     </td>
@@ -1329,7 +1195,6 @@ const ApaymentConsole = () => {
                         value={locumMax8 ? locumMax8 : ""}
                         onChange={(e) => {
                           setLocumMax8(e.target.value);
-                          handleLocumPlan8(e);
                         }}
                       />
                     </td>
@@ -1369,7 +1234,6 @@ const ApaymentConsole = () => {
                         value={locumMax9 ? locumMax9 : ""}
                         onChange={(e) => {
                           setLocumMax9(e.target.value);
-                          handleLocumPlan9(e);
                         }}
                       />
                     </td>

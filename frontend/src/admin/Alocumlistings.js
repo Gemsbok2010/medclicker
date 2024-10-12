@@ -25,7 +25,7 @@ const Alistings = () => {
     const res = await fetch(
       process.env.REACT_APP_BACKEND_URL +
         `api/admin/locumsonly?page=${page <= 0 ? 0 : page - 1}` +
-        "sortBy=" +
+        "&sortBy=" +
         sort +
         "&location=" +
         location +
@@ -57,7 +57,7 @@ const Alistings = () => {
         `api/admin/locumsonly?page=${
           page < maxPage ? 1 + parseInt(page) : page
         }` +
-        "sortBy=" +
+        "&sortBy=" +
         sort +
         "&location=" +
         location +
@@ -331,8 +331,7 @@ const Alistings = () => {
     setBackdrop(true);
     const res = await fetch(
       process.env.REACT_APP_BACKEND_URL +
-        `api/admin/locumSleepAd/${slug}/?` +
-        "sortBy=" +
+        `api/admin/locumSleepAd/${slug}/?sortBy=` +
         sort +
         "&location=" +
         location +
@@ -369,8 +368,7 @@ const Alistings = () => {
     setBackdrop(true);
     const res = await fetch(
       process.env.REACT_APP_BACKEND_URL +
-        `api/admin/locumSleepAd/${slug}/?` +
-        "sortBy=" +
+        `api/admin/locumSleepAd/${slug}/?sortBy=` +
         sort +
         "&location=" +
         location +
@@ -572,7 +570,7 @@ const Alistings = () => {
                         <h4>Payment Management</h4>
                       </Link>
                       <Link to="/admin/security">
-                        <h4>Security Settings</h4>
+                        <h4>Change Password</h4>
                       </Link>
                       <Link to="/sms">
                         <h4>SMS</h4>
@@ -1482,32 +1480,32 @@ const Alistings = () => {
           }
 
           tbody .professions div {
-            width: 140px;
+            width: 130px;
             padding-left: 10px;
           }
           thead .professions div {
-            width: 140px;
+            width: 130px;
             padding-left: 10px;
           }
           tbody .professions {
-            width: 140px;
+            width: 130px;
           }
           thead .professions {
-            width: 140px;
+            width: 130px;
           }
           thead .rate div {
-            width: 65px;
+            width: 75px;
             padding-left: 10px;
           }
           tbody .rate div {
-            width: 65px;
+            width: 75px;
             padding-left: 10px;
           }
           thead .rate {
-            width: 65px;
+            width: 75px;
           }
           tbody .rate {
-            width: 65px;
+            width: 75px;
           }
 
           thead .house div {
@@ -1698,16 +1696,16 @@ const Alistings = () => {
             }
 
             thead .professions {
-              width: 100px;
+              width: 90px;
             }
             tbody .professions {
-              width: 100px;
+              width: 90px;
             }
             thead .professions div {
-              width: 100px;
+              width: 90px;
             }
             tbody .professions div {
-              width: 100px;
+              width: 90px;
             }
 
             thead .cell-v {
@@ -1793,16 +1791,16 @@ const Alistings = () => {
             }
 
             thead .rate {
-              width: 65px;
+              width: 75px;
             }
             tbody .rate {
-              width: 65px;
+              width: 75px;
             }
             thead .rate div {
-              width: 65px;
+              width: 75px;
             }
             tbody .rate div {
-              width: 65px;
+              width: 75px;
             }
 
             thead .email {
