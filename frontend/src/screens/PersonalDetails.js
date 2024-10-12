@@ -142,6 +142,8 @@ const PersonalDetails = () => {
   const [latitude, setLatitude] = useState("");
   const [userInfo, setUserInfo] = useState({});
   const [idPhoto, setIdPhoto] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [isloading, setIsloading] = useState(false);
 
   // ========= GOOGLE SIGN UP DATA ===========
@@ -163,6 +165,16 @@ const PersonalDetails = () => {
         if (response.status === 200) {
           localStorage.setItem("userId", response.data._id);
           setUserInfo(response.data);
+          if (!response.data.firstName) {
+            setFirstName("");
+          } else {
+            setFirstName(response.data.firstName);
+          }
+          if (!response.data.lastName) {
+            setLastName("");
+          } else {
+            setLastName(response.data.lastName);
+          }
           setCountry(response.data.country);
 
           if (!response.data.postalCode) {
@@ -421,7 +433,7 @@ const PersonalDetails = () => {
           );
           setTimeout(function () {
             setUpdatePhoto(false);
-          }, 2000);
+          }, 3000);
         }
       })
       .catch((err) => {
@@ -438,8 +450,8 @@ const PersonalDetails = () => {
       credentials: "include",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({
-        firstName: user.firstName,
-        lastName: user.lastName,
+        firstName: firstName,
+        lastName: lastName,
         email: user.email,
         phone: userInfo.phone,
         profession: userInfo.profession,
@@ -487,7 +499,7 @@ const PersonalDetails = () => {
 
           setTimeout(function () {
             setUpdateNote(false);
-          }, 2000);
+          }, 3000);
         }
       })
       .catch((err) => {
@@ -927,8 +939,10 @@ const PersonalDetails = () => {
                             id="firstName"
                             name="firstName"
                             autoComplete="none"
-                            value={user.firstName ? user.firstName : ""}
-                            onChange={handleOnChange}
+                            value={firstName ? firstName : ""}
+                            onChange={(e) => {
+                              setFirstName(e.target.value);
+                            }}
                           />
                         </div>
                       </div>
@@ -946,8 +960,10 @@ const PersonalDetails = () => {
                             id="lastName"
                             name="lastName"
                             autoComplete="none"
-                            value={user.lastName ? user.lastName : ""}
-                            onChange={handleOnChange}
+                            value={lastName ? lastName : ""}
+                            onChange={(e) => {
+                              setLastName(e.target.value);
+                            }}
                           />
                         </div>
                       </div>
