@@ -6,6 +6,7 @@ import { useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { ExternalLink } from "react-external-link";
 
 const Contact = () => {
   const navigate = useNavigate();
@@ -199,7 +200,9 @@ const Contact = () => {
                 <h3 className="font-weight-bold">Follow us</h3>
                 <div className="d-flex align-items-center mb-5">
                   <img width="30" src="/images/fb.png" alt="facebook" />
-                  <Link to="/#">Facebook</Link>
+                  <ExternalLink href="https://www.facebook.com/people/Medclicker/61567136130594/">
+                    Facebook
+                  </ExternalLink>
                 </div>
               </div>
             </div>

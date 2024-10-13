@@ -265,7 +265,6 @@ const Footer = ({ asx }) => {
                 </button>
               )}
 
-            
               <p>OR</p>
               <button id="google-login">
                 <ExternalLink href={googleUrlAddress} target="_self">
@@ -713,7 +712,7 @@ const Footer = ({ asx }) => {
               <Link to="/refund_au">Refund Policy</Link>{" "}
               <ExternalLink
                 id="fbicon"
-                href="https://www.facebook.com"
+                href="https://www.facebook.com/people/Medclicker/61567136130594/"
                 target="_blank"
               >
                 <img src="/images/facebook.png" alt="" width="18px" /> Facebook
@@ -1065,8 +1064,6 @@ const Footer = ({ asx }) => {
           border-color: #14a248;
         }
 
-      
-     
         .wrap .loginQuestionCard #google-login {
           background-color: #fff;
           border: 1px solid #333;
