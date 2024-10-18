@@ -92,7 +92,7 @@ const Contact = () => {
                   Phone : <span>+61 (0)472 720 100</span>
                 </p>
                 <p>
-                  E-mail : <span>info@medclicker.com</span>
+                  E-mail : <span>info@medclicker.com.au</span>
                 </p>
               </div>
             </div>
