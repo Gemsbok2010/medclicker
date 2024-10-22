@@ -89,7 +89,7 @@ const Contact = () => {
               <div className="contactBottom">
                 <p>Our Contact Details</p>
                 <p>
-                  Phone : <span>+61 (0)472 720 100</span>
+                  Phone : <span>+61 (0)421 318 248</span>
                 </p>
                 <p>
                   E-mail : <span>info@medclicker.com.au</span>
