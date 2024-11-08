@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import $ from "jquery";
 import axios from "axios";
 import { ExternalLink } from "react-external-link";
-import { RotatingLines } from "react-loader-spinner";
 import { ThreeDots } from "react-loader-spinner";
 import { useSelector } from "react-redux";
 
@@ -709,7 +708,7 @@ const LocumProfile = () => {
     return (
       <div
         style={{
-          backgroundColor: "#14a248",
+          backgroundColor: "#fff",
           top: "0",
           left: "0",
           height: "100%",
@@ -731,12 +730,14 @@ const LocumProfile = () => {
             transform: "translate(-50%,-50%)",
           }}
         >
-          <RotatingLines
-            strokeColor="white"
-            strokeWidth="4"
-            animationDuration="1.25"
-            width="100"
-            visible={true}
+          <img
+            style={{
+              animation: "loadingframe 1000ms infinite",
+              animationDirection: "alternate-reverse",
+            }}
+            src="/images/medclicker.png"
+            width="120px"
+            alt="Medclicker logo"
           />
         </div>
       </div>

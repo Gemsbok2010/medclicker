@@ -324,6 +324,45 @@ const LocumAgreements = () => {
       });
   }, []);
 
+  if (!isloaded)
+    return (
+      <div
+        style={{
+          backgroundColor: "#fff",
+          top: "0",
+          left: "0",
+          height: "100%",
+          width: "100%",
+          zIndex: "2500",
+          display: "block",
+          position: "fixed",
+        }}
+      >
+        <div
+          style={{
+            textAlign: "center",
+            position: "absolute",
+            display: "block",
+            height: "100%",
+            width: "100%",
+            top: "90%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <img
+            style={{
+              animation: "loadingframe 1000ms infinite",
+              animationDirection: "alternate-reverse",
+            }}
+            src="/images/medclicker.png"
+            width="120px"
+            alt=""
+          />
+        </div>
+      </div>
+    );
+
   return (
     <>
       <HelmetProvider>

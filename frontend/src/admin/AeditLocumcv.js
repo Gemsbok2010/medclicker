@@ -3,7 +3,6 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import $ from "jquery";
-import { RotatingLines } from "react-loader-spinner";
 import { ExternalLink } from "react-external-link";
 
 const AeditLocumcv = () => {
@@ -523,7 +522,7 @@ const AeditLocumcv = () => {
     return (
       <div
         style={{
-          backgroundColor: "#14a248",
+          backgroundColor: "#fff",
           top: "0",
           left: "0",
           height: "100%",
@@ -545,12 +544,14 @@ const AeditLocumcv = () => {
             transform: "translate(-50%,-50%)",
           }}
         >
-          <RotatingLines
-            strokeColor="white"
-            strokeWidth="4"
-            animationDuration="1.25"
-            width="100"
-            visible={true}
+          <img
+            style={{
+              animation: "loadingframe 1000ms infinite",
+              animationDirection: "alternate-reverse",
+            }}
+            src="/images/medclicker.png"
+            width="120px"
+            alt="Medclicker logo"
           />
         </div>
       </div>
