@@ -1049,7 +1049,7 @@ const QuestionLocumReview = () => {
                 <button type="submit" className="btn-submit">
                   <ThreeDots
                     type="ThreeDots"
-                    height={40}
+                    height={30}
                     width={80}
                     color={"white"}
                   />

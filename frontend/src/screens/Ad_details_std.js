@@ -456,7 +456,7 @@ const Ad_details_std = () => {
                         <button className="btn-dots">
                           <ThreeDots
                             type="ThreeDots"
-                            height={40}
+                            height={30}
                             width={80}
                             color={"white"}
                           />

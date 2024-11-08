@@ -594,7 +594,7 @@ const HomeNav = () => {
                                 >
                                   <ThreeDots
                                     type="ThreeDots"
-                                    height={40}
+                                    height={30}
                                     width={80}
                                     color={"#fff"}
                                   />
@@ -885,7 +885,7 @@ const HomeNav = () => {
                   <button className="btn-login">
                     <ThreeDots
                       type="ThreeDots"
-                      height={40}
+                      height={30}
                       width={80}
                       color={"white"}
                     />

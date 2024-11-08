@@ -359,7 +359,7 @@ const Invoices = () => {
           <div className="backdrop">
             <ThreeDots
               type="ThreeDots"
-              height={40}
+              height={30}
               width={80}
               color={"white"}
             />
