@@ -629,7 +629,7 @@ const Ausers = () => {
       </nav>
       {backdrop ? (
         <div className="backdrop">
-          <ThreeDots type="ThreeDots" height={30} width={80} color={"white"} />
+          <ThreeDots type="ThreeDots" height={40} width={80} color={"white"} />
         </div>
       ) : (
         ""

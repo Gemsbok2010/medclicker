@@ -704,7 +704,7 @@ const ListingManager = () => {
           <div className="backdrop">
             <ThreeDots
               type="ThreeDots"
-              height={30}
+              height={40}
               width={80}
               color={"white"}
             />
@@ -1061,7 +1061,7 @@ const ListingManager = () => {
                   >
                     <ThreeDots
                       type="ThreeDots"
-                      height={30}
+                      height={40}
                       width={80}
                       color={"grey"}
                     />

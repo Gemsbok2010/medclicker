@@ -1043,7 +1043,7 @@ const Aedituser = () => {
                     <button className="btn-vori">
                       <ThreeDots
                         type="ThreeDots"
-                        height={30}
+                        height={40}
                         width={80}
                         color={"white"}
                       />

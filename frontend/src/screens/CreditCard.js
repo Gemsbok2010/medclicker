@@ -863,7 +863,7 @@ const CreditCard = () => {
                               <button type="button" className="noLocumPayment">
                                 <ThreeDots
                                   type="ThreeDots"
-                                  height={30}
+                                  height={40}
                                   width={80}
                                   color={"white"}
                                 />
